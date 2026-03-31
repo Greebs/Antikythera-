@@ -342,13 +342,10 @@ input:focus, select:focus { border-color: var(--accent); }
 <!-- ══ TOP BAR (sticky, always visible) ══ -->
 <div id="top-bar">
 
-  <!-- Row 1: title + readme + fullscreen -->
-  <!-- Row 1: title + subtitle + quit fullscreen -->
+  <!-- Row 1: title + subtitle -->
   <div class="top-row" id="top-row1" style="padding:12px 12px 8px;min-height:44px;gap:10px">
     <span style="font-family:var(--serif);font-size:18px;color:var(--text);letter-spacing:3px;flex-shrink:0">Antikythera</span>
     <span style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;flex-shrink:0">Sononumeric particle explorer</span>
-    <button id="main-fs-quit-btn" onclick="exitMainFullscreen()"
-      style="font-family:var(--mono);font-size:9px;background:none;border:1px solid var(--muted);color:var(--muted);cursor:pointer;padding:3px 12px;border-radius:2px;flex-shrink:0;letter-spacing:1px">✕ EXIT</button>
   </div>
 
   <!-- Row 2: zoetrope (centre) + readme (right) -->
@@ -1476,14 +1473,16 @@ let _midpointChar = ''; // single character drawn at each midpoint
 
 function setMidpointChar(val) {
   _midpointChar = val;
-  // Clear all glyph texture cache entries
   Object.keys(_pointTexCache).forEach(k => { if (k.startsWith('glyph:')) delete _pointTexCache[k]; });
   syncGlyphInputs(val);
-  renderActiveView();
-  if (_three && _pointShape === "glyph") {
-    if (_torusFS) requestAnimationFrame(() => _torusFS_resize());
-    else buildTorusPoints();
+  if (_three && _pointShape === 'glyph') {
+    if (_torusFS) {
+      requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+      return; // _torusFS_resize handles rebuild + render
+    }
+    buildTorusPoints();
   }
+  renderActiveView();
 }
 
 function syncGlyphInputs(val) {
@@ -2754,38 +2753,39 @@ function runDemo(name) {
     if (_rainbow !== on) toggleRainbow(btn);
   };
 
-  if (name === 'cloud') {
-    setN(7); setFn('rsq');
-    // Helix mode on, torus ratio 0.45
-    if (!_helixMode) toggleHelixMode(document.getElementById('helix-btn'));
-    setTorusRatioSlider(45, 'main');
-    setMode('chord', document.querySelector('[data-mode="chord"]'));
-    setChordSub('centre', document.querySelector('[data-csub="centre"]'));
+  if (name === "cloud") {
+    setN(7); setFn("rsq");
+    compute();
+    if (!_helixMode) toggleHelixMode(document.getElementById("helix-btn"));
+    setTorusRatioSlider(45, "main");
+    setMode("chord", document.querySelector("[data-mode=\"chord\"]"));
+    setChordSub("centre", document.querySelector("[data-csub=\"centre\"]"));
     setSpinFromSlider(0);
     setOpacity(11);
-    // Dark purple identity, bright peach inflection
-    const idHue = document.getElementById('pal-id-hue'); if (idHue) { idHue.value = 270; updatePalSlider(idHue); }
-    const idBri = document.getElementById('pal-id-bri'); if (idBri) { idBri.value = 20; updatePalSlider(idBri); }
-    const inflHue = document.getElementById('pal-infl-hue'); if (inflHue) { inflHue.value = 20; updatePalSlider(inflHue); }
-    const inflBri = document.getElementById('pal-infl-bri'); if (inflBri) { inflBri.value = 85; updatePalSlider(inflBri); }
-    // Sky blue background: hue ~200, brightness ~55
+    const idHue = document.getElementById("pal-id-hue"); if (idHue) { idHue.value = 270; updatePalSlider(idHue); }
+    const idBri = document.getElementById("pal-id-bri"); if (idBri) { idBri.value = 20; updatePalSlider(idBri); }
+    const inflHue = document.getElementById("pal-infl-hue"); if (inflHue) { inflHue.value = 20; updatePalSlider(inflHue); }
+    const inflBri = document.getElementById("pal-infl-bri"); if (inflBri) { inflBri.value = 85; updatePalSlider(inflBri); }
     setBgBri(55); setBgHue(200);
-    const bgBriEl = document.getElementById('main-bg-bri'); if (bgBriEl) bgBriEl.value = 55;
-    const bgHueEl = document.getElementById('main-bg-hue'); if (bgHueEl) bgHueEl.value = 200;
-    if (_rainbow) toggleRainbow(document.getElementById('rainbow-btn'));
+    const bgBriEl = document.getElementById("main-bg-bri"); if (bgBriEl) bgBriEl.value = 55;
+    const bgHueEl = document.getElementById("main-bg-hue"); if (bgHueEl) bgHueEl.value = 200;
+    if (_rainbow) toggleRainbow(document.getElementById("rainbow-btn"));
+    if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+  } else if (name === "pipe") {
+    setN(7); setFn("ex");
     compute();
-  } else if (name === 'pipe') {
-    setN(7); setFn('ex');
-    setShape('horn', 0.89);
-    setMode('chord', document.querySelector('[data-mode="chord"]'));
-    setChordSub('centre', document.querySelector('[data-csub="centre"]'));
+    setTorusShape("horn", document.querySelector("[data-shape=\"horn\"]"));
+    setTorusRatioSlider(89, "main");
+    setMode("chord", document.querySelector("[data-mode=\"chord\"]"));
+    setChordSub("centre", document.querySelector("[data-csub=\"centre\"]"));
     setSpinFromSlider(0);
     setOpacity(1);
-    setPalHue('pal-id-hue', 180); setPalHue('pal-infl-hue', 200);
-    setBG(40); setRainbow(true);
-    const sat = document.getElementById('rainbow-sat'); if (sat) { sat.value = 100; setRainbowSat(100); }
-    compute();
-  } else if (name === 'tree') {
+    setPalHue("pal-id-hue", 180); setPalHue("pal-infl-hue", 200);
+    setBG(40);
+    if (!_rainbow) toggleRainbow(document.getElementById("rainbow-btn"));
+    const sat = document.getElementById("rainbow-sat"); if (sat) { sat.value = 100; setRainbowSat(100); }
+    if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+  } else if (name === "tree") {
     // placeholder
   }
 }
@@ -3648,23 +3648,9 @@ function toggleTorusFS() {
     topBar.style.display = 'none';
     botBar.style.display = 'none';
     if (fsBtn) fsBtn.textContent = '✕ Exit Zoetrope';
-
-    // Request OS fullscreen — resizes after fullscreenchange fires
-    const req = panel.requestFullscreen || panel.webkitRequestFullscreen || panel.mozRequestFullScreen;
-    if (req) {
-      req.call(panel).catch(() => {
-        // Fallback: OS fullscreen denied, use rAF to measure after layout
-        requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
-      });
-    } else {
-      requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
-    }
+    // Use rAF to size after layout — no panel.requestFullscreen (unreliable in nested FS)
+    requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
   } else {
-    // Exit OS fullscreen if active
-    if (document.fullscreenElement || document.webkitFullscreenElement) {
-      const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen;
-      if (exit) exit.call(document);
-    }
     panel.style.cssText = '';
     panel.classList.remove("fs-active");
     const canvas = document.getElementById('torus3d-canvas');
@@ -3689,9 +3675,8 @@ function toggleTorusFS() {
       canvas.style.position = ""; canvas.style.top = ""; canvas.style.left = "";
       canvas.style.width = ""; canvas.style.height = ""; canvas.style.zIndex = ""; canvas.style.pointerEvents = "";
       const camPanel = document.getElementById("torus-cam-panel"); if (camPanel) camPanel.style.display = "none";
-      // Re-enter main fullscreen, then re-layout
+      // Re-layout after exit
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        enterMainFullscreen();
         layoutViewPort();
         safeRender();
       }));
@@ -4571,5 +4556,9 @@ function drawAtlas() {
 }
 
 </script>
+
+<!-- Fixed EXIT button — always accessible, z-index above everything except torus FS overlay -->
+<button id="main-fs-quit-btn" onclick="exitMainFullscreen()"
+  style="position:fixed;top:10px;right:10px;z-index:490;font-family:var(--mono);font-size:9px;background:rgba(10,10,10,0.85);border:1px solid var(--muted);color:var(--muted);cursor:pointer;padding:4px 14px;border-radius:2px;letter-spacing:1px;pointer-events:auto">&#10005; EXIT</button>
 </body>
 </html>
