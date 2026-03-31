@@ -199,7 +199,7 @@ input:focus, select:focus { border-color: var(--accent); }
 .bar-label { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
 .mode-btns { display: flex; gap: 3px; }
 .mbtn {
-  background: none; border: 1px solid var(--border);
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
   color: var(--muted); font-family: var(--mono); font-size: 8px;
   letter-spacing: 0.5px; padding: 2px 8px; border-radius: 2px;
   cursor: pointer; transition: all 0.12s;
@@ -343,13 +343,15 @@ input:focus, select:focus { border-color: var(--accent); }
 <div id="top-bar">
 
   <!-- Row 1: title + subtitle -->
-  <div class="top-row" id="top-row1" style="padding:12px 12px 8px;min-height:44px;gap:10px">
-    <span style="font-family:var(--serif);font-size:18px;color:var(--text);letter-spacing:3px;flex-shrink:0">Antikythera</span>
-    <span style="font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;flex-shrink:0">Sononumeric particle explorer</span>
+  <div class="top-row" id="top-row1" style="padding:8px 12px 6px;min-height:36px;gap:8px">
+    <span style="font-family:var(--serif);font-size:15px;color:var(--text);letter-spacing:2px;flex-shrink:0">Antikythera</span>
+    <span style="font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">Sononumeric particle explorer</span>
   </div>
 
   <!-- Row 2: zoetrope (centre) + readme (right) -->
   <div class="top-row" id="top-row1b" style="padding:4px 12px 6px;gap:6px;justify-content:center">
+    <button onclick="switchView('matrix',this)"
+      style="font-family:var(--mono);font-size:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 14px;cursor:pointer;letter-spacing:1px;flex-shrink:0">Matrix</button>
     <button id="zoetrope-fs-btn" onclick="toggleTorusFS()"
       style="font-family:var(--mono);font-size:11px;background:none;border:1px solid var(--accent);color:var(--accent);border-radius:2px;padding:5px 20px;cursor:pointer;letter-spacing:2px;flex-shrink:0">⛶ ZOETROPE</button>
     <div style="position:absolute;right:12px">
@@ -364,10 +366,11 @@ input:focus, select:focus { border-color: var(--accent); }
     <button id="play-btn" onclick="togglePlay()">▶</button>
     <input type="range" id="frame-slider" min="0" value="0" oninput="onFrameScrub(this.value)" style="flex:1;min-width:60px">
     <div id="speed-btns" style="display:flex;gap:2px;flex-shrink:0">
-      <button class="mbtn" data-spd="1" onclick="setPlaySpeed(1,this)">½×</button>
+      <button class="mbtn" data-spd="1"  onclick="setPlaySpeed(1,this)">½×</button>
       <button class="mbtn active" data-spd="2" onclick="setPlaySpeed(2,this)">1×</button>
-      <button class="mbtn" data-spd="4" onclick="setPlaySpeed(4,this)">2×</button>
-      <button class="mbtn" data-spd="8" onclick="setPlaySpeed(8,this)">4×</button>
+      <button class="mbtn" data-spd="4"  onclick="setPlaySpeed(4,this)">2×</button>
+      <button class="mbtn" data-spd="10" onclick="setPlaySpeed(10,this)">5×</button>
+      <button class="mbtn" data-spd="20" onclick="setPlaySpeed(20,this)">10×</button>
     </div>
   </div>
 
@@ -380,7 +383,7 @@ input:focus, select:focus { border-color: var(--accent); }
     <span class="bar-label" style="flex-shrink:0">Display:</span>
     <div class="mode-btns" id="frame-mode-btns" style="flex-shrink:0">
       <button class="mbtn"        data-mode="chord"    onclick="setMode('chord',this)">Chords</button>
-      <button class="mbtn active" data-mode="midpoint" onclick="setMode('midpoint',this)">Midpoints</button>
+      <button class="mbtn"        data-mode="midpoint" onclick="setMode('midpoint',this)">Midpoints</button>
       <button class="mbtn"        data-mode="vector"   onclick="setMode('vector',this)">Vectors</button>
     </div>
     <div style="width:1px;height:14px;background:var(--border);flex-shrink:0;margin:0 6px"></div>
@@ -399,7 +402,7 @@ input:focus, select:focus { border-color: var(--accent); }
       <span class="bar-label">Nodes</span>
       <select id="ak-count-sel" onchange="akSetCount(parseInt(this.value))" style="font-size:10px;padding:2px 6px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;">
         <option value="2">2</option><option value="3">3</option><option value="4">4</option>
-        <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+        <option value="5">5</option><option value="6">6</option><option value="7">7</option>
       </select>
       <div class="mode-btns" id="ak-mode-btns">
         <button class="mbtn active" data-akmode="pairwise" onclick="setAkMode('pairwise',this)">Pairwise</button>
@@ -434,10 +437,10 @@ input:focus, select:focus { border-color: var(--accent); }
       <div style="width:1px;height:16px;background:var(--border);flex-shrink:0"></div>
       <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
         <span style="font-size:7px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;flex-shrink:0">√2 — Inflection</span>
-        <input type="range" id="pal-infl-hue" min="0" max="360" value="22" oninput="updatePalSlider(this)" title="Hue" style="flex:1;height:6px;accent-color:var(--accent)">
-        <input type="range" id="pal-infl-bri" min="0" max="100" value="58" oninput="updatePalSlider(this)" title="Brightness" style="flex:1;height:6px;accent-color:var(--accent)">
+        <input type="range" id="pal-infl-hue" min="0" max="360" value="300" oninput="updatePalSlider(this)" title="Hue" style="flex:1;height:6px;accent-color:var(--accent)">
+        <input type="range" id="pal-infl-bri" min="0" max="100" value="72" oninput="updatePalSlider(this)" title="Brightness" style="flex:1;height:6px;accent-color:var(--accent)">
         <div id="pal-infl-swatch" style="width:12px;height:12px;border-radius:50%;border:1px solid #444;flex-shrink:0"></div>
-        <span style="font-size:7px;color:var(--muted);min-width:52px" id="pal-infl-label">H22 B58</span>
+        <span style="font-size:7px;color:var(--muted);min-width:52px" id="pal-infl-label">H300 B58</span>
       </div>
       <div style="width:1px;height:16px;background:var(--border);flex-shrink:0"></div>
       <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
@@ -453,6 +456,8 @@ input:focus, select:focus { border-color: var(--accent); }
         <input type="range" id="main-bg-bri" min="0" max="100" step="1" value="0" oninput="setBgBri(this.value)" style="width:60px;height:6px;accent-color:var(--accent)">
         <span style="font-family:var(--mono);font-size:6px;color:var(--muted)">Hue</span>
         <input type="range" id="main-bg-hue" min="0" max="360" step="1" value="0" oninput="setBgHue(this.value)" style="width:60px;height:6px;accent-color:var(--accent)">
+        <span style="font-family:var(--mono);font-size:6px;color:var(--muted)">Chr</span>
+        <input type="range" id="main-bg-sat" min="0" max="100" step="1" value="60" oninput="setBgSat(this.value)" style="width:60px;height:6px;accent-color:var(--accent)">
       </div>
     </div>
   </div>
@@ -576,8 +581,8 @@ input:focus, select:focus { border-color: var(--accent); }
         </div>
         <div style="display:flex;align-items:center;gap:4px">
           <span style="font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">α</span>
-          <input id="torus-opacity-main" type="range" min="3" max="100" step="1" value="80" oninput="setTorusOpacitySlider(this.value)" style="accent-color:var(--accent);width:80px">
-          <span id="torus-opacity-label" style="font-family:var(--mono);font-size:8px;color:var(--muted);min-width:28px">80%</span>
+          <input id="torus-opacity-main" type="range" min="0" max="100" step="1" value="89" oninput="setTorusOpacitySlider(this.value)" style="accent-color:var(--accent);width:80px">
+          <span id="torus-opacity-label" style="font-family:var(--mono);font-size:8px;color:var(--muted);min-width:28px">79%</span>
         </div>
       </div>
     </div>
@@ -597,7 +602,7 @@ input:focus, select:focus { border-color: var(--accent); }
         <div style="flex:1"></div>
         <span style="font-family:var(--mono);font-size:8px;color:var(--muted);white-space:nowrap">N-comp</span>
         <select id="atlas-coarse-n" onchange="setAtlasCoarseN(parseInt(this.value))" style="font-size:9px;padding:2px 4px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;">
-          <option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11" selected>11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option>
+          <option value="7">7</option><option value="9">9</option><option value="10">10</option><option value="11" selected>11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option>
         </select>
         <div style="display:flex;gap:2px" id="atlas-mode-group">
           <button class="mbtn active" id="atlas-fine-btn"  onclick="setAtlasViewMode('fine',this)"   style="min-width:42px;text-align:center">Fine</button>
@@ -644,19 +649,19 @@ input:focus, select:focus { border-color: var(--accent); }
     <!-- Zoetrope FS overlay: top-left exit+camera, bottom strip for playback -->
     <div id="torus-fs-overlay" style="display:none;position:fixed;inset:0;z-index:510;pointer-events:none">
 
-      <!-- Top-left: tools + demo -->
-      <div style="position:absolute;top:12px;left:12px;display:flex;gap:8px;align-items:center;pointer-events:auto;z-index:520">
-        <button id="torus-cam-toggle" onclick="toggleTorusCamPanel()" class="mbtn" style="font-size:11px;letter-spacing:1px;padding:6px 16px">&#9656; Tools</button>
+      <!-- Top-left: tools -->
+      <div style="position:absolute;top:12px;left:12px;pointer-events:auto;z-index:520">
+        <button id="torus-cam-toggle" onclick="toggleTorusCamPanel()" class="mbtn" style="font-size:11px;letter-spacing:1px;padding:6px 16px;background:rgba(0,0,0,0.7);border-color:var(--border)">&#9656; Tools</button>
+      </div>
+      <!-- Top-right: demo (small) + exit -->
+      <div style="position:absolute;top:12px;right:12px;display:flex;gap:6px;align-items:center;pointer-events:auto;z-index:520">
         <select id="fs-demo-sel" onchange="runDemo(this.value)"
-          style="font-family:var(--mono);font-size:11px;padding:6px 10px;background:rgba(12,12,12,0.9);color:var(--muted);border:1px solid var(--border);border-radius:2px;cursor:pointer;letter-spacing:1px">
-          <option value="">Demo &#9662;</option>
+          style="font-family:var(--mono);font-size:8px;padding:3px 6px;background:rgba(12,12,12,0.9);color:var(--muted);border:1px solid var(--border);border-radius:2px;cursor:pointer">
+          <option value="">Demo</option>
           <option value="cloud">Cloud</option>
           <option value="pipe">Pipe</option>
           <option value="tree" disabled>Tree</option>
         </select>
-      </div>
-      <!-- Top-right: exit -->
-      <div style="position:absolute;top:12px;right:12px;pointer-events:auto;z-index:520">
         <button onclick="toggleTorusFS()" style="font-family:var(--mono);font-size:9px;background:rgba(50,8,8,0.9);border:1px solid #833;color:#e88;border-radius:2px;padding:4px 12px;cursor:pointer;letter-spacing:1px">&#10005; Exit</button>
       </div>
 
@@ -686,15 +691,15 @@ input:focus, select:focus { border-color: var(--accent); }
             <!-- Play -->
             <div>
               <div class="bar-label" style="margin-bottom:4px">Play</div>
-              <div style="display:flex;align-items:center;gap:4px">
-                <button id="fs-panel-play-btn" onclick="togglePlay()" style="font-family:var(--mono);font-size:14px;background:none;border:1px solid var(--accent);color:var(--accent);border-radius:2px;padding:2px 12px;cursor:pointer;flex-shrink:0">▶</button>
-                <button class="mbtn" data-spd="1" onclick="setPlaySpeed(1,this)">½×</button>
-                <button class="mbtn active" data-spd="2" onclick="setPlaySpeed(2,this)">1×</button>
-                <button class="mbtn" data-spd="4" onclick="setPlaySpeed(4,this)">2×</button>
-                <button class="mbtn" data-spd="8" onclick="setPlaySpeed(8,this)">4×</button>
-              </div>
-            </div>
-
+               <div style="display:flex;align-items:center;gap:4px">
+                 <button id="fs-panel-play-btn" onclick="togglePlay()" style="font-family:var(--mono);font-size:14px;background:none;border:1px solid var(--accent);color:var(--accent);border-radius:2px;padding:2px 12px;cursor:pointer;flex-shrink:0">&#9654;</button>
+                 <button class="mbtn" data-spd="1"  onclick="setPlaySpeed(1,this)">&#189;&times;</button>
+                 <button class="mbtn active" data-spd="2" onclick="setPlaySpeed(2,this)">1&times;</button>
+                 <button class="mbtn" data-spd="4"  onclick="setPlaySpeed(4,this)">2&times;</button>
+                 <button class="mbtn" data-spd="10" onclick="setPlaySpeed(10,this)">5&times;</button>
+                 <button class="mbtn" data-spd="20" onclick="setPlaySpeed(20,this)">10&times;</button>
+               </div>
+             </div>
             <!-- Spin -->
             <div>
               <div class="bar-label" style="margin-bottom:4px">Spin</div>
@@ -710,8 +715,8 @@ input:focus, select:focus { border-color: var(--accent); }
             <div>
               <div class="bar-label" style="margin-bottom:4px">Display</div>
               <div style="display:flex;gap:2px" id="fs-display-btns">
-                <button class="mbtn" data-mode="chord"    onclick="setMode('chord',this);updateFSChordSub()"    style="flex:1;text-align:center">Chords</button>
-                <button class="mbtn active" data-mode="midpoint" onclick="setMode('midpoint',this);updateFSChordSub()" style="flex:1;text-align:center">Midpoints</button>
+                <button class="mbtn active" data-mode="chord"    onclick="setMode('chord',this);updateFSChordSub()"    style="flex:1;text-align:center">Chords</button>
+                <button class="mbtn" data-mode="midpoint" onclick="setMode('midpoint',this);updateFSChordSub()" style="flex:1;text-align:center">Midpoints</button>
                 <button class="mbtn" data-mode="vector"   onclick="setMode('vector',this);updateFSChordSub()"   style="flex:1;text-align:center">Vectors</button>
               </div>
               <!-- Chord sub-modes (only shown when chord active) -->
@@ -720,6 +725,26 @@ input:focus, select:focus { border-color: var(--accent); }
                 <button class="mbtn"        data-csub="latter" onclick="setChordSub('latter',this)" style="flex:1;text-align:center;font-size:8px">Latter</button>
                 <button class="mbtn"        data-csub="prior"  onclick="setChordSub('prior',this)"  style="flex:1;text-align:center;font-size:8px">Prior</button>
                 <button class="mbtn"        data-csub="centre" onclick="setChordSub('centre',this)" style="flex:1;text-align:center;font-size:8px">Centre</button>
+              </div>
+              <!-- Vector sub-options (shown when Vectors active) -->
+              <div id="fs-vec-sub" style="display:none;flex-direction:column;gap:4px;margin-top:4px">
+                <!-- V / P / Pendulum mode buttons -->
+                <div style="display:flex;gap:2px">
+                  <button class="mbtn active" data-vecmode="v" onclick="setVecSubMode('v',this)"
+                    style="flex:1;text-align:center;font-size:10px" title="Arrow vectors">V</button>
+                  <button class="mbtn"        data-vecmode="p" onclick="setVecSubMode('p',this)"
+                    style="flex:1;text-align:center;font-size:10px" title="Point at tip">P</button>
+                  <button class="mbtn"        data-vecmode="pendulum" onclick="setVecSubMode('pendulum',this)"
+                    style="flex:1;text-align:center;font-size:9px" title="Line + point at tip">Pend</button>
+                </div>
+                <!-- Intensity slider (both modes) -->
+                <div style="display:flex;align-items:center;gap:6px">
+                  <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:40px">Intensity</span>
+                  <input type="range" id="fs-vec-int" min="1" max="40" step="1" value="10"
+                    oninput="setVecIntensity(this.value/10)"
+                    style="flex:1;accent-color:var(--accent)">
+                  <span id="fs-vec-int-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">1.0×</span>
+                </div>
               </div>
             </div>
 
@@ -753,36 +778,41 @@ input:focus, select:focus { border-color: var(--accent); }
             <div>
               <div class="bar-label" style="margin-bottom:4px">Transparency</div>
               <div style="display:flex;align-items:center;gap:6px">
-                <input id="torus-opacity-fs" type="range" min="0" max="100" step="1" value="80"
+                <input id="torus-opacity-fs" type="range" min="0" max="100" step="1" value="89"
                   oninput="setTorusOpacitySlider(this.value)" style="accent-color:var(--accent);flex:1">
-                <span id="torus-opacity-label-fs" style="font-family:var(--mono);font-size:8px;color:var(--muted);min-width:28px">80%</span>
+                <span id="torus-opacity-label-fs" style="font-family:var(--mono);font-size:8px;color:var(--muted);min-width:28px">79%</span>
               </div>
             </div>
 
             <!-- Camera Angle -->
             <div>
-              <div class="bar-label" style="margin-bottom:4px">Camera Angle</div>
-              <select id="cam-angle-sel" onchange="setCamAngle(this.value)"
-                style="font-size:9px;padding:3px 6px;background:rgba(20,20,20,0.85);color:#d8d4cc;border:1px solid #333;border-radius:2px;width:100%">
-                <option value="wide">Wide (default)</option>
-                <option value="tube">Inside tube</option>
-              </select>
+              <div class="bar-label" style="margin-bottom:4px">Camera</div>
+              <div style="display:flex;gap:3px;margin-bottom:4px">
+                <button class="mbtn active" id="cam-wide-btn" data-cam="wide"
+                  onclick="setCamAngleBtn('wide')"
+                  style="flex:1;text-align:center;font-size:9px">Wide</button>
+                <button class="mbtn" id="cam-tube-btn" data-cam="tube"
+                  onclick="setCamAngleBtn('tube')"
+                  style="flex:1;text-align:center;font-size:9px">Inside</button>
+                <button class="mbtn" id="cam-slide-btn"
+                  onclick="triggerCamSlide()"
+                  style="flex:1;text-align:center;font-size:9px" title="Animate between Wide and Inside">Slide</button>
+              </div>
+              <!-- Slide speed -->
+              <div id="cam-slide-spd-row" style="display:flex;align-items:center;gap:6px;margin-top:4px">
+                <span style="font-family:var(--mono);font-size:7px;color:var(--muted);flex-shrink:0">Speed</span>
+                <input type="range" id="cam-slide-spd" min="1" max="20" step="1" value="3"
+                  oninput="setCamSlideSpeed(this.value)"
+                  style="flex:1;accent-color:var(--accent)">
+                <span id="cam-slide-spd-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:18px">3</span>
+              </div>
             </div>
 
-            <!-- Camera Motion -->
-            <div>
-              <div class="bar-label" style="margin-bottom:4px">Camera Motion</div>
-              <select id="cam-motion-sel" onchange="setCamMotion(this.value)"
-                style="font-size:9px;padding:3px 6px;background:rgba(20,20,20,0.85);color:#d8d4cc;border:1px solid #333;border-radius:2px;width:100%">
-                <option value="stationary">Stationary</option>
-                <option value="barrel">Barrel Roll</option>
-                <option value="tumble">Tumble</option>
-                <option value="serpent">Serpent</option>
-                <option value="rollercoaster">Rollercoaster</option>
-                <option value="wobble">Wobble</option>
-                <option value="bob">Bob</option>
-              </select>
-            </div>
+            <!-- hidden select kept for JS compat -->
+            <select id="cam-angle-sel" style="display:none" onchange="setCamAngle(this.value)">
+              <option value="wide">Wide</option>
+              <option value="tube">Inside</option>
+            </select>
 
             <!-- Alterations -->
             <div>
@@ -874,6 +904,11 @@ input:focus, select:focus { border-color: var(--accent); }
               <input type="range" id="bg-hue-slider" min="0" max="360" step="1" value="0"
                 oninput="setBgHue(this.value)" style="width:100%;accent-color:var(--accent)">
             </div>
+            <div>
+              <div class="bar-label" style="margin-bottom:3px">Background Chroma</div>
+              <input type="range" id="bg-sat-slider" min="0" max="100" step="1" value="60"
+                oninput="setBgSat(this.value)" style="width:100%;accent-color:var(--accent)">
+            </div>
 
             <!-- Data point shape -->
             <div>
@@ -954,10 +989,11 @@ input:focus, select:focus { border-color: var(--accent); }
         <div style="display:flex;gap:3px;align-items:center">
           <button class="mbtn" data-atcirc id="atlas-fs-circ-btn" onclick="toggleAtlasCirc(this)">Arc</button>
           <button id="atlas-fs-play-btn" onclick="togglePlay()" style="font-family:var(--mono);font-size:12px;background:none;border:1px solid var(--accent);color:var(--accent);border-radius:2px;padding:3px 8px;cursor:pointer">▶</button>
-          <button class="mbtn" data-spd="1" onclick="setPlaySpeed(1,this)">½×</button>
-          <button class="mbtn active" data-spd="1" onclick="setPlaySpeed(1,this)">1×</button>
-          <button class="mbtn active" data-spd="2" onclick="setPlaySpeed(2,this)">1×</button>
-          <button class="mbtn" data-spd="4" onclick="setPlaySpeed(4,this)">4×</button>
+           <button class="mbtn" data-spd="1"  onclick="setPlaySpeed(1,this)">½×</button>
+           <button class="mbtn active" data-spd="2" onclick="setPlaySpeed(2,this)">1×</button>
+           <button class="mbtn" data-spd="4"  onclick="setPlaySpeed(4,this)">2×</button>
+           <button class="mbtn" data-spd="10" onclick="setPlaySpeed(10,this)">5×</button>
+           <button class="mbtn" data-spd="20" onclick="setPlaySpeed(20,this)">10×</button>
           <div style="flex:1"></div>
           <button class="mbtn active" id="atlas-lock-btn-fs" onclick="toggleAtlasLock(this)">Unlock</button>
         </div>
@@ -973,7 +1009,7 @@ input:focus, select:focus { border-color: var(--accent); }
         <div style="display:flex;align-items:center;gap:4px">
           <span style="font-family:var(--mono);font-size:8px;color:var(--muted);white-space:nowrap">N-comp</span>
           <select id="atlas-coarse-n-fs" onchange="setAtlasCoarseN(parseInt(this.value))" style="font-size:9px;padding:2px 4px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;flex:1">
-            <option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11" selected>11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option>
+            <option value="7">7</option><option value="9">9</option><option value="10">10</option><option value="11" selected>11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option>
           </select>
           <button class="mbtn active" id="atlas-fine-btn-fs"   onclick="setAtlasViewMode('fine',this)">Fine</button>
           <button class="mbtn"        id="atlas-coarse-btn-fs" onclick="setAtlasViewMode('coarse',this)">Coarse</button>
@@ -993,7 +1029,7 @@ input:focus, select:focus { border-color: var(--accent); }
         </div>
         <div style="display:flex;gap:2px;justify-content:center">
           <button class="mbtn"        data-mode="chord"    onclick="setMode('chord',this)">Chords</button>
-          <button class="mbtn active" data-mode="midpoint" onclick="setMode('midpoint',this)">Midpoints</button>
+          <button class="mbtn" data-mode="midpoint" onclick="setMode('midpoint',this)">Midpoints</button>
           <button class="mbtn"        data-mode="vector"   onclick="setMode('vector',this)">Vectors</button>
         </div>
       </div>
@@ -1139,7 +1175,7 @@ function isPair(fn) { return fn === 'phi_pair' || fn === 'sqrt_pair' || fn === '
 // ── Palettes ─────────────────────────────────────────────────
 // ── Palette system ───────────────────────────────────────────
 let _palIdCol    = [32, 160, 210];  // Sky (ID default)
-let _palInflCol  = [237, 120,  14]; // Orange (INF default)
+let _palInflCol  = [255,   0, 200]; // Magenta (INF default)
 let _palAlt1Id   = [28, 140,  90];  // Jade (ID2 default)
 let _palAlt1Infl = [237, 120,  14]; // Orange (INF2 default)
 let _rainbow = false;
@@ -1291,10 +1327,6 @@ function openAndScrollMatrix() {
 }
 const openMatrix = openAndScrollMatrix;
 
-function toggleMatrixBody() {
-  // No-op: matrix is now always shown in its view panel
-}
-
 function hlMatrixRow(row, e) {
   e.stopPropagation();
   _hlRow = (_hlRow === row) ? -1 : row;
@@ -1410,7 +1442,7 @@ let _hlRow = -1, _hlCol = -1; // highlighted matrix row/col (-1 = none)
 let _n = 4, _fn = 'id';
 let _frame = 0;
 let _playing = false;
-let _frameMode = 'midpoint';
+let _frameMode = 'chord';
 let _reticMode = 'chord';
 let _reticOpacity = 0.8;
 let _midpointSize = 12; // dot radius scale factor
@@ -1432,24 +1464,6 @@ const _fnAliases = {
   '2^x': '2x', 'pi^x': 'pix', 'π^x': 'pix', 'e^x': 'ex', 'log2(x)': 'log2',
   'x^(1/x)': 'xx', 'x^(3/2)': 'cb32_pair', 'x^(2/3)': 'cb32_pair'
 };
-
-function onFnTextChange(raw) {
-  const trimmed = raw.trim();
-  const key = _fnAliases[trimmed] || trimmed;
-  // Validate: known key or reject
-  const knownKeys = new Set(['id','recip','sq','rsq','cb','rcb','sqrt_pair','phi_pair',
-    'cb32_pair','phix','rphi_x','2x','pix','ex','xx','log2','x4','rx4','x5','rx5','x6','rx6']);
-  const el = document.getElementById('fn-select');
-  if (knownKeys.has(key)) {
-    el.style.borderColor = '#333';
-    onFnSelectChange(key);
-    // Store resolved key for compute()
-    el.dataset.resolvedKey = key;
-  } else {
-    el.style.borderColor = '#833'; // red border = unrecognised
-    el.dataset.resolvedKey = '';
-  }
-}
 
 function onFnSelectChange(fn) {
   const inp = document.getElementById('fn-custom-input');
@@ -1503,13 +1517,6 @@ function autoSizeGlyphBox(el) {
   el.rows = rows;
 }
 
-function flashBuildBtn() {
-  const btn = document.getElementById('build-btn');
-  if (!btn) return;
-  btn.style.animation = 'none';
-  requestAnimationFrame(() => { btn.style.animation = 'quitFlash 1s step-end 3'; });
-}
-
 function compute() {
   _atlasModeCache = null;
   _frame = 0;
@@ -1519,6 +1526,7 @@ function compute() {
   _n = n; _fn = fn;
 
   const lo = Math.pow(2, n);
+  // N=8: skip odd integers to keep framecount same as N=7 (128 frames)
   s1 = Array.from({ length: lo }, (_, i) => lo + i);
 
   if (isPair(fn)) {
@@ -1533,7 +1541,7 @@ function compute() {
   // Build interleaved matrixFull with sub-integer interpolation.
   // For N>=5: step=0.5 (2N frames). For N=4: step=0.25 (4N=64). For N=3: step=0.125 (8N=64).
   // This keeps frame count at ~64 for N<=5, so animation detail increases as N decreases.
-  const subSteps = n <= 3 ? 16 : n === 4 ? 8 : n === 5 ? 4 : n === 6 ? 2 : 1; // N3=16ths N4=8ths N5=quarters N6=halves
+  const subSteps = n <= 3 ? 16 : n === 4 ? 8 : n === 5 ? 4 : n === 6 ? 4 : n === 7 ? 4 : 1; // N3=16ths N4=8ths N5-7=quarters
   _stepsPerInt = subSteps;
   const step = 1 / subSteps;
   matrixFull = [];
@@ -1832,18 +1840,45 @@ function drawChordFrame() {
       const mx = (ax+bx)/2, my = (ay+by)/2;
       const dx = bx-ax, dy = by-ay;
       const len = Math.hypot(dx,dy) || 1;
-      const vLen = len / 4;
-      const px = -dy/len * vLen, py = dx/len * vLen;
+      const vLen = len / 4 * _vecIntensity;
+      const nx = -dy/len, ny = dx/len; // unit normal (perpendicular bisector direction)
+      const px = nx * vLen, py = ny * vLen;
       const ex = mx+px, ey = my+py;
-      ctx.beginPath(); ctx.moveTo(mx,my); ctx.lineTo(ex,ey);
-      ctx.strokeStyle = `rgba(${r},${g},${b},${vAlpha})`; ctx.stroke();
-      const angle = Math.atan2(ey-my, ex-mx);
-      const hs = Math.max(3, vLen*0.4);
-      ctx.beginPath();
-      ctx.moveTo(ex, ey);
-      ctx.lineTo(ex - hs*Math.cos(angle-0.45), ey - hs*Math.sin(angle-0.45));
-      ctx.lineTo(ex - hs*Math.cos(angle+0.45), ey - hs*Math.sin(angle+0.45));
-      ctx.closePath(); ctx.fillStyle=`rgba(${r},${g},${b},${vAlpha})`; ctx.fill();
+      ctx.strokeStyle = `rgba(${r},${g},${b},${vAlpha})`;
+      ctx.fillStyle   = `rgba(${r},${g},${b},${vAlpha})`;
+
+      if (_vecSubMode === 'v') {
+        // V mode: arrow vectors
+        ctx.beginPath(); ctx.moveTo(mx,my); ctx.lineTo(ex,ey); ctx.stroke();
+        const angle = Math.atan2(ey-my, ex-mx);
+        const hs = Math.max(3, vLen*0.4);
+        ctx.beginPath();
+        ctx.moveTo(ex, ey);
+        ctx.lineTo(ex - hs*Math.cos(angle-0.45), ey - hs*Math.sin(angle-0.45));
+        ctx.lineTo(ex - hs*Math.cos(angle+0.45), ey - hs*Math.sin(angle+0.45));
+        ctx.closePath(); ctx.fill();
+      } else {
+        // P and Pendulum: shape/glyph at tip
+        const dotR = Math.max(0.5, proxSizeScale(prox) * Math.pow(_midpointSize / 5, 1.8));
+        // Pendulum also draws the line
+        if (_vecSubMode === 'pendulum') {
+          ctx.beginPath(); ctx.moveTo(mx,my); ctx.lineTo(ex,ey); ctx.stroke();
+        }
+        ctx.beginPath();
+        if (_pointShape === 'glyph' && _midpointChar) {
+          const angle = Math.atan2(py, px);
+          const fontSize = Math.max(6, dotR * 1.8);
+          ctx.save();
+          ctx.translate(ex, ey);
+          ctx.rotate(angle - Math.PI / 2);
+          ctx.font = `${fontSize}px var(--serif), serif`;
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText(_midpointChar, 0, 0);
+          ctx.restore();
+        } else {
+          drawShape2D(ctx, ex, ey, dotR);
+        }
+      }
     }
   }
 
@@ -2109,16 +2144,43 @@ function scheduleFrame() {
   _animId = requestAnimationFrame(ts => {
     const interval = 1000 / (FPS * _playSpeed);
     if (ts - _lastTime >= interval) {
+      const steps = Math.max(1, Math.floor((ts - _lastTime) / interval));
       _lastTime = ts;
-      setFrame((_frame + 1) % activeFrameCount());
+      setFrame((_frame + steps) % activeFrameCount());
     }
     scheduleFrame();
   });
-}
-function toggleZoetrope(btn) {} // no-op — zoetrope is just playback
+} // no-op — zoetrope is just playback
 
 // ── Mode switches ────────────────────────────────────────────
 let _chordSub = 'full'; // 'full' | 'latter' | 'prior' | 'centre'
+let _vecIntensity = 1.0;  // scales vector length
+let _vecGlyphPos  = 0.5;  // 0.0–1.0 position along vector for P-mode point
+let _vecSubMode   = "v";  // "v" = arrow vectors | "p" = point on vector
+
+function setVecIntensity(val) {
+  _vecIntensity = parseFloat(val);
+  const lbl = document.getElementById("fs-vec-int-label");
+  if (lbl) lbl.textContent = _vecIntensity.toFixed(1) + "×";
+  if (_activeView === "animation") drawChordFrame();
+  else if (_activeView === "torus" && _frameMode === "vector") buildTorusPoints();
+}
+function setVecGlyphPos(val) {
+  _vecGlyphPos = parseFloat(val);
+  const lbl = document.getElementById("fs-vec-glyph-label");
+  if (lbl) lbl.textContent = _vecGlyphPos.toFixed(2);
+  if (_activeView === "animation") drawChordFrame();
+  else if (_activeView === "torus" && _frameMode === "vector") buildTorusPoints();
+}
+function setVecSubMode(mode, btn) {
+  _vecSubMode = mode;
+  document.querySelectorAll("[data-vecmode]").forEach(b =>
+    b.classList.toggle("active", b.dataset.vecmode === mode));
+  const pSlider = document.getElementById("fs-vec-p-row");
+  if (pSlider) pSlider.style.display = mode === "p" ? "flex" : "none";
+  if (_activeView === "animation") drawChordFrame();
+  else if (_activeView === "torus") buildTorusPoints();
+}
 
 function setChordSub(sub, btn) {
   _chordSub = sub;
@@ -2131,6 +2193,8 @@ function setChordSub(sub, btn) {
 function updateFSChordSub() {
   const sub = document.getElementById('fs-chord-sub');
   if (sub) sub.style.display = _frameMode === 'chord' ? 'flex' : 'none';
+  const vec = document.getElementById('fs-vec-sub');
+  if (vec) vec.style.display = _frameMode === 'vector' ? 'flex' : 'none';
 }
 
 function setMode(mode, btn) {
@@ -2147,10 +2211,6 @@ function setMode(mode, btn) {
   else if (_activeView === 'reticulum')  { drawComposite(); }
   else if (_activeView === 'antikythera') akDraw();
   drawComposite();
-}
-function toggleMatrix() {
-  const btn = document.getElementById('matrix-view-btn');
-  switchView('matrix', btn);
 }
 
 // ── Antikythera ──────────────────────────────────────────────
@@ -2511,15 +2571,6 @@ function toggleHeatmapOverlay() {
   if (open) { renderHeatmap(); drawTorus(); }
 }
 
-function toggleFullscreen() {
-  if (document.fullscreenElement || document.webkitFullscreenElement) {
-    (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen).call(document);
-  } else {
-    const el = document.documentElement;
-    (el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen).call(el);
-  }
-}
-
 function enterMainFullscreen() {
   const el = document.documentElement;
   const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen;
@@ -2552,12 +2603,6 @@ function _updateQuitBtn() {
 }
 document.addEventListener('fullscreenchange', _updateQuitBtn);
 document.addEventListener('webkitfullscreenchange', _updateQuitBtn);
-
-function toggleViewFullscreen() {
-  // Fullscreen for Zoetrope uses existing toggleTorusFS; for Atlas uses toggleAtlasFS
-  if (_activeView === 'torus') toggleTorusFS();
-  else if (_activeView === 'atlas') toggleAtlasFS();
-}
 
 function updateFsBtn(view) {
   // zoetrope-fs-btn is always visible — label updates in toggleTorusFS
@@ -2712,13 +2757,6 @@ function setTorusOverlay(val) {
   if (_three) buildTorusPoints();
 }
 
-function toggleIdLine(btn) {
-  // Legacy — toggle between idline and none
-  _torusOverlay = _torusOverlay === 'idline' ? 'none' : 'idline';
-  if (btn) btn.classList.toggle('active', _torusOverlay === 'idline');
-  if (_three) buildTorusPoints();
-}
-
 function runDemo(name) {
   const sel = document.getElementById('fs-demo-sel');
   if (!name) return;
@@ -2801,19 +2839,6 @@ function toggleHelixMode(btn) {
 
 // Circular sprite texture for Points rendering
 let _circleTexCache = null;
-function makeCircleTexture() {
-  if (_circleTexCache) return _circleTexCache;
-  const size = 64;
-  const c = document.createElement('canvas');
-  c.width = c.height = size;
-  const ctx = c.getContext('2d');
-  ctx.beginPath();
-  ctx.arc(size/2, size/2, size/2 - 1, 0, Math.PI*2);
-  ctx.fillStyle = '#fff';
-  ctx.fill();
-  _circleTexCache = new THREE.CanvasTexture(c);
-  return _circleTexCache;
-}
 
 // ── Spin slider ────────────────────────────────────────────────
 // Slider 0-100 → spinSpeed. 0=stopped, 100=max (0.020)
@@ -2833,9 +2858,9 @@ function setSpinFromSlider(val) {
 }
 
 // ── Background colour ─────────────────────────────────────────
-let _bgBri = 0, _bgHue = 0;
+let _bgBri = 0, _bgHue = 0, _bgSat = 60;
 function _applyBgColor() {
-  const [r,g,b] = hslToRgb(_bgHue, _bgBri > 5 ? 60 : 0, _bgBri);
+  const [r,g,b] = hslToRgb(_bgHue, _bgBri > 5 ? _bgSat : 0, _bgBri);
   const hex = (v => '#' + v.toString(16).padStart(6,'0'))((r<<16)|(g<<8)|b);
   if (_three && _three.renderer) _three.renderer.setClearColor(hex, 1);
   const canvas = document.getElementById('torus3d-canvas');
@@ -2851,6 +2876,14 @@ function setBgHue(val) {
   _bgHue = parseInt(val);
   const el = document.getElementById('main-bg-hue');
   if (el && parseInt(el.value) !== _bgHue) el.value = _bgHue;
+  _applyBgColor();
+}
+function setBgSat(val) {
+  _bgSat = parseInt(val);
+  ['main-bg-sat','bg-sat-slider'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && parseInt(el.value) !== _bgSat) el.value = _bgSat;
+  });
   _applyBgColor();
 }
 
@@ -2871,18 +2904,6 @@ function randomizeColours() {
   if (bgHueEl) bgHueEl.value = bgHue;
   setBgBri(bgBri); setBgHue(bgHue);
   updatePalSlider();
-}
-
-function rotateTorus45() {
-  if (!_three) return;
-  const { camera } = _three;
-  // Roll camera up-vector by 45° — pure camera roll, controls unchanged
-  const angle = Math.PI / 4;
-  const cos = Math.cos(angle), sin = Math.sin(angle);
-  const ux = camera.up.x, uy = camera.up.y;
-  camera.up.set(ux * cos - uy * sin, ux * sin + uy * cos, camera.up.z);
-  camera.up.normalize();
-  if (_three.renderNow) _three.renderNow();
 }
 
 // ── Point shape textures ──────────────────────────────────────
@@ -2907,12 +2928,12 @@ function makePointTexture(shape) {
     case 'ring':
       ctx.beginPath(); ctx.arc(h,h,h-4,0,Math.PI*2); ctx.lineWidth=6; ctx.stroke(); break;
     case 'bubble':
-      // Inner fill first (grey = r≈0.25) — shader applies opacity to these pixels
+      // Inner fill: large, covers most of the texture — shader applies opacity
       ctx.fillStyle = '#404040';
-      ctx.beginPath(); ctx.arc(h,h,h-10,0,Math.PI*2); ctx.fill();
-      // Outer ring on top (white = r=1.0) — shader keeps these always opaque
+      ctx.beginPath(); ctx.arc(h,h,h-4,0,Math.PI*2); ctx.fill();
+      // Outer ring: as thin as possible (lineWidth 2), sits at edge
       ctx.fillStyle = '#fff'; ctx.strokeStyle = '#fff';
-      ctx.beginPath(); ctx.arc(h,h,h-4,0,Math.PI*2); ctx.lineWidth=6; ctx.stroke();
+      ctx.beginPath(); ctx.arc(h,h,h-2,0,Math.PI*2); ctx.lineWidth=2; ctx.stroke();
       break;
     case 'square':
       ctx.fillRect(8,8,sz-16,sz-16); break;
@@ -3199,10 +3220,10 @@ function initTorus3D() {
   canvas.addEventListener('touchmove', e => {
     if (e.touches.length === 2 && _pinchDist0 !== null) {
       const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-      if (_camAngle === 'tube') {
+      if (_camSlideDir === 0 && _camAngle === 'tube') {
         _tubeZoom = Math.max(-2, Math.min(2, _tubeZoom + (_pinchDist0 - d) * 0.01));
         _pinchDist0 = d;
-      } else {
+      } else if (_camSlideDir === 0) {
         camera.position.z = Math.max(0.5, Math.min(25, _camZ0 * (_pinchDist0 / d)));
       }
       e.preventDefault();
@@ -3213,6 +3234,7 @@ function initTorus3D() {
   // Mouse wheel zoom: scroll to zoom in/out
   canvas.addEventListener('wheel', e => {
     e.preventDefault();
+    if (_camSlideDir !== 0) return; // zoom disabled during slide
     if (_camAngle === 'tube') {
       _tubeZoom = Math.max(-2, Math.min(2, _tubeZoom + (e.deltaY > 0 ? 0.1 : -0.1)));
     } else {
@@ -3226,11 +3248,11 @@ function initTorus3D() {
     requestAnimationFrame(loop);
     if (_activeView !== 'torus') return;
 
-    const isInsideView = _camAngle === 'tube';
+    const isSlideView  = _camSlideDir !== 0; // actively sliding
+    const isInsideView = _camAngle === 'tube' && !isSlideView;
 
     if (isInsideView) {
       // Inside tube: camera at identity frame (0,0,-R), drag = look direction
-      // Torus spins normally around camera
       if (_spinning && !isDragging) rotY -= _spinSpeed * (_spinReverse ? -1 : 1);
       dataGroup.rotation.y = rotY;
       dataGroup.rotation.x = 0;
@@ -3240,14 +3262,38 @@ function initTorus3D() {
       camera.near = 0.001; camera.far = 20;
 
       const lookDist = 2;
-      // Camera at (0,0,-R) facing +Z toward origin.
-      // Yaw rotates around Y: drag right → look right (negative X from camera's POV)
-      // Pitch rotates around X: drag up → look up
       const lx = -lookDist * Math.sin(_camYaw) * Math.cos(_camPitch);
       const ly =  lookDist * Math.sin(_camPitch);
       const lz = -R + lookDist * Math.cos(_camYaw) * Math.cos(_camPitch);
       camera.lookAt(lx, ly, lz);
       camera.up.set(0, 1, 0);
+      camera.updateProjectionMatrix();
+    } else if (isSlideView) {
+      // Slide: arc in XZ plane around the outside of the torus ring
+      // Wide: (0,0,9.5) at angle 0. Inside: (0,0,-R) at angle π.
+      // Path: constant radius in XZ plane → never passes through origin or torus hole
+      if (_spinning && !isDragging) rotY -= _spinSpeed * (_spinReverse ? -1 : 1);
+      dataGroup.rotation.y = rotY;
+      dataGroup.rotation.x = rotX * (1 - _camSlide);
+      const R = Math.max(0.01, _torusRatio);
+      const t = _camSlide;
+      const ease = 0.5 - 0.5 * Math.cos(t * Math.PI);
+      // Sweep polar angle in XZ plane: 0 = wide (+Z), π = inside (-Z)
+      const polar = ease * Math.PI;
+      // Keep camera outside the torus ring (dist >= R+1) the whole time
+      // Wide dist=9.5, blend toward R+1.2 as we approach inside
+      const wideR = 9.5;
+      const tubeR = Math.max(R + 1.2, 2.0);
+      const dist = wideR + (tubeR - wideR) * ease;
+      const camX = 0;
+      const camY = 0; // stay in horizontal plane — no Y drift
+      const camZ = dist * Math.cos(polar);
+      const camXout = dist * Math.sin(polar); // X component of arc
+      camera.position.set(camXout, 0, camZ);
+      camera.near = dist < 2 ? 0.01 : 0.01;
+      camera.far = 1000;
+      camera.up.set(0, 1, 0);
+      camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
     } else {
       if (_spinning && !isDragging) rotY -= _spinSpeed * (_spinReverse ? -1 : 1);
@@ -3504,7 +3550,8 @@ function buildTorusPoints() {
     dataGroup.add(new THREE.Points(geo, mat));
 
   } else if (_frameMode === 'vector') {
-    const r_vec = 1.0; // minor radius for bisector (same as fiber)
+    const r_vec = 1.0;
+    const tipPositions = [], tipColors = [], tipSizes = [];
     for (const { i, row } of activeRows) {
       const phi = frameToPhi(i);
       for (let j = 0; j < count; j++) {
@@ -3521,7 +3568,8 @@ function buildTorusPoints() {
         // fR: bisector rule — radius of q disk
         const hc = Math.min(pChordLen*0.5, r_vec*0.9999);
         const mO = Math.sqrt(r_vec*r_vec - hc*hc);
-        const fR = Math.max(0.001, r_vec - mO);
+        // fR scaled by intensity
+        const fR = Math.max(0.001, (r_vec - mO) * _vecIntensity);
 
         // Rotation angle θ: linear output position × 2π
         // outputPos = (row[j] - lo) / lo → 0 at identity, 0.5 at position of 3
@@ -3558,25 +3606,83 @@ function buildTorusPoints() {
 
         const prox = inflectionProx(row[j], _n);
         const [cr,cg,cb] = palForCol(j)(prox, row[j], _n).map(c => c / 255);
-        positions.push(mx,my,mz, ex2,ey2,ez2);
-        colors.push(cr,cg,cb, cr,cg,cb);
 
-        // Arrowhead: splayed in u direction
-        const adx=ex2-mx, ady=ey2-my, adz=ez2-mz;
-        const aLen=Math.sqrt(adx*adx+ady*ady+adz*adz)||1;
-        const hLen=Math.min(fR*0.35, 0.2);
-        positions.push(ex2,ey2,ez2, ex2-(adx/aLen)*hLen+ux*hLen*0.4, ey2-(ady/aLen)*hLen+uy*hLen*0.4, ez2-(adz/aLen)*hLen+uz*hLen*0.4);
-        colors.push(cr,cg,cb, cr,cg,cb);
-        positions.push(ex2,ey2,ez2, ex2-(adx/aLen)*hLen-ux*hLen*0.4, ey2-(ady/aLen)*hLen-uy*hLen*0.4, ez2-(adz/aLen)*hLen-uz*hLen*0.4);
-        colors.push(cr,cg,cb, cr,cg,cb);
+        if (_vecSubMode === 'v') {
+          // V mode: fiber line + arrowhead
+          positions.push(mx,my,mz, ex2,ey2,ez2);
+          colors.push(cr,cg,cb, cr,cg,cb);
+          const adx=ex2-mx, ady=ey2-my, adz=ez2-mz;
+          const aLen=Math.sqrt(adx*adx+ady*ady+adz*adz)||1;
+          const hLen=Math.min(fR*0.35, 0.2);
+          positions.push(ex2,ey2,ez2, ex2-(adx/aLen)*hLen+ux*hLen*0.4, ey2-(ady/aLen)*hLen+uy*hLen*0.4, ez2-(adz/aLen)*hLen+uz*hLen*0.4);
+          colors.push(cr,cg,cb, cr,cg,cb);
+          positions.push(ex2,ey2,ez2, ex2-(adx/aLen)*hLen-ux*hLen*0.4, ey2-(ady/aLen)*hLen-uy*hLen*0.4, ez2-(adz/aLen)*hLen-uz*hLen*0.4);
+          colors.push(cr,cg,cb, cr,cg,cb);
+        } else if (_vecSubMode === 'pendulum') {
+          // Pendulum: fiber line only (no arrowhead — tip point added separately below)
+          positions.push(mx,my,mz, ex2,ey2,ez2);
+          colors.push(cr,cg,cb, cr,cg,cb);
+        }
+        // P and Pendulum: collect tip as point
+        if (_vecSubMode === 'p' || _vecSubMode === 'pendulum') {
+          tipPositions.push(ex2,ey2,ez2);
+          tipColors.push(cr,cg,cb);
+          const midBase = _n <= 3 ? 0.096 : _n === 4 ? 0.079 : _n === 5 ? 0.064 : _n === 6 ? 0.053 : 0.043;
+          tipSizes.push(midBase * Math.pow(_midpointSize / 5, 1.8) * proxSizeScale(prox));
+        }
       }
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
     geo.setAttribute('color',    new THREE.Float32BufferAttribute(colors, 3));
     const vectorOpacity = torusOpacity('vector');
-    dataGroup.add(new THREE.LineSegments(geo,
-      new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: vectorOpacity, depthWrite: false })));
+    if (positions.length > 0) {
+      dataGroup.add(new THREE.LineSegments(geo,
+        new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: vectorOpacity, depthWrite: false })));
+    }
+    // P and Pendulum: add Points at tips using selected shape texture
+    if (tipPositions.length > 0) {
+      const tGeo = new THREE.BufferGeometry();
+      tGeo.setAttribute('position', new THREE.Float32BufferAttribute(tipPositions, 3));
+      tGeo.setAttribute('color',    new THREE.Float32BufferAttribute(tipColors, 3));
+      tGeo.setAttribute('size',     new THREE.Float32BufferAttribute(tipSizes, 1));
+      const tipTex = makePointTexture(_pointShape);
+      const tipMat = new THREE.ShaderMaterial({
+        uniforms: {
+          uTex:      { value: tipTex },
+          uOpacity:  { value: vectorOpacity },
+          uIsBubble: { value: _pointShape === 'bubble' ? 1.0 : 0.0 },
+          uDPR:      { value: Math.min(window.devicePixelRatio || 1, 2) },
+        },
+        vertexShader: `
+          attribute float size;
+          attribute vec3 color;
+          varying vec3 vColor;
+          uniform float uOpacity;
+          uniform float uDPR;
+          varying float vOp;
+          void main() {
+            vColor = color; vOp = uOpacity;
+            vec4 mv = modelViewMatrix * vec4(position, 1.0);
+            gl_PointSize = size * uDPR * (300.0 / -mv.z);
+            gl_Position = projectionMatrix * mv;
+          }`,
+        fragmentShader: `
+          uniform sampler2D uTex;
+          uniform float uIsBubble;
+          varying vec3 vColor;
+          varying float vOp;
+          void main() {
+            float a = texture2D(uTex, gl_PointCoord).r;
+            if (a < 0.08) discard;
+            float alpha = uIsBubble > 0.5 ? (a >= 0.5 ? 1.0 : a * vOp * 2.0) : a * vOp;
+            gl_FragColor = vec4(vColor, alpha);
+          }`,
+        transparent: true,
+        depthWrite: false,
+      });
+      dataGroup.add(new THREE.Points(tGeo, tipMat));
+    }
   }
 
 
@@ -3746,9 +3852,64 @@ function _camAngleBase() {
   return { x: 0, y: 0, z: 9.5 }; // wide
 }
 
+function setCamAngleBtn(val) {
+  _camAngle = val;
+  document.querySelectorAll('[data-cam]').forEach(b =>
+    b.classList.toggle('active', b.dataset.cam === val));
+  const sel = document.getElementById('cam-angle-sel');
+  if (sel) sel.value = val === 'wide' ? 'wide' : 'tube';
+  if (val !== 'slide') setCamAngle(val);
+}
+
+let _camSlide = 0;
+let _camSlideDir = 0;
+let _camSlideRAF = null;
+let _camSlideSpeed = 0.002; // very slow default — full sweep ~500 frames at 60fps
+
+function setCamSlideSpeed(val) {
+  // slider 1–20 → speed 0.001–0.012 (all slow, bearable)
+  _camSlideSpeed = parseFloat(val) * 0.0006;
+  const lbl = document.getElementById('cam-slide-spd-label');
+  if (lbl) lbl.textContent = parseFloat(val).toFixed(0);
+}
+
+function triggerCamSlide() {
+  if (_camSlideDir !== 0) {
+    // Currently sliding — stop
+    _camSlideDir = 0;
+    _camSlideRAF = null;
+    const btn = document.getElementById('cam-slide-btn');
+    if (btn) btn.classList.remove('active');
+    return;
+  }
+  // Start oscillating from current position
+  // Direction: if near wide end go toward inside, else go toward wide
+  _camSlideDir = _camSlide <= 0.5 ? 1 : -1;
+  const btn = document.getElementById('cam-slide-btn');
+  if (btn) btn.classList.add('active');
+  _animateCamSlide();
+}
+
+function _animateCamSlide() {
+  if (_camSlideDir === 0) { _camSlideRAF = null; return; }
+  _camSlide += _camSlideDir * _camSlideSpeed;
+  if (_camSlide >= 1) {
+    _camSlide = 1;
+    _camSlideDir = -1; // bounce back toward wide
+  } else if (_camSlide <= 0) {
+    _camSlide = 0;
+    _camSlideDir = 1;  // bounce back toward inside
+  }
+  _camSlideRAF = requestAnimationFrame(_animateCamSlide);
+}
+
 function setCamAngle(val) {
   _camAngle = val;
   _camYaw = 0; _camPitch = 0; _tubeZoom = 0;
+  document.querySelectorAll('[data-cam]').forEach(b =>
+    b.classList.toggle('active', b.dataset.cam === val));
+  const sel = document.getElementById('cam-angle-sel');
+  if (sel) sel.value = val;
   if (!_three) return;
   const { camera } = _three;
   if (val === 'tube') {
@@ -3784,8 +3945,12 @@ function toggleTorusCamPanel() {
   const canvas = document.getElementById('torus3d-canvas');
   const open  = panel.style.display === 'none' || panel.style.display === '';
   panel.style.display = open ? 'block' : 'none';
-  if (btn) btn.textContent = (open ? '▾' : '▸') + ' Tools';
-  // Disable canvas touch/pointer events while panel is open so sliders work
+  if (btn) {
+    btn.textContent = (open ? '▾' : '▸') + ' Tools';
+    btn.style.background = open ? 'var(--accent)' : 'rgba(0,0,0,0.7)';
+    btn.style.color      = open ? '#000' : '';
+    btn.style.borderColor = open ? 'var(--accent)' : '';
+  }
   if (canvas) canvas.style.pointerEvents = open ? 'none' : 'auto';
 }
 
@@ -3842,13 +4007,17 @@ let _torusSliderActive = false;
 let _opacityScale = 0.8; // default 80%
 
 function setTorusOpacitySlider(val) {
-  _opacityScale = parseInt(val) / 100;
+  // Quadratic: slider 0→0%, slider 45→~20%, slider 100→100%
+  // This puts the useful 4–20% range in the first half of the slider
+  const v = parseInt(val);
+  _opacityScale = (v * v) / 10000;
+  const pct = Math.round(_opacityScale * 100);
   // Sync both sliders
   ['torus-opacity-main','torus-opacity-fs'].forEach(id => {
     const el = document.getElementById(id); if (el && el.value != val) el.value = val;
   });
   ['torus-opacity-label','torus-opacity-label-fs'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.textContent = val + '%';
+    const el = document.getElementById(id); if (el) el.textContent = pct + '%';
   });
   buildTorusPoints();
 }
@@ -4067,8 +4236,6 @@ function toggleAtlasAllOrders(btn) {
   drawAtlas();
 }
 
-function toggleAtlasMode(btn) { setAtlasViewMode(_atlasMode ? 'fine' : 'atlas', btn); }
-
 function setAtlasCoarseN(n) {
   _atlasCoarseN = n;
   _atlasModeCache = null;
@@ -4112,7 +4279,6 @@ function setAtlasViewMode(mode, btn) {
 }
 
 // Kept for FS toolbar compatibility
-function toggleAtlasFine(btn) { setAtlasViewMode(_atlasFine ? 'coarse' : 'fine', btn); }
 
 function toggleAtlasLock(btn) {
   _atlasLocked = !_atlasLocked;
@@ -4556,9 +4722,5 @@ function drawAtlas() {
 }
 
 </script>
-
-<!-- Fixed EXIT button — always accessible, z-index above everything except torus FS overlay -->
-<button id="main-fs-quit-btn" onclick="exitMainFullscreen()"
-  style="position:fixed;top:10px;right:10px;z-index:490;font-family:var(--mono);font-size:9px;background:rgba(10,10,10,0.85);border:1px solid var(--muted);color:var(--muted);cursor:pointer;padding:4px 14px;border-radius:2px;letter-spacing:1px;pointer-events:auto">&#10005; EXIT</button>
 </body>
 </html>
