@@ -519,7 +519,7 @@ input:focus, select:focus { border-color: var(--accent); }
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap">
           <span id="dot-size-row-lbl" style="font-family:var(--mono);font-size:8px;color:var(--muted);flex-shrink:0">Dot</span>
-          <input id="midpoint-size-slider" type="range" min="1" max="20" step="1" value="12" oninput="setMidpointSize(this.value)" style="width:80px;accent-color:var(--accent);flex-shrink:0">
+          <input id="midpoint-size-slider" type="range" min="1" max="80" step="1" value="12" oninput="setMidpointSize(this.value)" style="width:80px;accent-color:var(--accent);flex-shrink:0">
           <span id="midpoint-size-label" style="font-family:var(--mono);font-size:8px;color:var(--muted);min-width:18px;flex-shrink:0">12</span>
           <div style="width:1px;height:14px;background:var(--border);flex-shrink:0"></div>
           <select id="main-shape-sel" onchange="setPointShape(this.value,null)"
@@ -660,7 +660,10 @@ input:focus, select:focus { border-color: var(--accent); }
           <option value="">Demo</option>
           <option value="cloud">Cloud</option>
           <option value="pipe">Pipe</option>
-          <option value="tree" disabled>Tree</option>
+          <option value="moonlight">Moonlight</option>
+          <option value="squid">Squid</option>
+          <option value="tree">Tree</option>
+          <option value="apparition">Apparition</option>
         </select>
         <button onclick="toggleTorusFS()" style="font-family:var(--mono);font-size:9px;background:rgba(50,8,8,0.9);border:1px solid #833;color:#e88;border-radius:2px;padding:4px 12px;cursor:pointer;letter-spacing:1px">&#10005; Exit</button>
       </div>
@@ -728,14 +731,14 @@ input:focus, select:focus { border-color: var(--accent); }
               </div>
               <!-- Vector sub-options (shown when Vectors active) -->
               <div id="fs-vec-sub" style="display:none;flex-direction:column;gap:4px;margin-top:4px">
-                <!-- V / P / Pendulum mode buttons -->
+                <!-- V / P / Yo-yo mode buttons -->
                 <div style="display:flex;gap:2px">
                   <button class="mbtn active" data-vecmode="v" onclick="setVecSubMode('v',this)"
                     style="flex:1;text-align:center;font-size:10px" title="Arrow vectors">V</button>
                   <button class="mbtn"        data-vecmode="p" onclick="setVecSubMode('p',this)"
                     style="flex:1;text-align:center;font-size:10px" title="Point at tip">P</button>
-                  <button class="mbtn"        data-vecmode="pendulum" onclick="setVecSubMode('pendulum',this)"
-                    style="flex:1;text-align:center;font-size:9px" title="Line + point at tip">Pend</button>
+                  <button class="mbtn"        data-vecmode="yoyo" onclick="setVecSubMode('yoyo',this)"
+                    style="flex:1;text-align:center;font-size:9px" title="Line + point at tip">Yo-yo</button>
                 </div>
                 <!-- Intensity slider (both modes) -->
                 <div style="display:flex;align-items:center;gap:6px">
@@ -801,10 +804,10 @@ input:focus, select:focus { border-color: var(--accent); }
               <!-- Slide speed -->
               <div id="cam-slide-spd-row" style="display:flex;align-items:center;gap:6px;margin-top:4px">
                 <span style="font-family:var(--mono);font-size:7px;color:var(--muted);flex-shrink:0">Speed</span>
-                <input type="range" id="cam-slide-spd" min="1" max="20" step="1" value="3"
+                <input type="range" id="cam-slide-spd" min="1" max="20" step="1" value="1"
                   oninput="setCamSlideSpeed(this.value)"
                   style="flex:1;accent-color:var(--accent)">
-                <span id="cam-slide-spd-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:18px">3</span>
+                <span id="cam-slide-spd-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:18px">1</span>
               </div>
             </div>
 
@@ -822,6 +825,14 @@ input:focus, select:focus { border-color: var(--accent); }
                   style="flex:1;font-family:var(--mono);font-size:9px;background:var(--accent);color:#000;border:none;border-radius:2px;padding:5px 0;cursor:pointer;letter-spacing:1px;font-weight:600">↺ 90°</button>
                 <button id="helix-btn" onclick="toggleHelixMode(this)"
                   style="flex:1;font-family:var(--mono);font-size:9px;background:none;color:var(--accent);border:1px solid var(--accent);border-radius:2px;padding:5px 0;cursor:pointer;letter-spacing:1px">Helix</button>
+                <button id="tree-btn" onclick="toggleTreeMode(this)"
+                  style="flex:1;font-family:var(--mono);font-size:9px;background:none;color:var(--accent);border:1px solid var(--accent);border-radius:2px;padding:5px 0;cursor:pointer;letter-spacing:1px">Tree</button>
+              </div>
+              <!-- Helix repeat — only shown when helix active -->
+              <div id="helix-repeat-row" style="display:none;gap:2px;margin-bottom:6px">
+                <span style="font-family:var(--mono);font-size:7px;color:var(--muted);flex-shrink:0;align-self:center">Copies</span>
+                <button class="mbtn active" data-helixrep="1" onclick="setHelixRepeat(1,this)" style="flex:1;text-align:center;font-size:9px">×1</button>
+                <button class="mbtn"        data-helixrep="2" onclick="setHelixRepeat(2,this)" style="flex:1;text-align:center;font-size:9px">×2</button>
               </div>
               <div class="bar-label" style="margin-bottom:4px">Overlay</div>
               <select id="fs-overlay-sel" onchange="setTorusOverlay(this.value)"
@@ -1858,12 +1869,19 @@ function drawChordFrame() {
         ctx.lineTo(ex - hs*Math.cos(angle+0.45), ey - hs*Math.sin(angle+0.45));
         ctx.closePath(); ctx.fill();
       } else {
-        // P and Pendulum: shape/glyph at tip
+        // P and Yo-yo: shape/glyph at tip
         const dotR = Math.max(0.5, proxSizeScale(prox) * Math.pow(_midpointSize / 5, 1.8));
-        // Pendulum also draws the line
-        if (_vecSubMode === 'pendulum') {
+        // Yo-yo also draws the line (at normal alpha)
+        if (_vecSubMode === 'yoyo') {
           ctx.beginPath(); ctx.moveTo(mx,my); ctx.lineTo(ex,ey); ctx.stroke();
         }
+        // Tip point: yoyo/P glyphs get boosted opacity — floor at 0.6 for glyphs
+        const isGlyph = _pointShape === 'glyph' && _midpointChar;
+        const tipAlpha = isGlyph
+          ? Math.max(0.6, Math.min(1, vAlpha * 3))
+          : _vecSubMode === 'yoyo' ? Math.min(1, vAlpha * 2) : vAlpha;
+        ctx.fillStyle   = `rgba(${r},${g},${b},${tipAlpha})`;
+        ctx.strokeStyle = `rgba(${r},${g},${b},${tipAlpha})`;
         ctx.beginPath();
         if (_pointShape === 'glyph' && _midpointChar) {
           const angle = Math.atan2(py, px);
@@ -2610,16 +2628,12 @@ function updateFsBtn(view) {
 
 function switchView(view, btn) {
   _activeView = view;
-  // Update bottom bar vtabs
   document.querySelectorAll('#bottom-bar .vtab').forEach(b => b.classList.toggle('active', b === btn));
-  // Update matrix-view-btn in toolbar
   const mvb = document.getElementById('matrix-view-btn');
   if (mvb) mvb.classList.toggle('active', view === 'matrix');
   const torusOrientWrap = document.getElementById('torus-orient-label'); if (torusOrientWrap) torusOrientWrap.style.display = 'none';
   const akCtrl2 = document.getElementById('ak-tab-controls'); if (akCtrl2) akCtrl2.style.display = (view === 'antikythera') ? 'flex' : 'none';
-  // Alpha slider lives in colour row — show only on reticulum
   const reticOpWrap = document.getElementById('retic-opacity-wrap'); if (reticOpWrap) reticOpWrap.style.display = (view === 'reticulum') ? 'flex' : 'none';
-  // View-controls-row only needed for antikythera and torus
   const vcr = document.getElementById('view-controls-row');
   if (vcr) vcr.style.display = ['antikythera','torus'].includes(view) ? 'flex' : 'none';
   const tc = document.getElementById('torus-tab-controls');
@@ -2628,9 +2642,11 @@ function switchView(view, btn) {
   if (atc) atc.style.display = view === 'atlas' ? 'flex' : 'none';
   document.querySelectorAll('#view-animation,#view-reticulum,#view-torus,#view-antikythera,#view-atlas,#view-matrix')
     .forEach(el => el.classList.remove('active'));
-  document.getElementById('view-' + view).classList.add('active');
+  const domEl = document.getElementById('view-' + view);
+  if (domEl) domEl.classList.add('active');
   updateFsBtn(view);
-  safeRender();
+  if (view === 'torus') drawTorus3D();
+  else safeRender();
   if (view !== 'atlas') { stopAtlasSpin(); }
 }
 function showTip(e,txt) {
@@ -2748,6 +2764,16 @@ let _three = null;
 let _torusRatio = 2.0;  // R/r ratio: 2=normal ring, 1=horn, <1=spindle
 let _torusOrient = 'outside';
 let _helixMode = false;
+let _treeMode  = false;
+let _helixRepeat = 1; // 1/2/3 helix copies
+
+function setHelixRepeat(n, btn) {
+  _helixRepeat = n;
+  document.querySelectorAll("[data-helixrep]").forEach(b =>
+    b.classList.toggle("active", parseInt(b.dataset.helixrep) === n));
+  if (_three) buildTorusPoints();
+}
+
 let _torusOverlay = 'idline'; // 'none' | 'idline' | 'ring' | 'cage' | 'dyson'
 
 function setTorusOverlay(val) {
@@ -2774,9 +2800,21 @@ function runDemo(name) {
     const el = document.getElementById(id); if (el) { el.value = v; updatePalSlider(el); }
     const fs = document.getElementById(id + '-fs'); if (fs) { fs.value = v; updatePalSlider(fs); }
   };
+  const setPalBri = (id, v) => {
+    const el = document.getElementById(id); if (el) { el.value = v; updatePalSlider(el); }
+    const fs = document.getElementById(id + '-fs'); if (fs) { fs.value = v; updatePalSlider(fs); }
+  };
   const setBG = v => {
     const el = document.getElementById('main-bg-bri'); if (el) { el.value = v; setBgBri(v); }
     const fs = document.getElementById('bg-bri-slider'); if (fs) fs.value = v;
+  };
+  const setBGHue = v => {
+    const el = document.getElementById('main-bg-hue'); if (el) { el.value = v; setBgHue(v); }
+    const fs = document.getElementById('bg-hue-slider'); if (fs) fs.value = v;
+  };
+  const setBGSat = v => {
+    const el = document.getElementById('main-bg-sat'); if (el) { el.value = v; setBgSat(v); }
+    const fs = document.getElementById('bg-sat-slider'); if (fs) fs.value = v;
   };
   const setOpacity = v => {
     const el = document.getElementById('torus-opacity-main'); if (el) { el.value = v; setTorusOpacitySlider(v); }
@@ -2790,51 +2828,149 @@ function runDemo(name) {
     const btn = document.getElementById('rainbow-btn');
     if (_rainbow !== on) toggleRainbow(btn);
   };
+  const ensureHelix = on => {
+    if (_helixMode !== on) toggleHelixMode(document.getElementById('helix-btn'));
+  };
+  const setDotSize = v => {
+    _midpointSize = v;
+    ['midpoint-size-slider','fs-dot-slider'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = v;
+    });
+    const lbl = document.getElementById('midpoint-size-label'); if (lbl) lbl.textContent = v;
+  };
 
   if (name === "cloud") {
-    setN(7); setFn("rsq");
-    compute();
-    if (!_helixMode) toggleHelixMode(document.getElementById("helix-btn"));
-    setTorusRatioSlider(45, "main");
-    setMode("chord", document.querySelector("[data-mode=\"chord\"]"));
-    setChordSub("centre", document.querySelector("[data-csub=\"centre\"]"));
+    setN(7); setFn("rsq"); compute();
+    ensureHelix(true);
+    setShape('ring', 0.45);
+    setMode("chord", document.querySelector('[data-mode="chord"]'));
+    setChordSub("centre", document.querySelector('[data-csub="centre"]'));
     setSpinFromSlider(0);
-    setOpacity(11);
-    const idHue = document.getElementById("pal-id-hue"); if (idHue) { idHue.value = 270; updatePalSlider(idHue); }
-    const idBri = document.getElementById("pal-id-bri"); if (idBri) { idBri.value = 20; updatePalSlider(idBri); }
-    const inflHue = document.getElementById("pal-infl-hue"); if (inflHue) { inflHue.value = 20; updatePalSlider(inflHue); }
-    const inflBri = document.getElementById("pal-infl-bri"); if (inflBri) { inflBri.value = 85; updatePalSlider(inflBri); }
-    setBgBri(55); setBgHue(200);
-    const bgBriEl = document.getElementById("main-bg-bri"); if (bgBriEl) bgBriEl.value = 55;
-    const bgHueEl = document.getElementById("main-bg-hue"); if (bgHueEl) bgHueEl.value = 200;
-    if (_rainbow) toggleRainbow(document.getElementById("rainbow-btn"));
+    setOpacity(32);   // increased from 11
+    setPalHue('pal-id-hue', 270); setPalBri('pal-id-bri', 20);   // dark purple
+    setPalHue('pal-infl-hue', 20); setPalBri('pal-infl-bri', 85); // bright peach
+    setBG(55); setBGHue(200); setBGSat(60);
+    setRainbow(false);
     if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+
   } else if (name === "pipe") {
-    setN(7); setFn("ex");
-    compute();
-    setTorusShape("horn", document.querySelector("[data-shape=\"horn\"]"));
-    setTorusRatioSlider(89, "main");
-    setMode("chord", document.querySelector("[data-mode=\"chord\"]"));
-    setChordSub("centre", document.querySelector("[data-csub=\"centre\"]"));
+    setN(7); setFn("ex"); compute();
+    ensureHelix(true);  // helical not toroidal
+    setShape('ring', 2.0);
+    setMode("chord", document.querySelector('[data-mode="chord"]'));
+    setChordSub("prior", document.querySelector('[data-csub="prior"]'));
     setSpinFromSlider(0);
-    setOpacity(1);
-    setPalHue("pal-id-hue", 180); setPalHue("pal-infl-hue", 200);
-    setBG(40);
-    if (!_rainbow) toggleRainbow(document.getElementById("rainbow-btn"));
-    const sat = document.getElementById("rainbow-sat"); if (sat) { sat.value = 100; setRainbowSat(100); }
+    setOpacity(46);  // 21% actual: Math.pow(0.46, 1.5)*100 ≈ 31% → use 46 for ~21% visual
+    setRainbow(false);
+    setPalHue('pal-id-hue', 180); setPalBri('pal-id-bri', 65);   // saturated cyan
+    setPalHue('pal-infl-hue', 200); setPalBri('pal-infl-bri', 72); // sky blue
+    setBG(12); setBGHue(220); setBGSat(80); // dark navy
     if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+
+  } else if (name === "moonlight") {
+    setN(7); setFn("xx"); compute(); // x^(1/x)
+    ensureHelix(true);
+    setShape('ring', 2.0);
+    setMode("chord", document.querySelector('[data-mode="chord"]'));
+    setChordSub("full", document.querySelector('[data-csub="full"]'));
+    setSpinFromSlider(0);
+    setOpacity(20);  // ~4% actual
+    setRainbow(false);
+    setPalHue('pal-id-hue', 300); setPalBri('pal-id-bri', 25);
+    setPalHue('pal-infl-hue', 20); setPalBri('pal-infl-bri', 85);
+    setBG(18); setBGHue(230); setBGSat(70);
+    if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+
+  } else if (name === "squid") {
+    setN(7); setFn("phix"); compute(); // phi^x
+    ensureHelix(true);
+    setShape('sphere', 0.0);
+    setMode("vector", document.querySelector('[data-mode="vector"]'));
+    setVecSubMode('p', document.querySelector('[data-vecmode="p"]'));
+    setVecIntensity(4.0);
+    const intSlider = document.getElementById('fs-vec-int'); if (intSlider) intSlider.value = 40;
+    setDotSize(8);  // reduced from 20
+    setSpinFromSlider(0);
+    setOpacity(89);
+    setRainbow(false);
+    // INF size bias to 1.1
+    _proxBias = 1.1;
+    const pbSlider = document.getElementById('prox-bias-slider'); if (pbSlider) pbSlider.value = 1.1;
+    const pbLabel = document.querySelector('#prox-bias-slider + span'); if (pbLabel) pbLabel.textContent = '1.1';
+    setPalHue('pal-id-hue', 240); setPalBri('pal-id-bri', 15);
+    setPalHue('pal-infl-hue', 0); setPalBri('pal-infl-bri', 35);
+    setBG(90); setBGHue(270); setBGSat(30);
+    if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+
   } else if (name === "tree") {
-    // placeholder
+    setN(6); setFn("id"); compute();
+    ensureHelix(false);
+    setShape('ring', 2.0);
+    setMode("chord", document.querySelector('[data-mode="chord"]'));
+    setChordSub("full", document.querySelector('[data-csub="full"]'));
+    setSpinFromSlider(0);
+    setOpacity(75);
+    setRainbow(false);
+    setPalHue('pal-id-hue', 25); setPalBri('pal-id-bri', 22);
+    setPalHue('pal-infl-hue', 75); setPalBri('pal-infl-bri', 65);
+    setBG(88); setBGHue(200); setBGSat(85);
+    if (!_treeMode) toggleTreeMode(document.getElementById('tree-btn'));
+    else buildTorusPoints();
+    if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+
+  } else if (name === "apparition") {
+    setN(7); setFn("ex"); compute(); // e^x
+    ensureHelix(true);
+    setShape('ring', 4.0);           // 4.00 helix length/diameter
+    setMode("vector", document.querySelector('[data-mode="vector"]'));
+    setVecSubMode('yoyo', document.querySelector('[data-vecmode="yoyo"]'));
+    setVecIntensity(3.0);
+    const intSlider = document.getElementById('fs-vec-int'); if (intSlider) intSlider.value = 30;
+    setSpinFromSlider(0);
+    setOpacity(65);
+    setRainbow(false);
+    // Low saturation colours — desaturated defaults
+    setBGSat(15); setBG(8); setBGHue(0);
+    // Default palette (don't override ID/INF)
+    if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
   }
 }
 
 function toggleHelixMode(btn) {
   _helixMode = !_helixMode;
   if (btn) {
-    btn.classList.toggle('active', _helixMode);
-    btn.textContent = _helixMode ? 'Helix ✓' : 'Helix';
+    btn.classList.toggle("active", _helixMode);
+    btn.textContent = _helixMode ? "Helix ✓" : "Helix";
+  }
+  const row = document.getElementById("helix-repeat-row");
+  if (row) row.style.display = _helixMode ? "flex" : "none";
+  if (!_helixMode) { _helixRepeat = 1; document.querySelectorAll("[data-helixrep]").forEach(b => b.classList.toggle("active", b.dataset.helixrep === "1")); }
+  // Mutual exclusion: turning on helix turns off tree
+  if (_helixMode && _treeMode) {
+    _treeMode = false;
+    const tb = document.getElementById('tree-btn');
+    if (tb) { tb.classList.remove('active'); tb.textContent = 'Tree'; }
   }
   if (_three) buildTorusPoints();
+}
+
+function toggleTreeMode(btn) {
+  _treeMode = !_treeMode;
+  const el = document.getElementById('tree-btn');
+  if (el) {
+    el.classList.toggle('active', _treeMode);
+    el.textContent = _treeMode ? 'Tree ✓' : 'Tree';
+  }
+  // Mutual exclusion: turning on tree turns off helix
+  if (_treeMode && _helixMode) {
+    _helixMode = false;
+    const hb = document.getElementById('helix-btn');
+    if (hb) { hb.classList.remove('active'); hb.textContent = 'Helix'; }
+    const row = document.getElementById("helix-repeat-row");
+    if (row) row.style.display = "none";
+  }
+  if (_three) buildTorusPoints();
+  else if (_activeView === 'torus') drawTorus3D();
 }
 
 // Circular sprite texture for Points rendering
@@ -3221,7 +3357,7 @@ function initTorus3D() {
     if (e.touches.length === 2 && _pinchDist0 !== null) {
       const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
       if (_camSlideDir === 0 && _camAngle === 'tube') {
-        _tubeZoom = Math.max(-2, Math.min(2, _tubeZoom + (_pinchDist0 - d) * 0.01));
+        _tubeZoom = Math.max(-8, Math.min(8, _tubeZoom + (_pinchDist0 - d) * 0.01));
         _pinchDist0 = d;
       } else if (_camSlideDir === 0) {
         camera.position.z = Math.max(0.5, Math.min(25, _camZ0 * (_pinchDist0 / d)));
@@ -3236,10 +3372,10 @@ function initTorus3D() {
     e.preventDefault();
     if (_camSlideDir !== 0) return; // zoom disabled during slide
     if (_camAngle === 'tube') {
-      _tubeZoom = Math.max(-2, Math.min(2, _tubeZoom + (e.deltaY > 0 ? 0.1 : -0.1)));
+      _tubeZoom = Math.max(-8, Math.min(8, _tubeZoom + (e.deltaY > 0 ? 0.15 : -0.15)));
     } else {
       const factor = e.deltaY < 0 ? 0.90 : 1.11;
-      camera.position.z = Math.max(0.5, Math.min(25, camera.position.z * factor));
+      camera.position.z = Math.max(0.5, Math.min(120, camera.position.z * factor));
     }
     if (_three) _three.renderNow();
   }, { passive: false });
@@ -3410,17 +3546,39 @@ function buildTorusPoints() {
   // Unified torus formula: R = _torusRatio (slider), r = 1.0 (fixed)
   // R=2 → normal torus, R=1 → horn, R=0.5 → spindle, R=0 → sphere (degenerate)
   const r = 1.0, R = Math.max(0, _torusRatio);
-  const pt = _helixMode
-    ? (phi, theta) => [
-        r * Math.cos(theta),
-        r * Math.sin(theta),
-        (phi / (Math.PI * 2) - 0.5) * R * 3.0
-      ]
-    : (phi, theta) => [
-        (R + r * Math.cos(theta)) * Math.cos(phi),
-        r * Math.sin(theta),
-        (R + r * Math.cos(theta)) * Math.sin(phi)
-      ];
+  const helixH = R * 3.0;
+
+  // isTreeView: flag-based, independent of helix
+  const isTreeView = _treeMode;
+
+  const pt = isTreeView
+    // Tree (lampshade / cone): frame 0 at origin, descends into -Z.
+    // Slider R = end-ring diameter ratio.
+    //   R=0.00 → converges to a point at the bottom
+    //   R=1.00 → cylinder (all rings same radius)
+    //   R=2.00+ → lampshade, soft-exponential expansion
+    // ringR = R^t: exponential in t so large R fans out gently at the top.
+    ? (phi, theta) => {
+        const treeH = 6.0;
+        const t = phi / (Math.PI * 2);          // 0=identity(bottom), 1=last frame(top)
+        const baseR = 0.25;                     // fixed base radius — identity never moves
+        // Top radius = R directly; interpolate exponentially so base is always baseR
+        const topR = Math.max(0.0001, R);
+        const ringR = baseR * Math.pow(topR / baseR, t); // baseR at t=0, topR at t=1
+        const y = -treeH * 0.5 + t * treeH;
+        return [ringR * Math.cos(theta), y, ringR * Math.sin(theta)];
+      }
+    : _helixMode
+      ? (phi, theta, zOffset = 0) => [
+          r * Math.cos(theta),
+          r * Math.sin(theta),
+          (phi / (Math.PI * 2) - 0.5) * helixH + zOffset
+        ]
+      : (phi, theta) => [
+          (R + r * Math.cos(theta)) * Math.cos(phi),
+          r * Math.sin(theta),
+          (R + r * Math.cos(theta)) * Math.sin(phi)
+        ];
 
   // φ-slice i → matrixFull row offset by i*_stepsPerInt.
   // matrix.length integer rings on the torus; animation cycles through all sub-steps.
@@ -3618,13 +3776,13 @@ function buildTorusPoints() {
           colors.push(cr,cg,cb, cr,cg,cb);
           positions.push(ex2,ey2,ez2, ex2-(adx/aLen)*hLen-ux*hLen*0.4, ey2-(ady/aLen)*hLen-uy*hLen*0.4, ez2-(adz/aLen)*hLen-uz*hLen*0.4);
           colors.push(cr,cg,cb, cr,cg,cb);
-        } else if (_vecSubMode === 'pendulum') {
-          // Pendulum: fiber line only (no arrowhead — tip point added separately below)
+        } else if (_vecSubMode === 'yoyo') {
+          // Yo-yo: fiber line only (no arrowhead — tip point added separately below)
           positions.push(mx,my,mz, ex2,ey2,ez2);
           colors.push(cr,cg,cb, cr,cg,cb);
         }
-        // P and Pendulum: collect tip as point
-        if (_vecSubMode === 'p' || _vecSubMode === 'pendulum') {
+        // P and Yo-yo: collect tip as point
+        if (_vecSubMode === 'p' || _vecSubMode === 'yoyo') {
           tipPositions.push(ex2,ey2,ez2);
           tipColors.push(cr,cg,cb);
           const midBase = _n <= 3 ? 0.096 : _n === 4 ? 0.079 : _n === 5 ? 0.064 : _n === 6 ? 0.053 : 0.043;
@@ -3640,17 +3798,18 @@ function buildTorusPoints() {
       dataGroup.add(new THREE.LineSegments(geo,
         new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: vectorOpacity, depthWrite: false })));
     }
-    // P and Pendulum: add Points at tips using selected shape texture
+    // P and Yo-yo: add Points at tips using selected shape texture
     if (tipPositions.length > 0) {
       const tGeo = new THREE.BufferGeometry();
       tGeo.setAttribute('position', new THREE.Float32BufferAttribute(tipPositions, 3));
       tGeo.setAttribute('color',    new THREE.Float32BufferAttribute(tipColors, 3));
       tGeo.setAttribute('size',     new THREE.Float32BufferAttribute(tipSizes, 1));
       const tipTex = makePointTexture(_pointShape);
+      const tipOpacity = Math.min(1, vectorOpacity * (_vecSubMode === 'yoyo' ? 2 : 1));
       const tipMat = new THREE.ShaderMaterial({
         uniforms: {
           uTex:      { value: tipTex },
-          uOpacity:  { value: vectorOpacity },
+          uOpacity:  { value: tipOpacity },
           uIsBubble: { value: _pointShape === 'bubble' ? 1.0 : 0.0 },
           uDPR:      { value: Math.min(window.devicePixelRatio || 1, 2) },
         },
@@ -3686,6 +3845,29 @@ function buildTorusPoints() {
   }
 
 
+  // Helix repeat: clone geometry with Z offsets for copy 2 (×2 only, not tree view)
+  if (_helixMode && _helixRepeat > 1 && !isTreeView) {
+    const helixH = Math.max(0, _torusRatio) * 3.0;
+    const baseChildren = [...dataGroup.children]; // snapshot of copy 1
+    for (let copy = 1; copy < _helixRepeat; copy++) {
+      const zOff = copy * helixH;
+      for (const obj of baseChildren) {
+        const clone = obj.clone();
+        clone.position.z += zOff;
+        dataGroup.add(clone);
+        // Also add a mirror copy below (centred arrangement)
+        const mirror = obj.clone();
+        mirror.position.z -= zOff;
+        dataGroup.add(mirror);
+      }
+    }
+    // Re-centre: shift all children so the whole stack is centred at origin
+    const totalH = helixH * _helixRepeat;
+    dataGroup.children.forEach(ch => {
+      ch.position.z -= (totalH - helixH) / 2;
+    });
+  }
+
   // Overlay geometry
   if (rows > 0) {
     if (_torusOverlay === 'idline') {
@@ -3697,8 +3879,13 @@ function buildTorusPoints() {
       const p1 = [outX * innerScale, 0, outZ * innerScale];
       const indGeo = new THREE.BufferGeometry();
       indGeo.setAttribute('position', new THREE.Float32BufferAttribute([...p0, ...p1], 3));
+      // Opposite colour: complementary hue, inverted brightness, same saturation
+      const oppHue = (_bgHue + 180) % 360;
+      const oppBri = Math.max(30, 100 - _bgBri);
+      const [ir,ig,ib] = hslToRgb(oppHue, Math.max(40, _bgSat), oppBri);
+      const idCol = ((ir<<16)|(ig<<8)|ib);
       dataGroup.add(new THREE.LineSegments(indGeo,
-        new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.7 })));
+        new THREE.LineBasicMaterial({ color: idCol, transparent: true, opacity: 0.85 })));
     } else if (_torusOverlay === 'ring') {
       // Ring: circle tracing the torus major circle
       const R3d = Math.max(0.01, _torusRatio), segs = 64;
@@ -3864,10 +4051,9 @@ function setCamAngleBtn(val) {
 let _camSlide = 0;
 let _camSlideDir = 0;
 let _camSlideRAF = null;
-let _camSlideSpeed = 0.002; // very slow default — full sweep ~500 frames at 60fps
+let _camSlideSpeed = 0.0006; // slider=1 is neutral/slowest
 
 function setCamSlideSpeed(val) {
-  // slider 1–20 → speed 0.001–0.012 (all slow, bearable)
   _camSlideSpeed = parseFloat(val) * 0.0006;
   const lbl = document.getElementById('cam-slide-spd-label');
   if (lbl) lbl.textContent = parseFloat(val).toFixed(0);
@@ -3892,13 +4078,17 @@ function triggerCamSlide() {
 
 function _animateCamSlide() {
   if (_camSlideDir === 0) { _camSlideRAF = null; return; }
-  _camSlide += _camSlideDir * _camSlideSpeed;
+  // Soften approach to endpoints: slow down within 15% of each end
+  const proximity = Math.min(_camSlide, 1 - _camSlide) / 0.15;
+  const softFactor = Math.min(1, proximity); // 0 at endpoint, 1 in middle
+  const step = _camSlideDir * _camSlideSpeed * (0.25 + 0.75 * softFactor);
+  _camSlide += step;
   if (_camSlide >= 1) {
     _camSlide = 1;
-    _camSlideDir = -1; // bounce back toward wide
+    _camSlideDir = -1;
   } else if (_camSlide <= 0) {
     _camSlide = 0;
-    _camSlideDir = 1;  // bounce back toward inside
+    _camSlideDir = 1;
   }
   _camSlideRAF = requestAnimationFrame(_animateCamSlide);
 }
@@ -4010,7 +4200,7 @@ function setTorusOpacitySlider(val) {
   // Quadratic: slider 0→0%, slider 45→~20%, slider 100→100%
   // This puts the useful 4–20% range in the first half of the slider
   const v = parseInt(val);
-  _opacityScale = (v * v) / 10000;
+  _opacityScale = Math.min(1, Math.pow(v / 100, 1.5));
   const pct = Math.round(_opacityScale * 100);
   // Sync both sliders
   ['torus-opacity-main','torus-opacity-fs'].forEach(id => {
