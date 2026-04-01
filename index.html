@@ -77,11 +77,13 @@ body { background: var(--bg); color: var(--text); font-family: var(--mono); font
 #heatmap-tab-btn.active { color: var(--accent); background: rgba(212,168,71,0.08); }
 /* Heatmap floating overlay */
 #heatmap-overlay-panel {
-  display: none; position: fixed; bottom: 34px; left: 0; z-index: 140;
+  display: none; position: fixed; bottom: 34px; left: 50%; transform: translateX(-50%); z-index: 140;
   background: var(--panel); border: 1px solid var(--border);
-  border-bottom: none; border-left: none;
-  flex-direction: column; gap: 0; padding: 6px 8px;
-  box-shadow: 4px -4px 16px rgba(0,0,0,0.5);
+  border-bottom: none;
+  flex-direction: column; gap: 0; padding: 10px 14px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.6);
+  min-width: 340px;
+  align-items: center;
 }
 #heatmap-overlay-panel.open { display: flex; }
 #heatmap-col { flex-shrink: 0; }
@@ -512,7 +514,7 @@ input:focus, select:focus { border-color: var(--accent); }
         <div style="display:flex;align-items:center;gap:10px;margin-top:4px">
           <div class="stat"><span class="sv" id="st-input-range">—</span><span class="sk">Input set</span></div>
           <div class="stat"><span class="sv" id="st-output-range">—</span><span class="sk">Output set</span></div>
-          <button class="mbtn" style="font-size:8px;padding:2px 6px" onclick="switchView('matrix',document.querySelector('.vtab[data-view=matrix]'))">Matrix</button>
+          <button class="mbtn" style="font-size:8px;padding:2px 6px" onclick="switchView('matrix',document.getElementById('matrix-view-btn'))">Matrix</button>
           <button class="mbtn" style="font-size:8px;padding:2px 6px" onclick="downloadCurrentView()">↓ PNG</button>
           <button class="mbtn" id="quilt-btn" style="font-size:8px;padding:2px 6px">Quilt</button>
         </div>
@@ -597,6 +599,25 @@ input:focus, select:focus { border-color: var(--accent); }
     </div>
   </div>
   <!-- end tools inner -->
+  <!-- Permanent: N, f(x), Build — always visible below colour panel -->
+  <div class="top-row" id="nfn-row" style="padding:4px 12px 4px;gap:6px;border-top:1px solid var(--border)">
+    <span class="bar-label" style="flex-shrink:0">N</span>
+    <select style="font-size:10px;padding:2px 5px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;flex-shrink:0"
+      onchange="document.getElementById('n-val').value=this.value; document.getElementById('fs-n-val') && (document.getElementById('fs-n-val').value=this.value);">
+      <option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+    </select>
+    <select style="font-size:9px;padding:2px 5px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;flex:1;min-width:0"
+      onchange="document.getElementById('fn-select').value=this.value; onFnSelectChange(this.value);">
+      <option value="id">x</option><option value="recip">1/x</option><option value="sq">x²</option><option value="rsq">1/x²</option>
+      <option value="cb">x³</option><option value="rcb">1/x³</option><option value="phix">φ^x</option><option value="rphi_x">(1/φ)^x</option>
+      <option value="2x">2^x</option><option value="pix">π^x</option><option value="log2">log₂x</option><option value="ex">e^x</option>
+      <option value="ex_phi">e^(x^φ)</option><option value="phi_xe">φ^(x^e)</option><option value="xx">x^(1/x)</option>
+      <option value="rphipow">1/x^φ</option><option value="phi_pair">x^φ↔x^(1/φ)</option><option value="sqrt_pair">√x↔√(x/2)</option>
+      <option value="cb32_pair">x^(3/2)↔x^(2/3)</option><option value="sum_id_recip">f(x)+f(1/x)</option><option value="sum_sq_rsq">f(x²)+f(1/x²)</option>
+      <option value="custom">custom…</option>
+    </select>
+    <button class="mbtn" onclick="compute()" style="font-size:9px;padding:2px 10px;flex-shrink:0;background:var(--accent);color:#000;border-color:var(--accent)">Build</button>
+  </div>
 </div>
 <!-- end top-bar -->
 
@@ -1098,26 +1119,25 @@ input:focus, select:focus { border-color: var(--accent); }
 <!-- ══ HEATMAP OVERLAY (floating, toggled from bottom tab) ══ -->
 <div id="heatmap-overlay-panel">
   <div id="heatmap-col">
-    <div style="font-family:var(--mono);font-size:7px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding:0 0 2px 21px">Inflection Map</div>
-    <div style="display:flex;gap:0;align-items:flex-start">
-      <div id="hm-row-label">s1 ↑</div>
+    <div style="font-family:var(--mono);font-size:7px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding:0 0 4px 0;text-align:center">Inflection Map</div>
+    <div style="display:flex;gap:0;align-items:center;justify-content:center">
       <div id="heatmap-wrap">
         <canvas id="heatmap-canvas"></canvas>
         <canvas id="heatmap-overlay"></canvas>
       </div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:1px;padding-left:21px;margin-top:2px">
+    <div style="display:flex;flex-direction:column;gap:1px;align-items:center;margin-top:4px">
       <span id="hm-col-label" class="pane-label" style="font-size:7px">s2 →</span>
       <div class="legend" style="margin-top:2px">
         <span id="leg-lo" style="font-size:9px">—</span>
-        <canvas id="legend-bar-canvas" width="80" height="3" style="border-radius:2px;vertical-align:middle"></canvas>
+        <canvas id="legend-bar-canvas" width="140" height="5" style="border-radius:2px;vertical-align:middle"></canvas>
         <span id="leg-hi" style="font-size:9px">—</span>
       </div>
     </div>
   </div>
   <div id="frame-profile-col">
-    <div style="font-family:var(--mono);font-size:7px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding:2px 0 2px 4px;border-top:1px solid var(--border)">Frame Profile</div>
-    <canvas id="torus-canvas" style="display:block;background:#0a0a0a"></canvas>
+    <div style="font-family:var(--mono);font-size:7px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding:6px 0 4px 0;text-align:center;border-top:1px solid var(--border);width:100%">Frame Profile</div>
+    <canvas id="torus-canvas" style="display:block;background:#0a0a0a;margin:0 auto"></canvas>
   </div>
 </div>
 <!-- Matrix section -->
@@ -1666,9 +1686,9 @@ function renderHeatmap() {
 
   // Size heatmap to fit available space in tools panel
   const bar    = document.getElementById('heatmap-col');
-  const availW = bar ? Math.max(80, Math.floor((bar.clientWidth - 40))) : 160;
-  const maxH   = 220;
-  const cs = Math.max(1, Math.floor(Math.min(availW / cols, maxH / rows)));
+  const availW = 280; // fixed larger width for centered panel
+  const maxH   = 280;
+  const cs = Math.max(2, Math.floor(Math.min(availW / cols, maxH / rows)));
   _cellSize = cs;
 
   const canvas = document.getElementById('heatmap-canvas');
@@ -1903,18 +1923,15 @@ function drawChordFrame() {
         ctx.closePath(); ctx.fill();
       } else if (_vecSubMode === 'fan') {
         // Fan: rectangular panel centered at chord midpoint, perpendicular to vector.
-        // No vector line drawn. Width = perpendicular span. Length = depth along vector dir.
-        // Panel is a filled rect: center at (mx,my), half-extent = halfW perp, halfL along vec.
-        const halfW = len * _fanWidth * 0.6;   // perpendicular half-width
-        const halfL = len * _fanLength * 0.6;  // along-vector half-depth
-        // Unit vector along chord: (dx/len, dy/len)
-        const udx = dx/len, udy = dy/len;
-        // Perpendicular unit: (-udy, udx)
-        // Four corners of rectangle
-        const c1x = mx + udx*halfL - udy*halfW,  c1y = my + udy*halfL + udx*halfW;
-        const c2x = mx + udx*halfL + udy*halfW,  c2y = my + udy*halfL - udx*halfW;
-        const c3x = mx - udx*halfL + udy*halfW,  c3y = my - udy*halfL - udx*halfW;
-        const c4x = mx - udx*halfL - udy*halfW,  c4y = my - udy*halfL + udx*halfW;
+        // Uses vLen (intensity-scaled) so Width/Length/Intensity all interact.
+        const halfW = vLen * _fanWidth * 1.2;
+        const halfL = vLen * _fanLength * 1.2;
+        const udx = dx/len, udy = dy/len; // unit along chord
+        // Four corners: center=(mx,my), along udx by halfL, perp by halfW
+        const c1x = mx + udx*halfL - udy*halfW, c1y = my + udy*halfL + udx*halfW;
+        const c2x = mx + udx*halfL + udy*halfW, c2y = my + udy*halfL - udx*halfW;
+        const c3x = mx - udx*halfL + udy*halfW, c3y = my - udy*halfL - udx*halfW;
+        const c4x = mx - udx*halfL - udy*halfW, c4y = my - udy*halfL + udx*halfW;
         ctx.beginPath();
         ctx.moveTo(c1x,c1y); ctx.lineTo(c2x,c2y); ctx.lineTo(c3x,c3y); ctx.lineTo(c4x,c4y);
         ctx.closePath();
@@ -2673,7 +2690,7 @@ function toggleHeatmapOverlay() {
   const panel = document.getElementById('heatmap-overlay-panel');
   const btn = document.getElementById('heatmap-tab-btn');
   const open = panel.classList.toggle('open');
-  btn.classList.toggle('active', open);
+  if (btn) btn.classList.toggle('active', open);
   if (open) { renderHeatmap(); drawTorus(); }
 }
 
@@ -2715,6 +2732,11 @@ function updateFsBtn(view) {
 }
 
 function switchView(view, btn) {
+  // Matrix toggles: if already matrix, return to animation
+  if (view === 'matrix' && _activeView === 'matrix') {
+    view = 'animation';
+    btn = document.querySelector('.vtab[data-view="animation"]');
+  }
   _activeView = view;
   document.querySelectorAll('#bottom-bar .vtab').forEach(b => b.classList.toggle('active', b === btn));
   const mvb = document.getElementById('matrix-view-btn');
@@ -3845,6 +3867,7 @@ function buildTorusPoints() {
   } else if (_frameMode === 'vector') {
     const r_vec = 1.0;
     const tipPositions = [], tipColors = [], tipSizes = [];
+    const fanPositions = [], fanColors = [];
     for (const { i, row } of activeRows) {
       const phi = frameToPhi(i);
       for (let j = 0; j < count; j++) {
@@ -3916,21 +3939,24 @@ function buildTorusPoints() {
           positions.push(mx,my,mz, ex2,ey2,ez2);
           colors.push(cr,cg,cb, cr,cg,cb);
         } else if (_vecSubMode === 'fan') {
-          // Fan: rectangular panel in 3D, no fiber line.
-          // Centered at p-chord midpoint (mx,my,mz).
-          // Width (u direction, ⊥ fiber), Depth (along pd = fiber direction).
-          const halfW = pChordLen * _fanWidth * 0.6;  // perpendicular
-          const halfL = pChordLen * _fanLength * 0.6; // along fiber
-          // Four corners
+          // Fan 3D: mirrors Phase exactly.
+          // Phase center = chord midpoint, along = chord unit, perp = perpendicular unit.
+          // Phase scale: vLen = len/4 * _vecIntensity.
+          // 3D: center=(mx,my,mz), along=pdx/pdy/pdz (chord unit), perp=ux/uy/uz.
+          // 3D scale: pChordLen/4 * _vecIntensity (matches vLen).
+          // Scale: r_vec * 0.15 * intensity — fixed proportion of minor radius.
+          // Keeps panels visually proportional like Phase (where vLen = len/4*int ~1/8 diameter).
+          const scale = r_vec * 0.15 * _vecIntensity;
+          const halfW = scale * _fanWidth * 1.2;
+          const halfL = scale * _fanLength * 1.2;
           const c1x=mx+pdx*halfL+ux*halfW, c1y=my+pdy*halfL+uy*halfW, c1z=mz+pdz*halfL+uz*halfW;
           const c2x=mx+pdx*halfL-ux*halfW, c2y=my+pdy*halfL-uy*halfW, c2z=mz+pdz*halfL-uz*halfW;
           const c3x=mx-pdx*halfL-ux*halfW, c3y=my-pdy*halfL-uy*halfW, c3z=mz-pdz*halfL-uz*halfW;
           const c4x=mx-pdx*halfL+ux*halfW, c4y=my-pdy*halfL+uy*halfW, c4z=mz-pdz*halfL+uz*halfW;
-          // Draw as 4 edges of rectangle
-          positions.push(c1x,c1y,c1z, c2x,c2y,c2z); colors.push(cr,cg,cb, cr,cg,cb);
-          positions.push(c2x,c2y,c2z, c3x,c3y,c3z); colors.push(cr,cg,cb, cr,cg,cb);
-          positions.push(c3x,c3y,c3z, c4x,c4y,c4z); colors.push(cr,cg,cb, cr,cg,cb);
-          positions.push(c4x,c4y,c4z, c1x,c1y,c1z); colors.push(cr,cg,cb, cr,cg,cb);
+          fanPositions.push(c1x,c1y,c1z, c2x,c2y,c2z); fanColors.push(cr,cg,cb, cr,cg,cb);
+          fanPositions.push(c2x,c2y,c2z, c3x,c3y,c3z); fanColors.push(cr,cg,cb, cr,cg,cb);
+          fanPositions.push(c3x,c3y,c3z, c4x,c4y,c4z); fanColors.push(cr,cg,cb, cr,cg,cb);
+          fanPositions.push(c4x,c4y,c4z, c1x,c1y,c1z); fanColors.push(cr,cg,cb, cr,cg,cb);
         }
         // P and Yo-yo: collect tip as point
         if (_vecSubMode === 'p' || _vecSubMode === 'yoyo') {
@@ -3948,6 +3974,15 @@ function buildTorusPoints() {
     if (positions.length > 0) {
       dataGroup.add(new THREE.LineSegments(geo,
         new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: vectorOpacity, depthWrite: false })));
+    }
+    // Fan: own LineSegments with _fanOpacity matching Phase vAlpha
+    if (fanPositions.length > 0) {
+      const vAlpha = _n <= 4 ? 0.78 : _n === 5 ? 0.55 : _n === 6 ? 0.35 : 0.18;
+      const fanGeo = new THREE.BufferGeometry();
+      fanGeo.setAttribute('position', new THREE.Float32BufferAttribute(fanPositions, 3));
+      fanGeo.setAttribute('color',    new THREE.Float32BufferAttribute(fanColors, 3));
+      dataGroup.add(new THREE.LineSegments(fanGeo,
+        new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: _fanOpacity * vAlpha, depthWrite: false })));
     }
     // P and Yo-yo: add Points at tips using selected shape texture
     if (tipPositions.length > 0) {
