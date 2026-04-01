@@ -366,49 +366,14 @@ input:focus, select:focus { border-color: var(--accent); }
     <button id="play-btn" onclick="togglePlay()">▶</button>
     <input type="range" id="frame-slider" min="0" value="0" oninput="onFrameScrub(this.value)" style="flex:1;min-width:60px">
     <div id="speed-btns" style="display:flex;gap:2px;flex-shrink:0">
-      <button class="mbtn" data-spd="1"  onclick="setPlaySpeed(1,this)">½×</button>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <button class="mbtn" id="reverse-btn" onclick="togglePlayReverse(this)" title="Reverse" style="font-size:8px;padding:1px 4px">◀</button>
+        <button class="mbtn" data-spd="1"  onclick="setPlaySpeed(1,this)">½×</button>
+      </div>
       <button class="mbtn active" data-spd="2" onclick="setPlaySpeed(2,this)">1×</button>
       <button class="mbtn" data-spd="4"  onclick="setPlaySpeed(4,this)">2×</button>
       <button class="mbtn" data-spd="10" onclick="setPlaySpeed(10,this)">5×</button>
       <button class="mbtn" data-spd="20" onclick="setPlaySpeed(20,this)">10×</button>
-    </div>
-  </div>
-
-  <!-- Row 3 removed — view tabs moved to permanent bottom bar -->
-
-  <!-- Row 4: tools toggle + display modes + dot sizer + per-tab extras -->
-  <div class="top-row" id="top-row4">
-    <button id="tools-toggle-btn" class="mbtn" onclick="toggleToolsPanel()" style="font-size:8px;letter-spacing:2px;padding:2px 10px;flex-shrink:0">▸ TOOLS</button>
-    <div style="width:1px;height:14px;background:var(--border);flex-shrink:0;margin:0 6px"></div>
-    <span class="bar-label" style="flex-shrink:0">Display:</span>
-    <div class="mode-btns" id="frame-mode-btns" style="flex-shrink:0">
-      <button class="mbtn"        data-mode="chord"    onclick="setMode('chord',this)">Chords</button>
-      <button class="mbtn"        data-mode="midpoint" onclick="setMode('midpoint',this)">Midpoints</button>
-      <button class="mbtn"        data-mode="vector"   onclick="setMode('vector',this)">Vectors</button>
-    </div>
-    <div style="width:1px;height:14px;background:var(--border);flex-shrink:0;margin:0 6px"></div>
-    <button class="mbtn" id="matrix-view-btn" onclick="switchView('matrix',this)" style="flex-shrink:0">Matrix</button>
-  </div>
-
-  <!-- Per-view contextual controls row — shown/hidden per active tab -->
-  <div class="top-row" id="view-controls-row" style="display:none;min-height:0">
-    <span id="torus-orient-label" style="display:none;align-items:center;gap:4px;flex-shrink:0">
-      <span style="font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1px">Orient</span>
-      <select id="torus-orient-modebar" onchange="setTorusOrient(this.value)" style="font-size:9px;padding:2px 4px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;">
-        <option value="outside">Outside</option><option value="inside">Inside</option><option value="top">Top</option><option value="bottom">Bottom</option>
-      </select>
-    </span>
-    <div id="ak-tab-controls" style="display:none;align-items:center;gap:6px;flex-shrink:0">
-      <span class="bar-label">Nodes</span>
-      <select id="ak-count-sel" onchange="akSetCount(parseInt(this.value))" style="font-size:10px;padding:2px 6px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;">
-        <option value="2">2</option><option value="3">3</option><option value="4">4</option>
-        <option value="5">5</option><option value="6">6</option><option value="7">7</option>
-      </select>
-      <div class="mode-btns" id="ak-mode-btns">
-        <button class="mbtn active" data-akmode="pairwise" onclick="setAkMode('pairwise',this)">Pairwise</button>
-        <button class="mbtn"        data-akmode="combined" onclick="setAkMode('combined',this)">Combined</button>
-      </div>
-      <button class="mbtn" onclick="akReset()">Reset</button>
     </div>
   </div>
 
@@ -481,7 +446,7 @@ input:focus, select:focus { border-color: var(--accent); }
 
   <p><b>Antikythera.</b> A live product calculator. Place nodes anywhere on the octave circle by dragging. Products between nodes are computed in real time and drawn as chords — each chord&rsquo;s angle encodes the product&rsquo;s position, and its colour encodes proximity to &radic;2. Crucially, angles here carry weight: a node placed near the identity (the octave boundary) produces products that cluster near the identity; a node near &radic;2 produces products at maximum distance from it. The angle is not just a label — it is the arithmetic.</p>
 
-  <p><b>Atlas.</b> A prime composition wheel. Each integer in the octave is plotted by its prime factorisation — specifically by omega order, the count of prime factors with multiplicity. Primes appear at omega=1 (red), semiprimes at omega=2, and so on. Fine mode shows the current octave; Coarse extends outward; Atlas mode places all octaves on concentric rings. The wheel can spin and lock to the current frame.</p>
+  <p><b>Atlas.</b> A prime composition wheel and 1-dimensional harmonic attractor. Each integer in the octave is placed at its log₂ position around the circle — its angle encodes where it falls in the multiplicative hierarchy. Omega order (count of prime factors with multiplicity) is shown by colour and bar height: primes at omega=1, semiprimes at omega=2, and so on. The first five composites of every order are always labelled. Fine mode shows the current octave; Coarse extends outward; Atlas mode places all octaves on concentric rings.</p>
 
   <p><b>Data panel.</b> The heatmap (bottom-left tab) shows the full product matrix as a colour grid — rows are input values, columns are f(x) outputs, colour encodes octave position. The frame profile beneath it shows the current row as a vertical chord diagram.</p>
 
@@ -519,7 +484,7 @@ input:focus, select:focus { border-color: var(--accent); }
         </div>
         <div style="display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap">
           <span id="dot-size-row-lbl" style="font-family:var(--mono);font-size:8px;color:var(--muted);flex-shrink:0">Dot</span>
-          <input id="midpoint-size-slider" type="range" min="1" max="80" step="1" value="12" oninput="setMidpointSize(this.value)" style="width:80px;accent-color:var(--accent);flex-shrink:0">
+          <input id="midpoint-size-slider" type="range" min="1" max="200" step="1" value="12" oninput="setMidpointSize(this.value)" style="width:120px;accent-color:var(--accent);flex-shrink:0">
           <span id="midpoint-size-label" style="font-family:var(--mono);font-size:8px;color:var(--muted);min-width:18px;flex-shrink:0">12</span>
           <div style="width:1px;height:14px;background:var(--border);flex-shrink:0"></div>
           <select id="main-shape-sel" onchange="setPointShape(this.value,null)"
@@ -638,6 +603,45 @@ input:focus, select:focus { border-color: var(--accent); }
 
 
 <!-- ══ MAIN VIEW PORT (full width) ══ -->
+
+  <!-- Row 3 removed — view tabs moved to permanent bottom bar -->
+
+  <!-- Row 4: tools toggle + display modes + dot sizer + per-tab extras -->
+  <div class="top-row" id="top-row4">
+    <button id="tools-toggle-btn" class="mbtn" onclick="toggleToolsPanel()" style="font-size:8px;letter-spacing:2px;padding:2px 10px;flex-shrink:0">▸ TOOLS</button>
+    <div style="width:1px;height:14px;background:var(--border);flex-shrink:0;margin:0 6px"></div>
+    <span class="bar-label" style="flex-shrink:0">Display:</span>
+    <div class="mode-btns" id="frame-mode-btns" style="flex-shrink:0">
+      <button class="mbtn"        data-mode="chord"    onclick="setMode('chord',this)">Chords</button>
+      <button class="mbtn"        data-mode="midpoint" onclick="setMode('midpoint',this)">Midpoints</button>
+      <button class="mbtn"        data-mode="vector"   onclick="setMode('vector',this)">Vectors</button>
+    </div>
+    <div style="width:1px;height:14px;background:var(--border);flex-shrink:0;margin:0 6px"></div>
+    <button class="mbtn" id="matrix-view-btn" onclick="switchView('matrix',this)" style="flex-shrink:0">Matrix</button>
+  </div>
+
+  <!-- Per-view contextual controls row — shown/hidden per active tab -->
+  <div class="top-row" id="view-controls-row" style="display:none;min-height:0">
+    <span id="torus-orient-label" style="display:none;align-items:center;gap:4px;flex-shrink:0">
+      <span style="font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1px">Orient</span>
+      <select id="torus-orient-modebar" onchange="setTorusOrient(this.value)" style="font-size:9px;padding:2px 4px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;">
+        <option value="outside">Outside</option><option value="inside">Inside</option><option value="top">Top</option><option value="bottom">Bottom</option>
+      </select>
+    </span>
+    <div id="ak-tab-controls" style="display:none;align-items:center;gap:6px;flex-shrink:0">
+      <span class="bar-label">Nodes</span>
+      <select id="ak-count-sel" onchange="akSetCount(parseInt(this.value))" style="font-size:10px;padding:2px 6px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;">
+        <option value="2">2</option><option value="3">3</option><option value="4">4</option>
+        <option value="5">5</option><option value="6">6</option><option value="7">7</option>
+      </select>
+      <div class="mode-btns" id="ak-mode-btns">
+        <button class="mbtn active" data-akmode="pairwise" onclick="setAkMode('pairwise',this)">Pairwise</button>
+        <button class="mbtn"        data-akmode="combined" onclick="setAkMode('combined',this)">Combined</button>
+      </div>
+      <button class="mbtn" onclick="akReset()">Reset</button>
+    </div>
+  </div>
+
 <div id="view-port">
     <div id="view-port-inner">
   <!-- Torus -->
@@ -653,8 +657,9 @@ input:focus, select:focus { border-color: var(--accent); }
       <div style="position:absolute;top:12px;left:12px;pointer-events:auto;z-index:520">
         <button id="torus-cam-toggle" onclick="toggleTorusCamPanel()" class="mbtn" style="font-size:11px;letter-spacing:1px;padding:6px 16px;background:rgba(0,0,0,0.7);border-color:var(--border)">&#9656; Tools</button>
       </div>
-      <!-- Top-right: demo (small) + exit -->
-      <div style="position:absolute;top:12px;right:12px;display:flex;gap:6px;align-items:center;pointer-events:auto;z-index:520">
+      <!-- Top-right: demo (small) + exit + data panel -->
+      <div style="position:absolute;top:12px;right:12px;display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:auto;z-index:520">
+        <div style="display:flex;gap:6px;align-items:center">
         <select id="fs-demo-sel" onchange="runDemo(this.value)"
           style="font-family:var(--mono);font-size:8px;padding:3px 6px;background:rgba(12,12,12,0.9);color:var(--muted);border:1px solid var(--border);border-radius:2px;cursor:pointer">
           <option value="">Demo</option>
@@ -664,8 +669,13 @@ input:focus, select:focus { border-color: var(--accent); }
           <option value="squid">Squid</option>
           <option value="tree">Tree</option>
           <option value="apparition">Apparition</option>
+          <option value="peacock">Peacock</option>
+          <option value="cardinal">Cardinal</option>
+          <option value="orchid">Orchid</option>
         </select>
         <button onclick="toggleTorusFS()" style="font-family:var(--mono);font-size:9px;background:rgba(50,8,8,0.9);border:1px solid #833;color:#e88;border-radius:2px;padding:4px 12px;cursor:pointer;letter-spacing:1px">&#10005; Exit</button>
+        </div>
+        <button onclick="toggleHeatmapOverlay()" style="font-family:var(--mono);font-size:8px;background:rgba(12,12,12,0.85);border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:3px 8px;cursor:pointer">◧ Data</button>
       </div>
 
       <!-- Camera panel: collapsible, top-left below header -->
@@ -696,7 +706,10 @@ input:focus, select:focus { border-color: var(--accent); }
               <div class="bar-label" style="margin-bottom:4px">Play</div>
                <div style="display:flex;align-items:center;gap:4px">
                  <button id="fs-panel-play-btn" onclick="togglePlay()" style="font-family:var(--mono);font-size:14px;background:none;border:1px solid var(--accent);color:var(--accent);border-radius:2px;padding:2px 12px;cursor:pointer;flex-shrink:0">&#9654;</button>
-                 <button class="mbtn" data-spd="1"  onclick="setPlaySpeed(1,this)">&#189;&times;</button>
+                 <div style="display:flex;flex-direction:column;gap:2px">
+                   <button class="mbtn" id="fs-reverse-btn" onclick="togglePlayReverse(this)" title="Reverse" style="font-size:8px;padding:1px 4px">&#9664;</button>
+                   <button class="mbtn" data-spd="1"  onclick="setPlaySpeed(1,this)">&#189;&times;</button>
+                 </div>
                  <button class="mbtn active" data-spd="2" onclick="setPlaySpeed(2,this)">1&times;</button>
                  <button class="mbtn" data-spd="4"  onclick="setPlaySpeed(4,this)">2&times;</button>
                  <button class="mbtn" data-spd="10" onclick="setPlaySpeed(10,this)">5&times;</button>
@@ -739,6 +752,29 @@ input:focus, select:focus { border-color: var(--accent); }
                     style="flex:1;text-align:center;font-size:10px" title="Point at tip">P</button>
                   <button class="mbtn"        data-vecmode="yoyo" onclick="setVecSubMode('yoyo',this)"
                     style="flex:1;text-align:center;font-size:9px" title="Line + point at tip">Yo-yo</button>
+                  <button class="mbtn"        data-vecmode="fan" onclick="setVecSubMode('fan',this)"
+                    style="flex:1;text-align:center;font-size:9px" title="Perpendicular fan at vector head">Fan</button>
+                </div>
+                <!-- Fan sub-controls — shown when Fan active -->
+                <div id="fs-vec-fan-row" style="display:none;flex-direction:column;gap:3px;margin-top:3px">
+                  <div style="display:flex;align-items:center;gap:6px">
+                    <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:40px">Width</span>
+                    <input type="range" id="fs-fan-width" min="1" max="100" step="1" value="50"
+                      oninput="setFanWidth(this.value)" style="flex:1;accent-color:var(--accent)">
+                    <span id="fs-fan-width-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">50</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px">
+                    <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:40px">Length</span>
+                    <input type="range" id="fs-fan-length" min="1" max="100" step="1" value="50"
+                      oninput="setFanLength(this.value)" style="flex:1;accent-color:var(--accent)">
+                    <span id="fs-fan-length-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">50</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px">
+                    <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:40px">Fill</span>
+                    <input type="range" id="fs-fan-opacity" min="0" max="100" step="1" value="35"
+                      oninput="setFanOpacity(this.value)" style="flex:1;accent-color:var(--accent)">
+                    <span id="fs-fan-opacity-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">35</span>
+                  </div>
                 </div>
                 <!-- Intensity slider (both modes) -->
                 <div style="display:flex;align-items:center;gap:6px">
@@ -924,7 +960,7 @@ input:focus, select:focus { border-color: var(--accent); }
             <!-- Data point shape -->
             <div>
               <div class="bar-label" style="margin-bottom:4px">Point Shape</div>
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;font-size:18px">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-size:26px">
                 <button class="mbtn active" data-pshape="dot"      onclick="setPointShape('dot',this)">●</button>
                 <button class="mbtn"        data-pshape="ring"      onclick="setPointShape('ring',this)">○</button>
                 <button class="mbtn"        data-pshape="bubble"    onclick="setPointShape('bubble',this)">◎</button>
@@ -1089,9 +1125,6 @@ input:focus, select:focus { border-color: var(--accent); }
 
 <!-- ══ BOTTOM TAB BAR (permanent, always visible) ══ -->
 <div id="bottom-bar">
-  <!-- Heatmap toggle tab — bottom left -->
-  <button id="heatmap-tab-btn" onclick="toggleHeatmapOverlay()" title="Show/hide data panels">◧ Data</button>
-  <div style="width:1px;height:18px;background:var(--border);flex-shrink:0"></div>
   <!-- View tabs -->
   <button class="vtab"        data-view="torus"       onclick="switchView('torus',this)">Zoetrope</button>
   <button class="vtab active" data-view="animation"   onclick="switchView('animation',this)">Phase</button>
@@ -1868,6 +1901,27 @@ function drawChordFrame() {
         ctx.lineTo(ex - hs*Math.cos(angle-0.45), ey - hs*Math.sin(angle-0.45));
         ctx.lineTo(ex - hs*Math.cos(angle+0.45), ey - hs*Math.sin(angle+0.45));
         ctx.closePath(); ctx.fill();
+      } else if (_vecSubMode === 'fan') {
+        // Fan: rectangular panel centered at chord midpoint, perpendicular to vector.
+        // No vector line drawn. Width = perpendicular span. Length = depth along vector dir.
+        // Panel is a filled rect: center at (mx,my), half-extent = halfW perp, halfL along vec.
+        const halfW = len * _fanWidth * 0.6;   // perpendicular half-width
+        const halfL = len * _fanLength * 0.6;  // along-vector half-depth
+        // Unit vector along chord: (dx/len, dy/len)
+        const udx = dx/len, udy = dy/len;
+        // Perpendicular unit: (-udy, udx)
+        // Four corners of rectangle
+        const c1x = mx + udx*halfL - udy*halfW,  c1y = my + udy*halfL + udx*halfW;
+        const c2x = mx + udx*halfL + udy*halfW,  c2y = my + udy*halfL - udx*halfW;
+        const c3x = mx - udx*halfL + udy*halfW,  c3y = my - udy*halfL - udx*halfW;
+        const c4x = mx - udx*halfL - udy*halfW,  c4y = my - udy*halfL + udx*halfW;
+        ctx.beginPath();
+        ctx.moveTo(c1x,c1y); ctx.lineTo(c2x,c2y); ctx.lineTo(c3x,c3y); ctx.lineTo(c4x,c4y);
+        ctx.closePath();
+        ctx.globalAlpha = _fanOpacity;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        ctx.stroke();
       } else {
         // P and Yo-yo: shape/glyph at tip
         const dotR = Math.max(0.5, proxSizeScale(prox) * Math.pow(_midpointSize / 5, 1.8));
@@ -2145,6 +2199,11 @@ function setPlaySpeed(spd, btn) {
     b.classList.toggle('active', parseFloat(b.dataset.spd) === spd));
 }
 
+function togglePlayReverse(btn) {
+  _playReverse = !_playReverse;
+  if (btn) btn.classList.toggle('active', _playReverse);
+}
+
 function togglePlay() {
   _playing=!_playing;
   const icon = _playing ? '■' : '▶';
@@ -2164,7 +2223,8 @@ function scheduleFrame() {
     if (ts - _lastTime >= interval) {
       const steps = Math.max(1, Math.floor((ts - _lastTime) / interval));
       _lastTime = ts;
-      setFrame((_frame + steps) % activeFrameCount());
+      const count = activeFrameCount();
+      setFrame((_frame + (_playReverse ? -steps : steps) + count) % count);
     }
     scheduleFrame();
   });
@@ -2174,7 +2234,10 @@ function scheduleFrame() {
 let _chordSub = 'full'; // 'full' | 'latter' | 'prior' | 'centre'
 let _vecIntensity = 1.0;  // scales vector length
 let _vecGlyphPos  = 0.5;  // 0.0–1.0 position along vector for P-mode point
-let _vecSubMode   = "v";  // "v" = arrow vectors | "p" = point on vector
+let _vecSubMode   = "v";  // "v" | "p" | "yoyo" | "fan"
+let _fanWidth  = 0.5;  // 0–1 normalized
+let _fanLength = 0.5;  // 0–1 normalized
+let _fanOpacity = 0.35; // inner fill opacity
 
 function setVecIntensity(val) {
   _vecIntensity = parseFloat(val);
@@ -2196,8 +2259,33 @@ function setVecSubMode(mode, btn) {
     b.classList.toggle("active", b.dataset.vecmode === mode));
   const pSlider = document.getElementById("fs-vec-p-row");
   if (pSlider) pSlider.style.display = mode === "p" ? "flex" : "none";
+  const fanRow = document.getElementById("fs-vec-fan-row");
+  if (fanRow) fanRow.style.display = mode === "fan" ? "flex" : "none";
   if (_activeView === "animation") drawChordFrame();
   else if (_activeView === "torus") buildTorusPoints();
+}
+
+function setFanWidth(val) {
+  _fanWidth = parseInt(val) / 100;
+  const lbl = document.getElementById('fs-fan-width-label');
+  if (lbl) lbl.textContent = val;
+  if (_activeView === 'animation') drawChordFrame();
+  else if (_activeView === 'torus' && _frameMode === 'vector') buildTorusPoints();
+}
+
+function setFanLength(val) {
+  _fanLength = parseInt(val) / 100;
+  const lbl = document.getElementById('fs-fan-length-label');
+  if (lbl) lbl.textContent = val;
+  if (_activeView === 'animation') drawChordFrame();
+  else if (_activeView === 'torus' && _frameMode === 'vector') buildTorusPoints();
+}
+
+function setFanOpacity(val) {
+  _fanOpacity = parseInt(val) / 100;
+  const lbl = document.getElementById('fs-fan-opacity-label');
+  if (lbl) lbl.textContent = val;
+  if (_activeView === 'animation') drawChordFrame();
 }
 
 function setChordSub(sub, btn) {
@@ -2919,9 +3007,9 @@ function runDemo(name) {
     if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
 
   } else if (name === "apparition") {
-    setN(7); setFn("ex"); compute(); // e^x
+    setN(7); setFn("ex"); compute();
     ensureHelix(true);
-    setShape('ring', 4.0);           // 4.00 helix length/diameter
+    setShape('ring', 4.0);
     setMode("vector", document.querySelector('[data-mode="vector"]'));
     setVecSubMode('yoyo', document.querySelector('[data-vecmode="yoyo"]'));
     setVecIntensity(3.0);
@@ -2929,9 +3017,57 @@ function runDemo(name) {
     setSpinFromSlider(0);
     setOpacity(65);
     setRainbow(false);
-    // Low saturation colours — desaturated defaults
     setBGSat(15); setBG(8); setBGHue(0);
-    // Default palette (don't override ID/INF)
+    if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+
+  } else if (name === "orchid") {
+    setN(7); setFn("phi_pair"); compute(); // x^φ ↔ x^(1/φ)
+    ensureHelix(false);
+    setShape('horn', 1.0);               // horn ~0.97
+    setMode("vector", document.querySelector('[data-mode="vector"]'));
+    setVecSubMode('p', document.querySelector('[data-vecmode="p"]'));
+    setVecIntensity(4.0);
+    const intO = document.getElementById('fs-vec-int'); if (intO) intO.value = 40;
+    setDotSize(10);
+    setSpinFromSlider(0);
+    setOpacity(100);
+    setRainbow(false);
+    if (!_treeMode) toggleTreeMode(document.getElementById('tree-btn'));
+    if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+
+  } else if (name === "cardinal") {
+    setN(7); setFn("xx"); compute();     // x^(1/x)
+    ensureHelix(false);
+    if (_treeMode) toggleTreeMode(document.getElementById('tree-btn'));
+    setShape('ring', 2.16);
+    setMode("vector", document.querySelector('[data-mode="vector"]'));
+    setVecSubMode('p', document.querySelector('[data-vecmode="p"]'));
+    setVecIntensity(4.0);
+    const intC = document.getElementById('fs-vec-int'); if (intC) intC.value = 40;
+    setSpinFromSlider(0);
+    setOpacity(80);                      // ~64% visual
+    setRainbow(false);
+    setPalHue('pal-id-hue', 0);   setPalBri('pal-id-bri', 50);   // red
+    setPalHue('pal-infl-hue', 30); setPalBri('pal-infl-bri', 65); // orange
+    setBG(15); setBGHue(25); setBGSat(50); // dark brown
+    if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+
+  } else if (name === "peacock") {
+    setN(7); setFn("2x"); compute();     // 2^x
+    ensureHelix(false);
+    if (_treeMode) toggleTreeMode(document.getElementById('tree-btn'));
+    setShape('ring', 1.79);
+    setMode("vector", document.querySelector('[data-mode="vector"]'));
+    setVecSubMode('yoyo', document.querySelector('[data-vecmode="yoyo"]'));
+    setVecIntensity(4.0);
+    const intP = document.getElementById('fs-vec-int'); if (intP) intP.value = 40;
+    setDotSize(20);
+    setSpinFromSlider(0);
+    setOpacity(40);                      // ~16% visual
+    setRainbow(false);
+    setPalHue('pal-id-hue', 220); setPalBri('pal-id-bri', 55);   // blue
+    setPalHue('pal-infl-hue', 120); setPalBri('pal-infl-bri', 65); // green
+    setBG(40); setBGHue(30); setBGSat(60); // brownish
     if (_torusFS) requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
   }
 }
@@ -3296,7 +3432,7 @@ function initTorus3D() {
   if (typeof _three !== "undefined" && _three) _three.renderer = renderer;
 
   const scene  = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(42, W / H, 0.01, 100);
+  const camera = new THREE.PerspectiveCamera(42, W / H, 0.01, 500);
   camera.position.set(0, 0, 9.5);
   camera.lookAt(0, 0, 0);
 
@@ -3318,7 +3454,7 @@ function initTorus3D() {
       } else {
         rotY += dx * 0.012; rotX += dy * 0.012;
       }
-      rotX = Math.max(-1.39, Math.min(1.39, rotX));
+      // rotX unclamped — full spherical orbit
     }
   }
 
@@ -3375,7 +3511,7 @@ function initTorus3D() {
       _tubeZoom = Math.max(-8, Math.min(8, _tubeZoom + (e.deltaY > 0 ? 0.15 : -0.15)));
     } else {
       const factor = e.deltaY < 0 ? 0.90 : 1.11;
-      camera.position.z = Math.max(0.5, Math.min(120, camera.position.z * factor));
+      if (camera.position.z > 0) camera.position.z = Math.max(1.5, Math.min(200, camera.position.z * factor));
     }
     if (_three) _three.renderNow();
   }, { passive: false });
@@ -3427,7 +3563,7 @@ function initTorus3D() {
       const camXout = dist * Math.sin(polar); // X component of arc
       camera.position.set(camXout, 0, camZ);
       camera.near = dist < 2 ? 0.01 : 0.01;
-      camera.far = 1000;
+      camera.far = 500;
       camera.up.set(0, 1, 0);
       camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
@@ -3559,12 +3695,11 @@ function buildTorusPoints() {
     //   R=2.00+ → lampshade, soft-exponential expansion
     // ringR = R^t: exponential in t so large R fans out gently at the top.
     ? (phi, theta) => {
-        const treeH = 6.0;
+        const treeH = 9.0;
         const t = phi / (Math.PI * 2);          // 0=identity(bottom), 1=last frame(top)
-        const baseR = 0.25;                     // fixed base radius — identity never moves
-        // Top radius = R directly; interpolate exponentially so base is always baseR
-        const topR = Math.max(0.0001, R);
-        const ringR = baseR * Math.pow(topR / baseR, t); // baseR at t=0, topR at t=1
+        const baseR = 0.12;                     // tight base — identity never moves
+        const topR = Math.max(0.0001, R * 2.0); // R*2 so slider 2 = 4 units wide at top
+        const ringR = baseR * Math.pow(topR / baseR, t);
         const y = -treeH * 0.5 + t * treeH;
         return [ringR * Math.cos(theta), y, ringR * Math.sin(theta)];
       }
@@ -3780,6 +3915,22 @@ function buildTorusPoints() {
           // Yo-yo: fiber line only (no arrowhead — tip point added separately below)
           positions.push(mx,my,mz, ex2,ey2,ez2);
           colors.push(cr,cg,cb, cr,cg,cb);
+        } else if (_vecSubMode === 'fan') {
+          // Fan: rectangular panel in 3D, no fiber line.
+          // Centered at p-chord midpoint (mx,my,mz).
+          // Width (u direction, ⊥ fiber), Depth (along pd = fiber direction).
+          const halfW = pChordLen * _fanWidth * 0.6;  // perpendicular
+          const halfL = pChordLen * _fanLength * 0.6; // along fiber
+          // Four corners
+          const c1x=mx+pdx*halfL+ux*halfW, c1y=my+pdy*halfL+uy*halfW, c1z=mz+pdz*halfL+uz*halfW;
+          const c2x=mx+pdx*halfL-ux*halfW, c2y=my+pdy*halfL-uy*halfW, c2z=mz+pdz*halfL-uz*halfW;
+          const c3x=mx-pdx*halfL-ux*halfW, c3y=my-pdy*halfL-uy*halfW, c3z=mz-pdz*halfL-uz*halfW;
+          const c4x=mx-pdx*halfL+ux*halfW, c4y=my-pdy*halfL+uy*halfW, c4z=mz-pdz*halfL+uz*halfW;
+          // Draw as 4 edges of rectangle
+          positions.push(c1x,c1y,c1z, c2x,c2y,c2z); colors.push(cr,cg,cb, cr,cg,cb);
+          positions.push(c2x,c2y,c2z, c3x,c3y,c3z); colors.push(cr,cg,cb, cr,cg,cb);
+          positions.push(c3x,c3y,c3z, c4x,c4y,c4z); colors.push(cr,cg,cb, cr,cg,cb);
+          positions.push(c4x,c4y,c4z, c1x,c1y,c1z); colors.push(cr,cg,cb, cr,cg,cb);
         }
         // P and Yo-yo: collect tip as point
         if (_vecSubMode === 'p' || _vecSubMode === 'yoyo') {
@@ -3845,28 +3996,18 @@ function buildTorusPoints() {
   }
 
 
-  // Helix repeat: clone geometry with Z offsets for copy 2 (×2 only, not tree view)
+  // Helix repeat: one extra copy above, recentre by helixH/2
   if (_helixMode && _helixRepeat > 1 && !isTreeView) {
     const helixH = Math.max(0, _torusRatio) * 3.0;
-    const baseChildren = [...dataGroup.children]; // snapshot of copy 1
-    for (let copy = 1; copy < _helixRepeat; copy++) {
-      const zOff = copy * helixH;
-      for (const obj of baseChildren) {
-        const clone = obj.clone();
-        clone.position.z += zOff;
-        dataGroup.add(clone);
-        // Also add a mirror copy below (centred arrangement)
-        const mirror = obj.clone();
-        mirror.position.z -= zOff;
-        dataGroup.add(mirror);
-      }
+    const baseChildren = [...dataGroup.children];
+    for (const obj of baseChildren) {
+      const clone = obj.clone();
+      clone.position.z += helixH;
+      dataGroup.add(clone);
     }
-    // Re-centre: shift all children so the whole stack is centred at origin
-    const totalH = helixH * _helixRepeat;
-    dataGroup.children.forEach(ch => {
-      ch.position.z -= (totalH - helixH) / 2;
-    });
+    dataGroup.children.forEach(ch => { ch.position.z -= helixH / 2; });
   }
+
 
   // Overlay geometry
   if (rows > 0) {
@@ -3914,6 +4055,11 @@ function buildTorusPoints() {
     }
   }
 
+  // Tree mode: push camera back so full tree is visible
+  if (isTreeView && _three) {
+    const cam = _three.camera;
+    if (cam.position.z < 14) cam.position.z = 14;
+  }
   // Force render so the new geometry is visible immediately
   if (_three) _three.renderNow();
 }
@@ -4019,6 +4165,7 @@ function toggleFSOrient(btn) {
   btn.textContent = _fsMobile ? 'Rotated' : 'Rotate 90°';
   btn.classList.toggle('active', _fsMobile);
   if (!_three) return;
+  // Rotate scene z so the model tips sideways; drag axis swap handled in _applyDrag
   const { scene } = _three;
   scene.rotation.z = _fsMobile ? Math.PI / 2 : 0;
   if (_three.renderNow) _three.renderNow();
@@ -4105,7 +4252,7 @@ function setCamAngle(val) {
   if (val === 'tube') {
     camera.near = 0.001; camera.far = 20;
   } else {
-    camera.near = 0.01; camera.far = 1000;
+    camera.near = 0.01; camera.far = 500;
     camera.position.set(0, 0, 9.5);
     camera.up.set(0, 1, 0);
     camera.lookAt(0, 0, 0);
@@ -4164,6 +4311,7 @@ function drawTorus3D() {
 
 let _spinSpeed = 0;
 let _spinReverse = false;
+let _playReverse = false;
 
 function setSpinSpeed(v, btn) {
   const speeds = { x2: 0.002, x5: 0.005, x10: 0.010 };
@@ -4853,8 +5001,9 @@ function drawAtlas() {
         }
       }
 
-      // Labels: base level = bold gold; fine/above-base = tiny (white for primes, grey for composites)
-      const showLabel = isBaseLevel || (_atlasFine && k > BASE_K && spacing > MIN_SPACING * 2.5);
+      // Labels: base level always; first 5 of every order always; fine zoom reveals more
+      const first5 = (i < 5);
+      const showLabel = isBaseLevel || first5 || (_atlasFine && k > BASE_K && spacing > MIN_SPACING * 2.5);
       if (showLabel) {
         const innerR = R - om * (bH + bG) - 14;
         const lx = cx + innerR * Math.cos(angle);
