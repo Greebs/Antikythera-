@@ -355,14 +355,16 @@ input:focus, select:focus { border-color: var(--accent); }
 
   <!-- Row 2: zoetrope (centre) + readme (right) -->
   <div class="top-row" id="top-row1b" style="padding:4px 12px 6px;gap:6px;justify-content:center">
-    <button disabled title="Coming soon"
-      style="flex:1;font-family:var(--mono);font-size:13px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 0;cursor:not-allowed;opacity:0.4;text-align:center">🎶</button>
-    <button onclick="switchView('matrix',this)"
-      style="flex:1;font-family:var(--mono);font-size:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 0;cursor:pointer;letter-spacing:1px;text-align:center">Matrix</button>
+    <div style="display:flex;gap:6px;flex-shrink:0">
+      <button disabled title="Coming soon"
+        style="font-family:var(--mono);font-size:13px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 10px;cursor:not-allowed;opacity:0.4">🎶</button>
+      <button onclick="switchView('matrix',this)"
+        style="font-family:var(--mono);font-size:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 14px;cursor:pointer;letter-spacing:1px">Matrix</button>
+    </div>
     <button id="zoetrope-fs-btn" onclick="toggleTorusFS()"
-      style="flex:1;font-family:var(--mono);font-size:11px;background:none;border:1px solid var(--accent);color:var(--accent);border-radius:2px;padding:5px 0;cursor:pointer;letter-spacing:2px;text-align:center">⛶ ZOETROPE</button>
-    <button id="readme-toggle" onclick="document.getElementById('readme-body').classList.toggle('open');this.querySelector('.arr').textContent=document.getElementById('readme-body').classList.contains('open')?'▾':'▸'" style="flex:1;font-family:var(--mono);font-size:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 0;cursor:pointer;text-align:center"
-      style="flex:1;font-family:var(--mono);font-size:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 0;cursor:pointer;text-align:center">
+      style="font-family:var(--mono);font-size:11px;background:none;border:1px solid var(--accent);color:var(--accent);border-radius:2px;padding:5px 20px;cursor:pointer;letter-spacing:2px;flex:1;text-align:center">⛶ ZOETROPE</button>
+    <button id="readme-toggle" onclick="document.getElementById('readme-body').classList.toggle('open');this.querySelector('.arr').textContent=document.getElementById('readme-body').classList.contains('open')?'▾':'▸'"
+      style="font-family:var(--mono);font-size:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 14px;cursor:pointer;flex-shrink:0">
       <span class="arr">▸</span> readme
     </button>
   </div>
@@ -391,7 +393,7 @@ input:focus, select:focus { border-color: var(--accent); }
     </div>
     <span id="retic-opacity-wrap" style="display:none;align-items:center;gap:4px;flex-shrink:0;margin-left:6px">
       <span style="font-family:var(--mono);font-size:7px;color:var(--muted)">α</span>
-      <input id="retic-opacity-slider" type="range" min="0" max="100" step="1" value="89" oninput="setReticOpacity(this.value)" style="accent-color:var(--accent);width:90px;flex-shrink:0">
+      <input id="retic-opacity-slider" type="range" min="0" max="100" step="1" value="89" oninput="setReticOpacity(this.value)" style="accent-color:var(--accent);width:180px;width:90px;flex-shrink:0">
       <span id="retic-opacity-label" style="font-family:var(--mono);font-size:8px;color:var(--muted);min-width:28px;flex-shrink:0">80%</span>
     </span>
     <div style="flex:1"></div>
@@ -480,7 +482,7 @@ input:focus, select:focus { border-color: var(--accent); }
           <div class="pf" style="margin:0">
             <label>f(x)</label>
             <select id="fn-select" style="width:130px;font-size:10px;padding:3px 6px;background:#0a0a0a;color:#d8d4cc;border-color:#333;" onchange="onFnSelectChange(this.value)">
-              <option value="id">x</option><option value="recip">1/x</option><option value="sq">x²</option><option value="rsq">1/x²</option><option value="cb">x³</option><option value="rcb">1/x³</option><option value="x4">x⁴</option><option value="rx4">1/x⁴</option><option value="x5">x⁵</option><option value="rx5">1/x⁵</option><option value="x6">x⁶</option><option value="rx6">1/x⁶</option><option value="sqrt_pair">√x ↔ √(x/2)</option><option value="phi_pair">x^φ ↔ x^(1/φ)</option><option value="cb32_pair">x^(3/2) ↔ x^(2/3)</option><option value="phix">φ^x</option><option value="rphi_x">(1/φ)^x</option><option value="2x">2^x</option><option value="pix">π^x</option><option value="log2">log₂(x)</option><option value="ex">e^x</option><option value="ex_phi">e^(x^φ)</option><option value="phi_xe">φ^(x^e)</option><option value="xx">x^(1/x)</option><option value="rphipow">1/x^φ</option><option value="sum_id_recip">f(x)+f(1/x)</option><option value="sum_sq_rsq">f(x²)+f(1/x²)</option><option value="custom">custom…</option>
+              <option value="id">x</option><option value="recip">1/x</option><option value="sq">x²</option><option value="rsq">1/x²</option><option value="sqrt">√x</option><option value="cb">x³</option><option value="rcb">1/x³</option><option value="x4">x⁴</option><option value="rx4">1/x⁴</option><option value="x5">x⁵</option><option value="rx5">1/x⁵</option><option value="x6">x⁶</option><option value="rx6">1/x⁶</option><option value="sqrt_pair">√x ↔ √(x/2)</option><option value="phi_pair">x^φ ↔ x^(1/φ)</option><option value="cb32_pair">x^(3/2) ↔ x^(2/3)</option><option value="phix">φ^x</option><option value="rphi_x">(1/φ)^x</option><option value="2x">2^x</option><option value="pix">π^x</option><option value="log2">log₂(x)</option><option value="ex">e^x</option><option value="ex_phi">e^(x^φ)</option><option value="phi_xe">φ^(x^e)</option><option value="xx">x^(1/x)</option><option value="rphipow">1/x^φ</option><option value="sum_id_recip">f(x)+f(1/x)</option><option value="sum_sq_rsq">f(x²)+f(1/x²)</option><option value="custom">custom…</option>
             </select>
           </div>
           <input id="fn-custom-input" type="text" placeholder="e.g. x*x+1" title="Custom f(x) — use x as variable"
@@ -586,13 +588,13 @@ input:focus, select:focus { border-color: var(--accent); }
         <button id="atlas-all-btn" class="mbtn" onclick="toggleAtlasAllOrders(this)" style="font-size:8px;padding:2px 6px;margin-left:4px">All</button>
         <div style="display:flex;gap:6px;margin-left:4px">
           <button class="mbtn active" id="chk-omega-1" onclick="toggleOmegaOrder(1,this)" style="color:#e53030;min-width:22px;padding:2px 4px;font-size:9px">p</button>
-          <button class="mbtn" id="chk-omega-2" onclick="toggleOmegaOrder(2,this)" style="color:#e88030;min-width:22px;padding:2px 4px;font-size:9px">2</button>
-          <button class="mbtn" id="chk-omega-3" onclick="toggleOmegaOrder(3,this)" style="color:#d4a847;min-width:22px;padding:2px 4px;font-size:9px">3</button>
-          <button class="mbtn" id="chk-omega-4" onclick="toggleOmegaOrder(4,this)" style="color:#4caf50;min-width:22px;padding:2px 4px;font-size:9px">4</button>
-          <button class="mbtn" id="chk-omega-5" onclick="toggleOmegaOrder(5,this)" style="color:#00bcd4;min-width:22px;padding:2px 4px;font-size:9px">5</button>
-          <button class="mbtn" id="chk-omega-6" onclick="toggleOmegaOrder(6,this)" style="color:#7c6fcd;min-width:22px;padding:2px 4px;font-size:9px">6</button>
-          <button class="mbtn" id="chk-omega-7" onclick="toggleOmegaOrder(7,this)" style="color:#e040fb;min-width:22px;padding:2px 4px;font-size:9px">7</button>
-          <button class="mbtn" id="chk-omega-8" onclick="toggleOmegaOrder(8,this)" style="color:#f48fb1;min-width:22px;padding:2px 4px;font-size:9px">8+</button>
+          <button class="mbtn active" id="chk-omega-2" onclick="toggleOmegaOrder(2,this)" style="color:#e88030;min-width:22px;padding:2px 4px;font-size:9px">2</button>
+          <button class="mbtn active" id="chk-omega-3" onclick="toggleOmegaOrder(3,this)" style="color:#d4a847;min-width:22px;padding:2px 4px;font-size:9px">3</button>
+          <button class="mbtn active" id="chk-omega-4" onclick="toggleOmegaOrder(4,this)" style="color:#4caf50;min-width:22px;padding:2px 4px;font-size:9px">4</button>
+          <button class="mbtn active" id="chk-omega-5" onclick="toggleOmegaOrder(5,this)" style="color:#00bcd4;min-width:22px;padding:2px 4px;font-size:9px">5</button>
+          <button class="mbtn active" id="chk-omega-6" onclick="toggleOmegaOrder(6,this)" style="color:#7c6fcd;min-width:22px;padding:2px 4px;font-size:9px">6</button>
+          <button class="mbtn active" id="chk-omega-7" onclick="toggleOmegaOrder(7,this)" style="color:#e040fb;min-width:22px;padding:2px 4px;font-size:9px">7</button>
+          <button class="mbtn active" id="chk-omega-8" onclick="toggleOmegaOrder(8,this)" style="color:#f48fb1;min-width:22px;padding:2px 4px;font-size:9px">8+</button>
         </div>
         <div style="flex:1"></div>
         <div style="display:flex;flex-direction:column;gap:2px;align-items:stretch">
@@ -613,6 +615,7 @@ input:focus, select:focus { border-color: var(--accent); }
     <select style="font-size:9px;padding:2px 5px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;flex:1;min-width:0"
       onchange="document.getElementById('fn-select').value=this.value; onFnSelectChange(this.value);">
       <option value="id">x</option><option value="recip">1/x</option><option value="sq">x²</option><option value="rsq">1/x²</option>
+      <option value="sqrt">√x</option>
       <option value="cb">x³</option><option value="rcb">1/x³</option><option value="phix">φ^x</option><option value="rphi_x">(1/φ)^x</option>
       <option value="2x">2^x</option><option value="pix">π^x</option><option value="log2">log₂x</option><option value="ex">e^x</option>
       <option value="ex_phi">e^(x^φ)</option><option value="phi_xe">φ^(x^e)</option><option value="xx">x^(1/x)</option>
@@ -635,6 +638,131 @@ input:focus, select:focus { border-color: var(--accent); }
       <button class="mbtn"        data-akmode="combined" onclick="setAkMode('combined',this)" style="font-size:9px;padding:2px 8px">Combined</button>
     </div>
     <button class="mbtn" onclick="akReset()" style="font-size:9px;padding:2px 8px;flex-shrink:0">Reset</button>
+  </div>
+  <!-- Phase row -->
+  <div id="phase-main-row" class="top-row" style="display:none;flex-direction:column;gap:0;border-top:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:4px;padding:4px 12px">
+      <button class="mbtn" data-mode="chord"    onclick="setMode('chord',this);updateFSChordSub();updateMainChordSub()" style="font-size:8px;padding:2px 7px">Chords</button>
+      <button class="mbtn" data-mode="midpoint" onclick="setMode('midpoint',this);updateFSChordSub();updateMainChordSub()" style="font-size:8px;padding:2px 7px">Midpoints</button>
+      <button class="mbtn" data-mode="vector"   onclick="setMode('vector',this);updateFSChordSub();updateMainChordSub()" style="font-size:8px;padding:2px 7px">Vectors</button>
+    </div>
+    <div id="phase-chord-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
+      <button class="mbtn active" data-csub="full"   onclick="setChordSub('full',this)"   style="font-size:8px;padding:2px 5px">Full</button>
+      <button class="mbtn"        data-csub="latter" onclick="setChordSub('latter',this)" style="font-size:8px;padding:2px 5px">Latter</button>
+      <button class="mbtn"        data-csub="prior"  onclick="setChordSub('prior',this)"  style="font-size:8px;padding:2px 5px">Prior</button>
+      <button class="mbtn"        data-csub="centre" onclick="setChordSub('centre',this)" style="font-size:8px;padding:2px 5px">Centre</button>
+      <button class="mbtn"        data-csub="pane"   onclick="setChordSub('pane',this)"   style="font-size:8px;padding:2px 5px">Pane</button>
+    </div>
+    <div id="phase-vec-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
+      <button class="mbtn active" data-vecmode="v"        onclick="setVecSubMode('v',this)"        style="font-size:8px;padding:2px 5px">V</button>
+      <button class="mbtn"        data-vecmode="p"        onclick="setVecSubMode('p',this)"        style="font-size:8px;padding:2px 5px">P</button>
+      <button class="mbtn"        data-vecmode="yoyo"     onclick="setVecSubMode('yoyo',this)"     style="font-size:8px;padding:2px 5px">Yo-yo</button>
+      <button class="mbtn"        data-vecmode="fan"      onclick="setVecSubMode('fan',this)"      style="font-size:8px;padding:2px 5px">Fan</button>
+      <button class="mbtn"        data-vecmode="umbrella" onclick="setVecSubMode('umbrella',this)" style="font-size:8px;padding:2px 5px">Umbrella</button>
+    </div>
+  </div>
+
+  <!-- Reticulum row -->
+  <div id="retic-main-row" class="top-row" style="display:none;flex-direction:column;gap:0;border-top:1px solid var(--border)">
+    <!-- Row 1: opacity + mode buttons -->
+    <div style="display:flex;align-items:center;gap:6px;padding:4px 12px">
+      <span style="font-family:var(--mono);font-size:8px;color:var(--muted);flex-shrink:0">α</span>
+      <input type="range" min="0" max="100" step="1" value="89"
+        oninput="setReticOpacity(this.value)" style="accent-color:var(--accent);width:180px;flex-shrink:0">
+      <div style="display:flex;gap:2px;flex-shrink:0;margin-left:4px">
+        <button class="mbtn" data-mode="chord"    onclick="setMode('chord',this);updateRetSubs()"    style="font-size:8px;padding:2px 7px">Chords</button>
+        <button class="mbtn" data-mode="midpoint" onclick="setMode('midpoint',this);updateRetSubs()" style="font-size:8px;padding:2px 7px">Midpoints</button>
+        <button class="mbtn" data-mode="vector"   onclick="setMode('vector',this);updateRetSubs()"   style="font-size:8px;padding:2px 7px">Vectors</button>
+      </div>
+    </div>
+    <!-- Row 2: sub-options (shown conditionally) -->
+    <div id="retic-chord-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
+      <button class="mbtn active" data-csub="full"   onclick="setChordSub('full',this)"   style="font-size:8px;padding:2px 5px">Full</button>
+      <button class="mbtn"        data-csub="latter" onclick="setChordSub('latter',this)" style="font-size:8px;padding:2px 5px">Latter</button>
+      <button class="mbtn"        data-csub="prior"  onclick="setChordSub('prior',this)"  style="font-size:8px;padding:2px 5px">Prior</button>
+      <button class="mbtn"        data-csub="centre" onclick="setChordSub('centre',this)" style="font-size:8px;padding:2px 5px">Centre</button>
+      <button class="mbtn"        data-csub="pane"   onclick="setChordSub('pane',this)"   style="font-size:8px;padding:2px 5px">Pane</button>
+    </div>
+    <div id="retic-vec-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
+      <button class="mbtn active" data-vecmode="v"        onclick="setVecSubMode('v',this)"        style="font-size:8px;padding:2px 5px">V</button>
+      <button class="mbtn"        data-vecmode="p"        onclick="setVecSubMode('p',this)"        style="font-size:8px;padding:2px 5px">P</button>
+      <button class="mbtn"        data-vecmode="yoyo"     onclick="setVecSubMode('yoyo',this)"     style="font-size:8px;padding:2px 5px">Yo-yo</button>
+      <button class="mbtn"        data-vecmode="fan"      onclick="setVecSubMode('fan',this)"      style="font-size:8px;padding:2px 5px">Fan</button>
+      <button class="mbtn"        data-vecmode="umbrella" onclick="setVecSubMode('umbrella',this)" style="font-size:8px;padding:2px 5px">Umbrella</button>
+    </div>
+  </div>
+
+  <!-- Atlas row -->
+  <div id="atlas-main-row" class="top-row" style="display:none;flex-direction:column;gap:0;border-top:1px solid var(--border)">
+    <!-- Row A: Unlock + Spin + Arc/Full + N-comp -->
+    <div style="display:flex;align-items:center;gap:8px;padding:4px 12px;flex-wrap:wrap">
+      <button class="mbtn active" id="atlas-lock-btn-main" onclick="toggleAtlasLock(this)" style="font-size:8px;padding:2px 6px">Unlock</button>
+      <div style="width:1px;height:14px;background:var(--border);flex-shrink:0"></div>
+      <button class="mbtn" data-aspeed="rev"  onclick="setAtlasSpin('rev',this)"  style="font-size:8px;padding:2px 5px">«</button>
+      <button class="mbtn" data-aspeed="slow" onclick="setAtlasSpin('slow',this)" style="font-size:8px;padding:2px 5px">½×</button>
+      <button class="mbtn" data-aspeed="med"  onclick="setAtlasSpin('med',this)"  style="font-size:8px;padding:2px 5px">1×</button>
+      <button class="mbtn" data-aspeed="fast" onclick="setAtlasSpin('fast',this)" style="font-size:8px;padding:2px 5px">2×</button>
+      <div style="width:1px;height:14px;background:var(--border);flex-shrink:0"></div>
+      <button class="mbtn" id="atlas-circ-btn-main" data-atcirc onclick="toggleAtlasCirc(this)" style="font-size:8px;padding:2px 5px">Arc</button>
+      <button class="mbtn" onclick="toggleAtlasFS()" style="font-size:8px;padding:2px 5px">Full</button>
+      <div style="flex:1"></div>
+      <span style="font-family:var(--mono);font-size:7px;color:var(--muted);flex-shrink:0">N</span>
+      <select onchange="setAtlasCoarseN(parseInt(this.value));document.getElementById('atlas-coarse-n').value=this.value"
+        style="font-size:9px;padding:1px 4px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;flex-shrink:0">
+        <option value="7">7</option><option value="9">9</option><option value="10">10</option>
+        <option value="11" selected>11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option>
+      </select>
+    </div>
+    <!-- Row B: Fine / Coarse / Atlas -->
+    <div style="display:flex;align-items:center;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
+      <button class="mbtn active" id="atlas-fine-btn-main"   onclick="setAtlasViewMode('fine',this)"   style="font-size:8px;padding:2px 8px;flex:1;text-align:center">Fine</button>
+      <button class="mbtn"        id="atlas-coarse-btn-main" onclick="setAtlasViewMode('coarse',this)" style="font-size:8px;padding:2px 8px;flex:1;text-align:center">Coarse</button>
+      <button class="mbtn"        data-atlasmode             onclick="setAtlasViewMode('atlas',this)"  style="font-size:8px;padding:2px 8px;flex:1;text-align:center">Atlas</button>
+    </div>
+    <!-- Row C: All + omega orders -->
+    <div style="display:flex;align-items:center;gap:6px;padding:3px 12px;border-top:1px solid var(--border);flex-wrap:wrap">
+      <button id="atlas-all-btn-main" class="mbtn" onclick="toggleAtlasAllOrders(this)" style="font-size:8px;padding:2px 5px">All</button>
+      <div style="width:1px;height:14px;background:var(--border);flex-shrink:0"></div>
+      <button class="mbtn active" id="chk-omega-main-1" onclick="toggleOmegaOrder(1,this)" style="color:#e53030;font-size:8px;padding:2px 4px">p</button>
+      <button class="mbtn active" id="chk-omega-main-2" onclick="toggleOmegaOrder(2,this)" style="color:#e88030;font-size:8px;padding:2px 4px">2</button>
+      <button class="mbtn active" id="chk-omega-main-3" onclick="toggleOmegaOrder(3,this)" style="color:#d4a847;font-size:8px;padding:2px 4px">3</button>
+      <button class="mbtn active" id="chk-omega-main-4" onclick="toggleOmegaOrder(4,this)" style="color:#4caf50;font-size:8px;padding:2px 4px">4</button>
+      <button class="mbtn active" id="chk-omega-main-5" onclick="toggleOmegaOrder(5,this)" style="color:#00bcd4;font-size:8px;padding:2px 4px">5</button>
+      <button class="mbtn active" id="chk-omega-main-6" onclick="toggleOmegaOrder(6,this)" style="color:#7c6fcd;font-size:8px;padding:2px 4px">6</button>
+      <button class="mbtn active" id="chk-omega-main-7" onclick="toggleOmegaOrder(7,this)" style="color:#e040fb;font-size:8px;padding:2px 4px">7</button>
+      <button class="mbtn active" id="chk-omega-main-8" onclick="toggleOmegaOrder(8,this)" style="color:#f48fb1;font-size:8px;padding:2px 4px">8+</button>
+    </div>
+  </div>
+
+  <!-- Antikythera vec row -->
+  <div id="ak-vec-row" class="top-row" style="display:none;flex-direction:column;gap:0;border-top:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:4px;padding:4px 12px;flex-wrap:wrap">
+      <button class="mbtn" data-mode="chord"    onclick="setMode('chord',this);updateFSChordSub();updateMainChordSub()" style="font-size:8px;padding:2px 7px">Chords</button>
+      <button class="mbtn" data-mode="midpoint" onclick="setMode('midpoint',this);updateFSChordSub();updateMainChordSub()" style="font-size:8px;padding:2px 7px">Midpoints</button>
+      <button class="mbtn" data-mode="vector"   onclick="setMode('vector',this);updateFSChordSub();updateMainChordSub()" style="font-size:8px;padding:2px 7px">Vectors</button>
+      <select onchange="setPointShape(this.value,null)"
+        style="font-size:9px;padding:2px 5px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;flex-shrink:0;margin-left:4px">
+        <option value="dot">● dot</option><option value="ring">○ ring</option>
+        <option value="bubble">◎ bubble</option><option value="square">▪ sq</option>
+        <option value="square_o">□ sq○</option><option value="heart">♡ heart</option>
+        <option value="star">☆ star</option><option value="triangle">△ tri</option>
+        <option value="cross">✚ cross</option>
+      </select>
+    </div>
+    <div id="ak-chord-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
+      <button class="mbtn active" data-csub="full"   onclick="setChordSub('full',this)"   style="font-size:8px;padding:2px 5px">Full</button>
+      <button class="mbtn"        data-csub="latter" onclick="setChordSub('latter',this)" style="font-size:8px;padding:2px 5px">Latter</button>
+      <button class="mbtn"        data-csub="prior"  onclick="setChordSub('prior',this)"  style="font-size:8px;padding:2px 5px">Prior</button>
+      <button class="mbtn"        data-csub="centre" onclick="setChordSub('centre',this)" style="font-size:8px;padding:2px 5px">Centre</button>
+      <button class="mbtn"        data-csub="pane"   onclick="setChordSub('pane',this)"   style="font-size:8px;padding:2px 5px">Pane</button>
+    </div>
+    <div id="ak-vec-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
+      <button class="mbtn active" data-vecmode="v"        onclick="setVecSubMode('v',this)"        style="font-size:8px;padding:2px 5px">V</button>
+      <button class="mbtn"        data-vecmode="p"        onclick="setVecSubMode('p',this)"        style="font-size:8px;padding:2px 5px">P</button>
+      <button class="mbtn"        data-vecmode="yoyo"     onclick="setVecSubMode('yoyo',this)"     style="font-size:8px;padding:2px 5px">Yo-yo</button>
+      <button class="mbtn"        data-vecmode="fan"      onclick="setVecSubMode('fan',this)"      style="font-size:8px;padding:2px 5px">Fan</button>
+      <button class="mbtn"        data-vecmode="umbrella" onclick="setVecSubMode('umbrella',this)" style="font-size:8px;padding:2px 5px">Umbrella</button>
+    </div>
   </div>
 </div>
 <!-- end top-bar -->
@@ -742,7 +870,7 @@ input:focus, select:focus { border-color: var(--accent); }
                 </select>
                 <select id="fs-fn-select" onchange="document.getElementById('fn-select').value=this.value;onFnSelectChange(this.value)"
                   style="font-size:9px;padding:3px 5px;background:rgba(30,30,30,0.85);color:#d8d4cc;border:1px solid #333;border-radius:2px;flex:1;min-width:0">
-                  <option value="id">x</option><option value="recip">1/x</option><option value="sq">x²</option><option value="rsq">1/x²</option><option value="cb">x³</option><option value="rcb">1/x³</option><option value="x4">x⁴</option><option value="rx4">1/x⁴</option><option value="x5">x⁵</option><option value="rx5">1/x⁵</option><option value="x6">x⁶</option><option value="rx6">1/x⁶</option><option value="sqrt_pair">√x↔√(x/2)</option><option value="phi_pair">x^φ↔x^(1/φ)</option><option value="cb32_pair">x^(3/2)↔x^(2/3)</option><option value="phix">φ^x</option><option value="rphi_x">(1/φ)^x</option><option value="2x">2^x</option><option value="pix">π^x</option><option value="log2">log₂x</option><option value="ex">e^x</option><option value="ex_phi">e^(x^φ)</option><option value="phi_xe">φ^(x^e)</option><option value="xx">x^(1/x)</option><option value="rphipow">1/x^φ</option><option value="sum_id_recip">f(x)+f(1/x)</option><option value="sum_sq_rsq">f(x²)+f(1/x²)</option>
+                  <option value="id">x</option><option value="recip">1/x</option><option value="sq">x²</option><option value="rsq">1/x²</option><option value="sqrt">√x</option><option value="cb">x³</option><option value="rcb">1/x³</option><option value="x4">x⁴</option><option value="rx4">1/x⁴</option><option value="x5">x⁵</option><option value="rx5">1/x⁵</option><option value="x6">x⁶</option><option value="rx6">1/x⁶</option><option value="sqrt_pair">√x↔√(x/2)</option><option value="phi_pair">x^φ↔x^(1/φ)</option><option value="cb32_pair">x^(3/2)↔x^(2/3)</option><option value="phix">φ^x</option><option value="rphi_x">(1/φ)^x</option><option value="2x">2^x</option><option value="pix">π^x</option><option value="log2">log₂x</option><option value="ex">e^x</option><option value="ex_phi">e^(x^φ)</option><option value="phi_xe">φ^(x^e)</option><option value="xx">x^(1/x)</option><option value="rphipow">1/x^φ</option><option value="sum_id_recip">f(x)+f(1/x)</option><option value="sum_sq_rsq">f(x²)+f(1/x²)</option>
                 </select>
                 <button onclick="compute()" style="font-family:var(--mono);font-size:8px;background:var(--accent);color:#000;border:none;border-radius:2px;padding:3px 7px;cursor:pointer;flex-shrink:0">Build</button>
               </div>
@@ -779,7 +907,7 @@ input:focus, select:focus { border-color: var(--accent); }
                 <button class="mbtn"        data-csub="latter" onclick="setChordSub('latter',this)" style="flex:1;text-align:center;font-size:8px">Latter</button>
                 <button class="mbtn"        data-csub="prior"  onclick="setChordSub('prior',this)"  style="flex:1;text-align:center;font-size:8px">Prior</button>
                 <button class="mbtn"        data-csub="centre" onclick="setChordSub('centre',this)" style="flex:1;text-align:center;font-size:8px">Centre</button>
-                <button class="mbtn"        data-csub="pane"   onclick="setChordSub('pane',this)"   style="flex:1;text-align:center;font-size:8px">Pane</button>
+                <button class="mbtn"        data-csub="pane"   onclick="setChordSub('pane',this)"   style="flex:1;text-align:center;font-size:8px;opacity:0.35;cursor:not-allowed" disabled title="Pane not available in Zoetrope">Pane</button>
               </div>
               <!-- Pane width — shown when Pane active -->
               <div id="fs-pane-width-row" style="display:none;align-items:center;gap:6px;margin-top:3px">
@@ -2180,7 +2308,16 @@ function renderReticulum(canvas, size, alpha, lineW, fontSize, mode, noBg) {
       const stroke=`rgba(${r},${g},${b},${alpha})`;
       ctx.strokeStyle=stroke; ctx.lineWidth=lineW;
       if (mode==='chord') {
-        ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.stroke();
+        // Apply chord sub-mode
+        let x1r=ax,y1r=ay,x2r=bx,y2r=by;
+        const mxr=(ax+bx)/2, myr=(ay+by)/2;
+        if (_chordSub==='latter')  { x1r=mxr; y1r=myr; }
+        else if (_chordSub==='prior')  { x2r=mxr; y2r=myr; }
+        else if (_chordSub==='centre') {
+          const hxr=(bx-ax)*0.25,hyr=(by-ay)*0.25;
+          x1r=mxr-hxr; y1r=myr-hyr; x2r=mxr+hxr; y2r=myr+hyr;
+        }
+        ctx.beginPath(); ctx.moveTo(x1r,y1r); ctx.lineTo(x2r,y2r); ctx.stroke();
       } else if (mode==='midpoint') {
         const mx=(ax+bx)/2,my=(ay+by)/2,dotR=Math.max(1,proxSizeScale(prox2)*Math.pow(_midpointSize/5,1.8));
         ctx.fillStyle=`rgba(${r},${g},${b},${alpha})`; ctx.strokeStyle=ctx.fillStyle; ctx.lineWidth=Math.max(1,dotR*0.3);
@@ -2394,12 +2531,32 @@ function setChordSub(sub, btn) {
   const paneRow = document.getElementById('fs-pane-width-row');
   if (paneRow) paneRow.style.display = sub === 'pane' ? 'flex' : 'none';
   if (_activeView === 'animation') { drawChordFrame(); drawTorus(); }
+  else if (_activeView === 'reticulum') { drawComposite(); }
   else if (_torusFS) buildTorusPoints();
+}
+
+function updateRetSubs() {
+  const rcs = document.getElementById('retic-chord-sub');
+  if (rcs) rcs.style.display = _frameMode === 'chord' ? 'flex' : 'none';
+  const rvs = document.getElementById('retic-vec-sub');
+  if (rvs) rvs.style.display = _frameMode === 'vector' ? 'flex' : 'none';
 }
 
 function updateMainChordSub() {
   const sub = document.getElementById('main-chord-sub');
   if (sub) sub.style.display = _frameMode === 'chord' ? 'flex' : 'none';
+  // Phase row subs
+  const pcs = document.getElementById('phase-chord-sub');
+  if (pcs) pcs.style.display = _frameMode === 'chord' ? 'flex' : 'none';
+  const pvs = document.getElementById('phase-vec-sub');
+  if (pvs) pvs.style.display = _frameMode === 'vector' ? 'flex' : 'none';
+  // AK row subs
+  const akcs = document.getElementById('ak-chord-sub');
+  if (akcs) akcs.style.display = _frameMode === 'chord' ? 'flex' : 'none';
+  const akvs = document.getElementById('ak-vec-sub');
+  if (akvs) akvs.style.display = _frameMode === 'vector' ? 'flex' : 'none';
+  // Retic subs
+  updateRetSubs();
 }
 
 function updateFSChordSub() {
@@ -2833,6 +2990,10 @@ function switchView(view, btn) {
   const torusOrientWrap = document.getElementById('torus-orient-label'); if (torusOrientWrap) torusOrientWrap.style.display = 'none';
   const akCtrl2 = document.getElementById('ak-tab-controls'); if (akCtrl2) akCtrl2.style.display = (view === 'antikythera') ? 'flex' : 'none';
   const akMain = document.getElementById('ak-main-row'); if (akMain) akMain.style.display = (view === 'antikythera') ? 'flex' : 'none';
+  const phaseRow = document.getElementById('phase-main-row'); if (phaseRow) phaseRow.style.display = (view === 'animation') ? 'flex' : 'none';
+  const reticRow = document.getElementById('retic-main-row'); if (reticRow) reticRow.style.display = (view === 'reticulum') ? 'flex' : 'none';
+  const atlasRow = document.getElementById('atlas-main-row'); if (atlasRow) atlasRow.style.display = (view === 'atlas') ? 'flex' : 'none';
+  const akVecRow = document.getElementById('ak-vec-row'); if (akVecRow) akVecRow.style.display = (view === 'antikythera') ? 'flex' : 'none';
   const reticOpWrap = document.getElementById('retic-opacity-wrap'); if (reticOpWrap) reticOpWrap.style.display = (view === 'reticulum') ? 'flex' : 'none';
   const vcr = document.getElementById('view-controls-row');
   if (vcr) vcr.style.display = ['antikythera','torus'].includes(view) ? 'flex' : 'none';
@@ -2845,7 +3006,7 @@ function switchView(view, btn) {
   const domEl = document.getElementById('view-' + view);
   if (domEl) domEl.classList.add('active');
   updateFsBtn(view);
-  if (view === 'torus') drawTorus3D();
+  if (view === 'torus') { drawTorus3D(); setTimeout(() => { if (_three) { const {W,H}=getViewPortSize(); _three.resize(W,H); buildTorusPoints(); }}, 150); }
   else safeRender();
   if (view !== 'atlas') { stopAtlasSpin(); }
 }
@@ -3285,11 +3446,16 @@ function toggleHelixMode(btn) {
   const chonkRow = document.getElementById("chonk-row");
   if (chonkRow) chonkRow.style.display = _helixMode ? "flex" : "none";
   if (!_helixMode) { _helixRepeat = 1; document.querySelectorAll("[data-helixrep]").forEach(b => b.classList.toggle("active", b.dataset.helixrep === "1")); }
-  // Mutual exclusion: turning on helix turns off tree
+  // Mutual exclusion: turning on helix turns off tree and pipe
   if (_helixMode && _treeMode) {
     _treeMode = false;
     const tb = document.getElementById('tree-btn');
     if (tb) { tb.classList.remove('active'); tb.textContent = 'Tree'; }
+  }
+  if (_helixMode && _pipeMode) {
+    _pipeMode = false;
+    const pb = document.getElementById('pipe-btn');
+    if (pb) { pb.classList.remove('active'); pb.textContent = 'Pipe'; }
   }
   if (_three) buildTorusPoints();
 }
@@ -3303,13 +3469,18 @@ function toggleTreeMode(btn) {
   }
   const chonkR = document.getElementById("chonk-row");
   if (chonkR) chonkR.style.display = _treeMode ? "flex" : "none";
-  // Mutual exclusion: turning on tree turns off helix
+  // Mutual exclusion: turning on tree turns off helix and pipe
   if (_treeMode && _helixMode) {
     _helixMode = false;
     const hb = document.getElementById('helix-btn');
     if (hb) { hb.classList.remove('active'); hb.textContent = 'Helix'; }
     const row = document.getElementById("helix-repeat-row");
     if (row) row.style.display = "none";
+  }
+  if (_treeMode && _pipeMode) {
+    _pipeMode = false;
+    const pb = document.getElementById('pipe-btn');
+    if (pb) { pb.classList.remove('active'); pb.textContent = 'Pipe'; }
   }
   if (_three) buildTorusPoints();
   else if (_activeView === 'torus') drawTorus3D();
@@ -3980,7 +4151,7 @@ function buildTorusPoints() {
             const hx=(x1-x0)*0.25, hy=(y1-y0)*0.25, hz=(z1-z0)*0.25;
             x0=mx-hx; y0=my-hy; z0=mz-hz;
             x1=mx+hx; y1=my+hy; z1=mz+hz;
-          } else if (_chordSub === 'pane') {
+          } else if (_chordSub === 'pane' && false) { // Pane disabled in Zoetrope
             // Pane: rectangle along chord, perpendicular via Gram-Schmidt (works in all views)
             const cdx=x1-x0, cdy=y1-y0, cdz=z1-z0;
             const clen=Math.sqrt(cdx*cdx+cdy*cdy+cdz*cdz)||0.001;
@@ -4455,6 +4626,11 @@ document.addEventListener('webkitfullscreenchange', () => {
 
 function toggleFSOrient(btn) {
   _fsMobile = !_fsMobile;
+  if (_fsMobile && _pipeMode) {
+    _pipeMode = false;
+    const pb = document.getElementById('pipe-btn');
+    if (pb) { pb.classList.remove('active'); pb.textContent = 'Pipe'; }
+  }
   btn.textContent = _fsMobile ? 'Rotated' : 'Rotate 90°';
   btn.classList.toggle('active', _fsMobile);
   if (!_three) return;
@@ -4694,7 +4870,12 @@ function setTorusShape(shape, btn) {
       const el = document.getElementById(id); if (el) { el.textContent = (val/100).toFixed(2); el.style.color = col; }
     });
   }
-  // Reset chonk to neutral on shape button press
+  // Reset chonk to neutral on shape button press; deactivate pipe
+  if (_pipeMode) {
+    _pipeMode = false;
+    const pb = document.getElementById('pipe-btn');
+    if (pb) { pb.classList.remove('active'); pb.textContent = 'Pipe'; }
+  }
   _chonk = 0.12;
   ['chonk-slider','chonk-slider-fs'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=12;});
   ['chonk-label','chonk-label-fs'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='12';});
@@ -4830,10 +5011,13 @@ function toggleOmegaOrder(n, btn) {
   btn.classList.toggle('active');
   const isActive = btn.classList.contains('active');
   // Sync both toolbars
-  const other = document.getElementById(
-    btn.id.startsWith('chk-omega-fs-') ? 'chk-omega-' + n : 'chk-omega-fs-' + n
-  );
-  if (other) other.classList.toggle('active', isActive);
+  // Sync all omega button variants
+  ['chk-omega-' + n, 'chk-omega-fs-' + n, 'chk-omega-main-' + n].forEach(id => {
+    if (id !== btn.id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('active', isActive);
+    }
+  });
   drawAtlas();
 }
 
@@ -4860,7 +5044,7 @@ function toggleAtlasAllOrders(btn) {
   }
   const newState = !allCurrentlyOn;
   for (let i = 1; i <= 8; i++) {
-    ['chk-omega-' + i, 'chk-omega-fs-' + i].forEach(id => {
+    ['chk-omega-' + i, 'chk-omega-fs-' + i, 'chk-omega-main-' + i].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.toggle('active', newState);
     });
@@ -4888,10 +5072,10 @@ function setAtlasViewMode(mode, btn) {
   _atlasFine  = (mode === 'fine');
   _atlasCoarse= (mode === 'coarse');
   // Sync all mode group buttons (main + FS)
-  ['atlas-fine-btn','atlas-fine-btn-fs'].forEach(id => {
+  ['atlas-fine-btn','atlas-fine-btn-fs','atlas-fine-btn-main'].forEach(id => {
     const el=document.getElementById(id); if(el){el.classList.toggle('active', mode==='fine');}
   });
-  ['atlas-coarse-btn','atlas-coarse-btn-fs'].forEach(id => {
+  ['atlas-coarse-btn','atlas-coarse-btn-fs','atlas-coarse-btn-main'].forEach(id => {
     const el=document.getElementById(id); if(el){el.classList.toggle('active', mode==='coarse');}
   });
   document.querySelectorAll('[data-atlasmode]').forEach(b => b.classList.toggle('active', _atlasMode));
