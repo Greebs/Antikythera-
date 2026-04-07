@@ -360,18 +360,21 @@ input:focus, select:focus { border-color: var(--accent); }
 
   <!-- Row 2: zoetrope (centre) + readme (right) -->
   <div class="top-row" id="top-row1b" style="padding:4px 12px 6px;gap:6px;justify-content:center">
-    <div style="display:flex;gap:6px;flex-shrink:0">
+    <div style="display:flex;gap:6px;flex-shrink:0;align-items:center">
       <button disabled title="Coming soon"
         style="font-family:var(--mono);font-size:13px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 10px;cursor:not-allowed;opacity:0.4">🎶</button>
       <button onclick="switchView('matrix',this)"
         style="font-family:var(--mono);font-size:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 14px;cursor:pointer;letter-spacing:1px">Matrix</button>
+      <button id="readme-toggle" onclick="document.getElementById('readme-body').classList.toggle('open');this.querySelector('.arr').textContent=document.getElementById('readme-body').classList.contains('open')?'▾':'▸'"
+        style="font-family:var(--mono);font-size:9px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:4px 8px;cursor:pointer;flex-shrink:0;letter-spacing:0.5px">
+        <span class="arr">▸</span> readme
+      </button>
     </div>
     <button id="zoetrope-fs-btn" onclick="toggleTorusFS()"
       style="font-family:var(--mono);font-size:11px;background:none;border:1px solid var(--accent);color:var(--accent);border-radius:2px;padding:5px 20px;cursor:pointer;letter-spacing:2px;flex:1;text-align:center">⛶ ZOETROPE</button>
-    <button id="readme-toggle" onclick="document.getElementById('readme-body').classList.toggle('open');this.querySelector('.arr').textContent=document.getElementById('readme-body').classList.contains('open')?'▾':'▸'"
-      style="font-family:var(--mono);font-size:10px;background:none;border:1px solid var(--border);color:var(--muted);border-radius:2px;padding:5px 14px;cursor:pointer;flex-shrink:0">
-      <span class="arr">▸</span> readme
-    </button>
+    <button id="quilt-top-btn" onclick="toggleQuiltFS()"
+      style="display:none;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:2px;background:none;color:var(--accent);border:2px solid var(--accent);border-radius:2px;padding:5px 16px;cursor:pointer;flex-shrink:0"
+      title="Open Quilt view">QUILT</button>
   </div>
 
   <!-- Row 2: play bar -->
@@ -613,6 +616,10 @@ input:focus, select:focus { border-color: var(--accent); }
   <!-- Atlas controls (shown only when Atlas tab active) -->
   <div id="atlas-tab-controls" style="display:none;flex-direction:column;gap:0;border-top:1px solid var(--border)">
       <div style="display:flex;align-items:center;gap:8px;padding:5px 12px;flex-wrap:wrap">
+        <button onclick="toggleQuiltFS()"
+          style="font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:2px;background:none;color:var(--accent);border:2px solid var(--accent);border-radius:3px;padding:5px 16px;cursor:pointer;flex-shrink:0"
+          title="Open Quilt view">QUILT</button>
+        <div style="width:1px;height:20px;background:var(--border);flex-shrink:0"></div>
         <button class="mbtn active" id="atlas-lock-btn" onclick="toggleAtlasLock(this)">Unlock</button>
         <div style="width:1px;height:14px;background:var(--border)"></div>
         <span class="bar-label">Spin</span>
@@ -709,18 +716,22 @@ input:focus, select:focus { border-color: var(--accent); }
       <button class="mbtn" data-mode="midpoint" onclick="setMode('midpoint',this);updateFSChordSub();updateMainChordSub()" style="font-size:8px;padding:2px 7px">Midpoints</button>
       <button class="mbtn" data-mode="vector"   onclick="setMode('vector',this);updateFSChordSub();updateMainChordSub()" style="font-size:8px;padding:2px 7px">Vectors</button>
     </div>
-    <div id="phase-chord-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
-      <button class="mbtn active" data-csub="full"   onclick="setChordSub('full',this)"   style="font-size:8px;padding:2px 5px">Full</button>
-      <button class="mbtn"        data-csub="latter" onclick="setChordSub('latter',this)" style="font-size:8px;padding:2px 5px">Latter</button>
-      <button class="mbtn"        data-csub="prior"  onclick="setChordSub('prior',this)"  style="font-size:8px;padding:2px 5px">Prior</button>
-      <button class="mbtn"        data-csub="centre" onclick="setChordSub('centre',this)" style="font-size:8px;padding:2px 5px">Centre</button>
-      <button class="mbtn"        data-csub="pane"   onclick="setChordSub('pane',this)"   style="font-size:8px;padding:2px 5px">Pane</button>
+    <div id="phase-chord-sub" style="display:none;flex-direction:column;gap:4px;padding:4px 12px;border-top:1px solid var(--border)">
+      <div style="display:flex;gap:2px">
+        <button class="mbtn active" data-csub="full"     onclick="setChordSub('full',this)"     style="flex:1;text-align:center;font-size:8px">Full</button>
+        <button class="mbtn"        data-csub="prior"    onclick="setChordSub('prior',this)"    style="flex:1;text-align:center;font-size:8px">Prior</button>
+        <button class="mbtn"        data-csub="latter"   onclick="setChordSub('latter',this)"   style="flex:1;text-align:center;font-size:8px">Latter</button>
+      </div>
+      <div style="display:flex;gap:2px;margin-top:2px">
+        <button class="mbtn"        data-csub="centre"   onclick="setChordSub('centre',this)"   style="flex:1;text-align:center;font-size:8px">Centre</button>
+        <button class="mbtn"        data-csub="tangent"  onclick="setChordSub('tangent',this)"  style="flex:1;text-align:center;font-size:8px">Tangent</button>
+        <button class="mbtn"        data-csub="radiance" onclick="setChordSub('radiance',this)" style="flex:1;text-align:center;font-size:8px">Radiance</button>
+      </div>
     </div>
     <div id="phase-vec-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
       <button class="mbtn active" data-vecmode="v"        onclick="setVecSubMode('v',this)"        style="font-size:8px;padding:2px 5px">V</button>
       <button class="mbtn"        data-vecmode="p"        onclick="setVecSubMode('p',this)"        style="font-size:8px;padding:2px 5px">P</button>
       <button class="mbtn"        data-vecmode="yoyo"     onclick="setVecSubMode('yoyo',this)"     style="font-size:8px;padding:2px 5px">Yo-yo</button>
-      <button class="mbtn"        data-vecmode="fan"      onclick="setVecSubMode('fan',this)"      style="font-size:8px;padding:2px 5px">Fan</button>
     </div>
   </div>
 
@@ -738,18 +749,22 @@ input:focus, select:focus { border-color: var(--accent); }
       </div>
     </div>
     <!-- Row 2: sub-options (shown conditionally) -->
-    <div id="retic-chord-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
-      <button class="mbtn active" data-csub="full"   onclick="setChordSub('full',this)"   style="font-size:8px;padding:2px 5px">Full</button>
-      <button class="mbtn"        data-csub="latter" onclick="setChordSub('latter',this)" style="font-size:8px;padding:2px 5px">Latter</button>
-      <button class="mbtn"        data-csub="prior"  onclick="setChordSub('prior',this)"  style="font-size:8px;padding:2px 5px">Prior</button>
-      <button class="mbtn"        data-csub="centre" onclick="setChordSub('centre',this)" style="font-size:8px;padding:2px 5px">Centre</button>
-      <button class="mbtn"        data-csub="pane"   onclick="setChordSub('pane',this)"   style="font-size:8px;padding:2px 5px">Pane</button>
+    <div id="retic-chord-sub" style="display:none;flex-direction:column;gap:4px;padding:4px 12px;border-top:1px solid var(--border)">
+      <div style="display:flex;gap:2px">
+        <button class="mbtn active" data-csub="full"     onclick="setChordSub('full',this)"     style="flex:1;text-align:center;font-size:8px">Full</button>
+        <button class="mbtn"        data-csub="prior"    onclick="setChordSub('prior',this)"    style="flex:1;text-align:center;font-size:8px">Prior</button>
+        <button class="mbtn"        data-csub="latter"   onclick="setChordSub('latter',this)"   style="flex:1;text-align:center;font-size:8px">Latter</button>
+      </div>
+      <div style="display:flex;gap:2px;margin-top:2px">
+        <button class="mbtn"        data-csub="centre"   onclick="setChordSub('centre',this)"   style="flex:1;text-align:center;font-size:8px">Centre</button>
+        <button class="mbtn"        data-csub="tangent"  onclick="setChordSub('tangent',this)"  style="flex:1;text-align:center;font-size:8px">Tangent</button>
+        <button class="mbtn"        data-csub="radiance" onclick="setChordSub('radiance',this)" style="flex:1;text-align:center;font-size:8px">Radiance</button>
+      </div>
     </div>
     <div id="retic-vec-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
       <button class="mbtn active" data-vecmode="v"        onclick="setVecSubMode('v',this)"        style="font-size:8px;padding:2px 5px">V</button>
       <button class="mbtn"        data-vecmode="p"        onclick="setVecSubMode('p',this)"        style="font-size:8px;padding:2px 5px">P</button>
       <button class="mbtn"        data-vecmode="yoyo"     onclick="setVecSubMode('yoyo',this)"     style="font-size:8px;padding:2px 5px">Yo-yo</button>
-      <button class="mbtn"        data-vecmode="fan"      onclick="setVecSubMode('fan',this)"      style="font-size:8px;padding:2px 5px">Fan</button>
     </div>
   </div>
 
@@ -810,18 +825,22 @@ input:focus, select:focus { border-color: var(--accent); }
         <option value="cross">✚ cross</option>
       </select>
     </div>
-    <div id="ak-chord-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
-      <button class="mbtn active" data-csub="full"   onclick="setChordSub('full',this)"   style="font-size:8px;padding:2px 5px">Full</button>
-      <button class="mbtn"        data-csub="latter" onclick="setChordSub('latter',this)" style="font-size:8px;padding:2px 5px">Latter</button>
-      <button class="mbtn"        data-csub="prior"  onclick="setChordSub('prior',this)"  style="font-size:8px;padding:2px 5px">Prior</button>
-      <button class="mbtn"        data-csub="centre" onclick="setChordSub('centre',this)" style="font-size:8px;padding:2px 5px">Centre</button>
-      <button class="mbtn"        data-csub="pane"   onclick="setChordSub('pane',this)"   style="font-size:8px;padding:2px 5px">Pane</button>
+    <div id="ak-chord-sub" style="display:none;flex-direction:column;gap:4px;padding:4px 12px;border-top:1px solid var(--border)">
+      <div style="display:flex;gap:2px">
+        <button class="mbtn active" data-csub="full"     onclick="setChordSub('full',this)"     style="flex:1;text-align:center;font-size:8px">Full</button>
+        <button class="mbtn"        data-csub="prior"    onclick="setChordSub('prior',this)"    style="flex:1;text-align:center;font-size:8px">Prior</button>
+        <button class="mbtn"        data-csub="latter"   onclick="setChordSub('latter',this)"   style="flex:1;text-align:center;font-size:8px">Latter</button>
+      </div>
+      <div style="display:flex;gap:2px;margin-top:2px">
+        <button class="mbtn"        data-csub="centre"   onclick="setChordSub('centre',this)"   style="flex:1;text-align:center;font-size:8px">Centre</button>
+        <button class="mbtn"        data-csub="tangent"  onclick="setChordSub('tangent',this)"  style="flex:1;text-align:center;font-size:8px">Tangent</button>
+        <button class="mbtn"        data-csub="radiance" onclick="setChordSub('radiance',this)" style="flex:1;text-align:center;font-size:8px">Radiance</button>
+      </div>
     </div>
     <div id="ak-vec-sub" style="display:none;gap:2px;padding:3px 12px;border-top:1px solid var(--border)">
       <button class="mbtn active" data-vecmode="v"        onclick="setVecSubMode('v',this)"        style="font-size:8px;padding:2px 5px">V</button>
       <button class="mbtn"        data-vecmode="p"        onclick="setVecSubMode('p',this)"        style="font-size:8px;padding:2px 5px">P</button>
       <button class="mbtn"        data-vecmode="yoyo"     onclick="setVecSubMode('yoyo',this)"     style="font-size:8px;padding:2px 5px">Yo-yo</button>
-      <button class="mbtn"        data-vecmode="fan"      onclick="setVecSubMode('fan',this)"      style="font-size:8px;padding:2px 5px">Fan</button>
     </div>
   </div>
 </div>
@@ -847,11 +866,16 @@ input:focus, select:focus { border-color: var(--accent); }
     </div>
     <!-- Chord sub (main bar) -->
     <div id="main-chord-sub" style="display:none;gap:2px;flex-shrink:0">
-      <button class="mbtn active" data-csub="full"   onclick="setChordSub('full',this)"   style="font-size:8px;padding:2px 5px">Full</button>
-      <button class="mbtn"        data-csub="latter" onclick="setChordSub('latter',this)" style="font-size:8px;padding:2px 5px">Latter</button>
-      <button class="mbtn"        data-csub="prior"  onclick="setChordSub('prior',this)"  style="font-size:8px;padding:2px 5px">Prior</button>
-      <button class="mbtn"        data-csub="centre" onclick="setChordSub('centre',this)" style="font-size:8px;padding:2px 5px">Centre</button>
-      <button class="mbtn"        data-csub="pane"   onclick="setChordSub('pane',this)"   style="font-size:8px;padding:2px 5px">Pane</button>
+      <div style="display:flex;gap:2px">
+        <button class="mbtn active" data-csub="full"     onclick="setChordSub('full',this)"     style="flex:1;text-align:center;font-size:8px">Full</button>
+        <button class="mbtn"        data-csub="prior"    onclick="setChordSub('prior',this)"    style="flex:1;text-align:center;font-size:8px">Prior</button>
+        <button class="mbtn"        data-csub="latter"   onclick="setChordSub('latter',this)"   style="flex:1;text-align:center;font-size:8px">Latter</button>
+      </div>
+      <div style="display:flex;gap:2px;margin-top:2px">
+        <button class="mbtn"        data-csub="centre"   onclick="setChordSub('centre',this)"   style="flex:1;text-align:center;font-size:8px">Centre</button>
+        <button class="mbtn"        data-csub="tangent"  onclick="setChordSub('tangent',this)"  style="flex:1;text-align:center;font-size:8px">Tangent</button>
+        <button class="mbtn"        data-csub="radiance" onclick="setChordSub('radiance',this)" style="flex:1;text-align:center;font-size:8px">Radiance</button>
+      </div>
     </div>
     <div style="width:1px;height:14px;background:var(--border);flex-shrink:0;margin:0 6px"></div>
     <button class="mbtn" id="matrix-view-btn" onclick="switchView('matrix',this)" style="flex-shrink:0">Matrix</button>
@@ -1017,20 +1041,19 @@ input:focus, select:focus { border-color: var(--accent); }
                 <button class="mbtn" data-mode="vector"   onclick="setMode('vector',this);updateFSChordSub()"   style="flex:1;text-align:center">Vectors</button>
               </div>
               <!-- Chord sub-modes (only shown when chord active) -->
-              <div id="fs-chord-sub" style="display:none;gap:2px;margin-top:3px">
-                <button class="mbtn active" data-csub="full"   onclick="setChordSub('full',this)"   style="flex:1;text-align:center;font-size:8px">Full</button>
-                <button class="mbtn"        data-csub="latter" onclick="setChordSub('latter',this)" style="flex:1;text-align:center;font-size:8px">Latter</button>
-                <button class="mbtn"        data-csub="prior"  onclick="setChordSub('prior',this)"  style="flex:1;text-align:center;font-size:8px">Prior</button>
-                <button class="mbtn"        data-csub="centre" onclick="setChordSub('centre',this)" style="flex:1;text-align:center;font-size:8px">Centre</button>
-                <button class="mbtn"        data-csub="pane"   onclick="setChordSub('pane',this)"   style="flex:1;text-align:center;font-size:8px;opacity:0.35;cursor:not-allowed" disabled title="Pane not available in Zoetrope">Pane</button>
+              <div id="fs-chord-sub" style="display:none;flex-direction:column;gap:4px;margin-top:4px">
+                <div style="display:flex;gap:2px">
+                  <button class="mbtn active" data-csub="full"     onclick="setChordSub('full',this)"     style="flex:1;text-align:center;font-size:8px">Full</button>
+                  <button class="mbtn"        data-csub="prior"    onclick="setChordSub('prior',this)"    style="flex:1;text-align:center;font-size:8px">Prior</button>
+                  <button class="mbtn"        data-csub="latter"   onclick="setChordSub('latter',this)"   style="flex:1;text-align:center;font-size:8px">Latter</button>
+                </div>
+                <div style="display:flex;gap:2px;margin-top:2px">
+                  <button class="mbtn"        data-csub="centre"   onclick="setChordSub('centre',this)"   style="flex:1;text-align:center;font-size:8px">Centre</button>
+                  <button class="mbtn"        data-csub="tangent"  onclick="setChordSub('tangent',this)"  style="flex:1;text-align:center;font-size:8px">Tangent</button>
+                  <button class="mbtn"        data-csub="radiance" onclick="setChordSub('radiance',this)" style="flex:1;text-align:center;font-size:8px">Radiance</button>
+                </div>
               </div>
               <!-- Pane width — shown when Pane active -->
-              <div id="fs-pane-width-row" style="display:none;align-items:center;gap:6px;margin-top:3px">
-                <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:40px">Width</span>
-                <input type="range" id="fs-pane-width" min="1" max="100" step="1" value="50"
-                  oninput="setFanWidth(this.value)" style="flex:1;accent-color:var(--accent)">
-                <span id="fs-pane-width-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">50</span>
-              </div>
               <!-- Vector sub-options (shown when Vectors active) -->
               <div id="fs-vec-sub" style="display:none;flex-direction:column;gap:4px;margin-top:4px">
                 <!-- V / P / Yo-yo mode buttons -->
@@ -1041,25 +1064,9 @@ input:focus, select:focus { border-color: var(--accent); }
                     style="flex:1;text-align:center;font-size:10px" title="Point at tip">P</button>
                   <button class="mbtn"        data-vecmode="yoyo" onclick="setVecSubMode('yoyo',this)"
                     style="flex:1;text-align:center;font-size:9px" title="Line + point at tip">Yo-yo</button>
-                  <button class="mbtn"        data-vecmode="fan" onclick="setVecSubMode('fan',this)"
-                    style="flex:1;text-align:center;font-size:9px" title="Rectangle along vector">Fan</button>
                 </div>
                 <!-- Fan sub-controls — shown when Fan active -->
-                <div id="fs-vec-fan-row" style="display:none;flex-direction:column;gap:3px;margin-top:3px">
-                  <div style="display:flex;align-items:center;gap:6px">
-                    <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:40px">Width</span>
-                    <input type="range" id="fs-fan-width" min="1" max="100" step="1" value="50"
-                      oninput="setFanWidth(this.value)" style="flex:1;accent-color:var(--accent)">
-                    <span id="fs-fan-width-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">50</span>
-                  </div>
-                  <div style="display:flex;align-items:center;gap:6px">
-                    <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:40px">Length</span>
-                    <input type="range" id="fs-fan-length" min="1" max="100" step="1" value="50"
-                      oninput="setFanLength(this.value)" style="flex:1;accent-color:var(--accent)">
-                    <span id="fs-fan-length-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">50</span>
-                  </div>
-
-                </div>
+                
                 <!-- Intensity slider (both modes) -->
                 <div style="display:flex;align-items:center;gap:6px">
                   <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:40px">Intensity</span>
@@ -1072,19 +1079,28 @@ input:focus, select:focus { border-color: var(--accent); }
 
               <div id="point-shape-panel" style="display:none">
               <div class="bar-label" style="margin-bottom:4px">Point Shape</div>
-              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;font-size:26px">
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:26px">
                 <button class="mbtn active" data-pshape="dot"      onclick="setPointShape('dot',this)">●</button>
-                <button class="mbtn"        data-pshape="ring"      onclick="setPointShape('ring',this)">○</button>
-                <button class="mbtn"        data-pshape="bubble"    onclick="setPointShape('bubble',this)">◎</button>
-                <button class="mbtn"        data-pshape="square"    onclick="setPointShape('square',this)">▪</button>
-                <button class="mbtn"        data-pshape="square_o"  onclick="setPointShape('square_o',this)">□</button>
-                <button class="mbtn"        data-pshape="heart"     onclick="setPointShape('heart',this)">♡</button>
-                <button class="mbtn"        data-pshape="star"      onclick="setPointShape('star',this)">☆</button>
-                <button class="mbtn"        data-pshape="triangle"  onclick="setPointShape('triangle',this)">△</button>
-                <button class="mbtn"        data-pshape="cross"     onclick="setPointShape('cross',this)">+</button>
-                <button class="mbtn"        data-pshape="glyph"     onclick="setPointShape('glyph',this)" style="font-size:13px;font-family:var(--serif)">Aa</button>
-                <button class="mbtn"        data-pshape="duck"      onclick="setPointShape('duck',this)" style="font-size:22px">🦆</button>
-
+                <button class="mbtn"        data-pshape="ring"     onclick="setPointShape('ring',this)">○</button>
+                <button class="mbtn"        data-pshape="bubble"   onclick="setPointShape('bubble',this)">◎</button>
+                <button class="mbtn"        data-pshape="square"   onclick="setPointShape('square',this)">▪</button>
+                <button class="mbtn"        data-pshape="square_o" onclick="setPointShape('square_o',this)">□</button>
+                <button class="mbtn"        data-pshape="heart"    onclick="setPointShape('heart',this)">♡</button>
+                <button class="mbtn"        data-pshape="star"     onclick="setPointShape('star',this)">☆</button>
+                <button class="mbtn"        data-pshape="triangle" onclick="setPointShape('triangle',this)">△</button>
+                <button class="mbtn"        data-pshape="cross"    onclick="setPointShape('cross',this)">+</button>
+                <button class="mbtn"        data-pshape="glyph"    onclick="setPointShape('glyph',this)" style="font-size:13px;font-family:var(--serif)">Aa</button>
+                <button class="mbtn"        data-pshape="club"     onclick="setPointShape('club',this)">♣</button>
+                <button class="mbtn"        data-pshape="spade"    onclick="setPointShape('spade',this)">♠</button>
+              </div>
+              <!-- Alt: how many shapes to cycle through per input -->
+              <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
+                <span style="font-family:var(--mono);font-size:8px;color:var(--muted)">Shapes:</span>
+                <select id="alt-shape-count" onchange="setAltShapeCount(parseInt(this.value))"
+                  style="font-size:9px;padding:2px 4px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px;flex:1">
+                  <option value="1" selected>1 shape</option>
+                  <option value="2">Dual — alternating per frame</option>
+                </select>
               </div>
               <!-- Glyph textbox — shown when glyph shape is active -->
               <div id="fs-glyph-wrap" style="display:none;margin-top:6px">
@@ -1142,11 +1158,11 @@ input:focus, select:focus { border-color: var(--accent); }
             <div>
               <div class="bar-label" style="margin-bottom:4px">Size Bias</div>
               <div style="display:flex;align-items:center;gap:6px">
-                <span style="font-family:var(--mono);font-size:7px;color:var(--muted);flex-shrink:0">.1×</span>
+                <span style="font-family:var(--mono);font-size:7px;color:var(--muted);flex-shrink:0">0.2×</span>
                 <input type="range" id="prox-bias-slider" min="0" max="100" step="1" value="50"
                   oninput="setProxBias(this.value)" style="flex:1;accent-color:var(--accent)">
-                <span style="font-family:var(--mono);font-size:7px;color:var(--muted);flex-shrink:0">10×</span>
-                <span id="prox-bias-label" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px;text-align:right">1.0×</span>
+                <span style="font-family:var(--mono);font-size:7px;color:var(--muted);flex-shrink:0">5×</span>
+                <span id="prox-bias-label" style="font-family:var(--mono);font-size:8px;color:var(--accent)">1.00×</span>
               </div>
             </div>
 
@@ -1183,6 +1199,13 @@ input:focus, select:focus { border-color: var(--accent); }
                 <span style="font-family:var(--mono);font-size:7px;color:var(--muted);flex-shrink:0;align-self:center">Copies</span>
                 <button class="mbtn active" data-helixrep="1" onclick="setHelixRepeat(1,this)" style="flex:1;text-align:center;font-size:9px">×1</button>
                 <button class="mbtn"        data-helixrep="2" onclick="setHelixRepeat(2,this)" style="flex:1;text-align:center;font-size:9px">×2</button>
+              </div>
+              <!-- Tree height — shown when tree active -->
+              <div id="tree-height-row-alt" style="display:none;align-items:center;gap:6px;margin-bottom:6px">
+                <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:40px">Height</span>
+                <input type="range" id="tree-height-slider-alt" min="10" max="400" step="5" value="100"
+                  oninput="setTreeHeight(this.value)" style="flex:1;accent-color:var(--accent)">
+                <span id="tree-height-label-alt" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">1.00</span>
               </div>
 
               <div class="bar-label" style="margin-bottom:4px">Overlay</div>
@@ -1276,6 +1299,23 @@ input:focus, select:focus { border-color: var(--accent); }
               <div class="bar-label" style="margin-bottom:3px">Inflection Brightness</div>
               <input type="range" id="fs-pal-infl-bri" min="0" max="100" value="58"
                 oninput="updatePalSlider(this)" style="width:100%;height:6px;accent-color:var(--accent)">
+            </div>
+
+            <!-- 2nd Fn brightness + hue — visible when pair fn selected -->
+            <div id="fs-dual-sect" style="display:none">
+              <div class="bar-label" style="margin-bottom:4px">2nd Fn</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+                <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:30px">Bright</span>
+                <input type="range" id="fs-dual-bright2" min="0" max="100" step="1" value="50"
+                  oninput="setDualBright(this.value)" style="flex:1;accent-color:var(--accent)">
+                <span id="fs-dual-bright2-lbl" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">0.50</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:30px">Hue</span>
+                <input type="range" id="fs-dual-hue" min="0" max="360" step="1" value="0"
+                  oninput="setDualHue(this.value)" style="flex:1;accent-color:var(--accent)">
+                <span id="fs-dual-hue-lbl" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">0°</span>
+              </div>
             </div>
 
             <!-- Colour features -->
@@ -1447,6 +1487,27 @@ input:focus, select:focus { border-color: var(--accent); }
 
 <script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+let _dualHue = 0;
+
+
 let _dualBright = 0.5;
 let _treeHeight  = 1.0;
 
@@ -1523,14 +1584,7 @@ function applyFn(x, fn, n) {
     case 'custom':
       if (_customFn) { try { v = _customFn(x); } catch(e) { v = x; } } else v = x;
       break;
-    case 'duck': {
-      // Rubber duck — filled emoji-style
-      const fs = Math.max(r * 2, 8);
-      ctx.font = `${fs}px serif`;
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('🦆', x, y);
-      return;
-    }
+  
         default:         return x;
   }
   if (!isFinite(v) || v <= 0) v = lo;
@@ -1848,6 +1902,16 @@ function onFnSelectChange(fn) {
   if (dbr) dbr.style.display = isPair(fn) ? 'flex' : 'none';
   const dbrf = document.getElementById('fs-dual-bright-row');
   if (dbrf) dbrf.style.display = isPair(fn) ? 'flex' : 'none';
+  const dss = document.getElementById('fs-dual-sect');
+  if (dss) dss.style.display = isPair(fn) ? '' : 'none';
+}
+
+function setDualHue(val) {
+  _dualHue = parseFloat(val);
+  const lbl = document.getElementById('fs-dual-hue-lbl');
+  if (lbl) lbl.textContent = Math.round(_dualHue) + '°';
+  safeRender();
+  if (_three) buildTorusPoints();
 }
 
 function setDualBright(val) {
@@ -1856,6 +1920,8 @@ function setDualBright(val) {
   if (lbl) lbl.textContent = _dualBright.toFixed(2);
   const lblf = document.getElementById('fs-dual-bright-label');
   if (lblf) lblf.textContent = _dualBright.toFixed(2);
+  const lbf2 = document.getElementById('fs-dual-bright2-lbl');
+  if (lbf2) { lbf2.textContent = _dualBright.toFixed(2); const s2=document.getElementById('fs-dual-bright2'); if(s2) s2.value=Math.round(_dualBright*100); }
   safeRender();
 }
 
@@ -1880,7 +1946,16 @@ function setMidpointChar(val) {
   syncGlyphInputs(val);
   if (_three && _pointShape === 'glyph') {
     if (_torusFS) {
-      requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+      // Two rAFs for layout flush, then a 500ms delayed call so mobile
+    // browser chrome has time to collapse before we measure the viewport.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      _torusFS_resize();
+      setTimeout(_torusFS_resize, 500);
+    }));
+    // Also re-resize whenever visualViewport reports a size change
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', _torusFS_debounced, { once: false });
+    }
       return; // _torusFS_resize handles rebuild + render
     }
     buildTorusPoints();
@@ -2204,30 +2279,38 @@ function drawChordFrame() {
       else if (_chordSub === 'centre') {
         const hx=(bx-ax)*0.25, hy=(by-ay)*0.25;
         x1=mx-hx; y1=my-hy; x2=mx+hx; y2=my+hy;
-      } else if (_chordSub === 'pane') {
-        // Pane: filled rectangle along chord, width = _fanWidth fraction of chord length
-        const prox_p = inflectionProx(row[j], _n);
-        const [rp,gp,bp] = palForCol(j)(prox_p, row[j], _n);
-        const paneAlpha = _n <= 4 ? 0.78 : _n === 5 ? 0.55 : _n === 6 ? 0.35 : 0.18;
+      } else if (_chordSub === 'tangent') {
+        // Chord perpendicular to the true chord, passing through its midpoint,
+        // clipped to the circle circumference.
+        // Perp direction: rotate chord direction 90°
         const cdx=bx-ax, cdy=by-ay, clen=Math.hypot(cdx,cdy)||1;
-        const pW = clen * _fanWidth * 0.25;
-        const pnx=-cdy/clen, pny=cdx/clen;
-        ctx.fillStyle   = `rgba(${rp},${gp},${bp},${paneAlpha * 0.45})`;
-        ctx.strokeStyle = `rgba(${rp},${gp},${bp},${paneAlpha})`;
-        ctx.beginPath();
-        ctx.moveTo(ax+pnx*pW, ay+pny*pW); ctx.lineTo(bx+pnx*pW, by+pny*pW);
-        ctx.lineTo(bx-pnx*pW, by-pny*pW); ctx.lineTo(ax-pnx*pW, ay-pny*pW);
-        ctx.closePath();
-        ctx.fill(); ctx.stroke();
-        // skip the default line stroke below
-        ctx.globalAlpha = 0;
+        const pnx=-cdy/clen, pny=cdx/clen; // unit perp (rotated 90°)
+        // Find where the perp line (mx+t*pnx, my+t*pny) intersects circle (cx,cy,R)
+        const dmx=mx-cx, dmy=my-cy;
+        // |( dmx+t*pnx, dmy+t*pny )|² = R²
+        // t² + 2(dmx*pnx+dmy*pny)t + (dmx²+dmy²-R²) = 0
+        const B2=2*(dmx*pnx+dmy*pny);
+        const C2=dmx*dmx+dmy*dmy-R*R;
+        const disc2=B2*B2-4*C2;  // A=1 since pn is unit
+        if (disc2>=0) {
+          const sd=Math.sqrt(Math.max(0,disc2));
+          x1=mx+pnx*((-B2-sd)/2); y1=my+pny*((-B2-sd)/2);
+          x2=mx+pnx*((-B2+sd)/2); y2=my+pny*((-B2+sd)/2);
+        }
+      } else if (_chordSub === 'radiance') {
+        // Rays from each circle point outward by chord length; collapse default stroke.
+        const cdx=bx-ax, cdy=by-ay, clen=Math.hypot(cdx,cdy)||1;
+        const ux=cdx/clen, uy=cdy/clen;
+        ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(ax-ux*clen, ay-uy*clen); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(bx+ux*clen, by+uy*clen); ctx.stroke();
+        x1=mx; y1=my; x2=mx; y2=my;
       }
       ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
       ctx.globalAlpha = 1;
     } else if (phaseMode === 'midpoint') {
       const mx = (ax+bx)/2, my = (ay+by)/2;
       const dotR = Math.max(0.5, proxSizeScale(prox) * Math.pow(_midpointSize / 5, 1.8));
-      const mpAlpha = colDim;
+      const mpAlpha = 0.9; // fixed 90% opacity — colDim intentionally ignored here
       ctx.fillStyle = `rgba(${r},${g},${b},${mpAlpha})`; ctx.strokeStyle = `rgba(${r},${g},${b},${mpAlpha})`; ctx.lineWidth = Math.max(1, dotR*0.3);
       if (_pointShape === 'glyph') {
         const ch = _midpointChar || '·';
@@ -2267,30 +2350,7 @@ function drawChordFrame() {
         ctx.lineTo(ex - hs*Math.cos(angle-0.45), ey - hs*Math.sin(angle-0.45));
         ctx.lineTo(ex - hs*Math.cos(angle+0.45), ey - hs*Math.sin(angle+0.45));
         ctx.closePath(); ctx.fill();
-      } else if (_vecSubMode === 'fan') {
-        // Fan: vector arrow + square panel extending BEYOND tip, centered on head.
-        // Panel lies in same plane as vector. Square half-size from single size param.
-        const fSize = vLen * (Math.max(_fanWidth, _fanLength) / 100) * 120 + 6;
-        // Draw vector
-        ctx.beginPath(); ctx.moveTo(mx,my); ctx.lineTo(ex,ey); ctx.stroke();
-        const fAngle = Math.atan2(ey-my, ex-mx);
-        const hs = Math.max(3, vLen*0.35);
-        ctx.beginPath();
-        ctx.moveTo(ex,ey);
-        ctx.lineTo(ex - hs*Math.cos(fAngle-0.45), ey - hs*Math.sin(fAngle-0.45));
-        ctx.lineTo(ex - hs*Math.cos(fAngle+0.45), ey - hs*Math.sin(fAngle+0.45));
-        ctx.closePath(); ctx.fill();
-        // Square panel: centered at tip, extends forward (nx,ny) and perp (-ny,nx)
-        const fp1x = ex + nx*fSize + (-ny)*fSize, fp1y = ey + ny*fSize + nx*fSize;
-        const fp2x = ex + nx*fSize - (-ny)*fSize, fp2y = ey + ny*fSize - nx*fSize;
-        const fp3x = ex - (-ny)*fSize,             fp3y = ey - nx*fSize;
-        const fp4x = ex + (-ny)*fSize,             fp4y = ey + nx*fSize;
-        ctx.fillStyle   = `rgba(${r},${g},${b},${vAlpha * 0.35})`;
-        ctx.strokeStyle = `rgba(${r},${g},${b},${vAlpha})`;
-        ctx.beginPath();
-        ctx.moveTo(fp1x,fp1y); ctx.lineTo(fp2x,fp2y); ctx.lineTo(fp3x,fp3y); ctx.lineTo(fp4x,fp4y);
-        ctx.closePath(); ctx.fill(); ctx.stroke();
-            } else {
+      } else {
         // P and Yo-yo: shape/glyph at tip
         const dotR = Math.max(0.5, proxSizeScale(prox) * Math.pow(_midpointSize / 5, 1.8));
         // Yo-yo also draws the line (at normal alpha)
@@ -2457,6 +2517,25 @@ function renderReticulum(canvas, size, alpha, lineW, fontSize, mode, noBg) {
         else if (_chordSub==='centre') {
           const hxr=(bx-ax)*0.25,hyr=(by-ay)*0.25;
           x1r=mxr-hxr; y1r=myr-hyr; x2r=mxr+hxr; y2r=myr+hyr;
+        } else if (_chordSub==='tangent') {
+          const cdxr=bx-ax, cdyr=by-ay, clenr=Math.hypot(cdxr,cdyr)||1;
+          const pnxr=-cdyr/clenr, pnyr=cdxr/clenr;
+          const dmxr=mxr-cx, dmyr=myr-cy;
+          const B2r=2*(dmxr*pnxr+dmyr*pnyr);
+          const C2r=dmxr*dmxr+dmyr*dmyr-R*R;
+          const disc2r=B2r*B2r-4*C2r;
+          if (disc2r>=0) {
+            const sd2r=Math.sqrt(Math.max(0,disc2r));
+            x1r=mxr+pnxr*((-B2r-sd2r)/2); y1r=myr+pnyr*((-B2r-sd2r)/2);
+            x2r=mxr+pnxr*((-B2r+sd2r)/2); y2r=myr+pnyr*((-B2r+sd2r)/2);
+          }
+        } else if (_chordSub==='radiance') {
+          const cdxr=bx-ax, cdyr=by-ay, clenr=Math.hypot(cdxr,cdyr)||1;
+          const uxr=cdxr/clenr, uyr=cdyr/clenr;
+          // Rays from each circle point outward by chord length
+          ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(ax-uxr*clenr, ay-uyr*clenr); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(bx+uxr*clenr, by+uyr*clenr); ctx.stroke();
+          x1r=mxr; y1r=myr; x2r=mxr; y2r=myr; // collapse default stroke
         }
         ctx.beginPath(); ctx.moveTo(x1r,y1r); ctx.lineTo(x2r,y2r); ctx.stroke();
       } else if (mode==='midpoint') {
@@ -2640,8 +2719,6 @@ function setVecSubMode(mode, btn) {
     b.classList.toggle("active", b.dataset.vecmode === mode));
   const pSlider = document.getElementById("fs-vec-p-row");
   if (pSlider) pSlider.style.display = mode === "p" ? "flex" : "none";
-  const fanRow = document.getElementById("fs-vec-fan-row");
-  if (fanRow) fanRow.style.display = (mode === "fan" || mode === "umbrella") ? "flex" : "none";
   const psp = document.getElementById('point-shape-panel');
   if (psp) psp.style.display = (_frameMode === 'midpoint' || (_frameMode === 'vector' && (_vecSubMode === 'p' || _vecSubMode === 'yoyo'))) ? '' : 'none';
   if (_activeView === "animation") drawChordFrame();
@@ -2675,8 +2752,6 @@ function setChordSub(sub, btn) {
   _chordSub = sub;
   document.querySelectorAll('[data-csub]').forEach(b =>
     b.classList.toggle('active', b.dataset.csub === sub));
-  const paneRow = document.getElementById('fs-pane-width-row');
-  if (paneRow) paneRow.style.display = sub === 'pane' ? 'flex' : 'none';
   if (_activeView === 'animation') { drawChordFrame(); drawTorus(); }
   else if (_activeView === 'reticulum') { drawComposite(); }
   else if (_torusFS) buildTorusPoints();
@@ -3150,6 +3225,18 @@ function switchView(view, btn) {
   if (tc) tc.style.display = view === 'torus' ? 'flex' : 'none';
   const atc = document.getElementById('atlas-tab-controls');
   if (atc) atc.style.display = view === 'atlas' ? 'flex' : 'none';
+  const qtb = document.getElementById('quilt-top-btn');
+  if (qtb) {
+    qtb.style.display = view === 'atlas' ? '' : 'none';
+    if (view === 'atlas') {
+      // Flash 3× to draw attention
+      let fc = 0;
+      const flash = setInterval(() => {
+        qtb.style.opacity = (fc % 2 === 0) ? '0.2' : '1';
+        if (++fc >= 6) { clearInterval(flash); qtb.style.opacity = '1'; }
+      }, 200);
+    }
+  }
   document.querySelectorAll('#view-animation,#view-reticulum,#view-torus,#view-antikythera,#view-atlas,#view-matrix')
     .forEach(el => el.classList.remove('active'));
   const domEl = document.getElementById('view-' + view);
@@ -3338,6 +3425,8 @@ function setTreeHeight(val) {
   _treeHeight = parseFloat(val) / 100;
   const lbl = document.getElementById('tree-height-label-fs');
   if (lbl) lbl.textContent = _treeHeight.toFixed(2);
+  const lblA = document.getElementById('tree-height-label-alt');
+  if (lblA) { lblA.textContent = _treeHeight.toFixed(2); const sA=document.getElementById('tree-height-slider-alt'); if(sA) sA.value=Math.round(_treeHeight*100); }
   if (_three) buildTorusPoints();
 }
 function togglePipeMode(btn) {
@@ -3361,7 +3450,7 @@ function generatePipeWalk() {
   const ctrlPts = [[0,0,0]];
   const dirs = [[1,0,0],[0,1,0],[0,0,1],[-1,0,0],[0,-1,0],[0,0,-1]];
   let lastDir = [1,0,0];
-  for (let i = 1; i < 8; i++) {
+  for (let i = 1; i < 9; i++) {
     const valid = dirs.filter(d => !(d[0]===lastDir[0]&&d[1]===lastDir[1]&&d[2]===lastDir[2]) &&
                                    !(d[0]===-lastDir[0]&&d[1]===-lastDir[1]&&d[2]===-lastDir[2]));
     const d = valid[Math.floor(Math.random()*valid.length)];
@@ -3383,11 +3472,9 @@ function generatePipeWalk() {
     }
   }
   pts.push([...cp[N-1]]);
-  // Rotate so ctrlPts[4] (origin) aligns with phi=0 (identity frame)
-  // ctrlPts[4] is at spline index 4*SS = 32
-  const originIdx = 4 * SS;
-  const rotated = [...pts.slice(originIdx), ...pts.slice(0, originIdx)];
-  return rotated;
+  // Linear path: no rotation. phi=0→path start, phi=π→middle, phi=2π→path end.
+  // Clamped in BTP to total*0.9999 so endpoints never connect.
+  return pts;
 }
 function setHelixRepeat(n, btn) {
   _helixRepeat = n;
@@ -3692,6 +3779,8 @@ function toggleTreeMode(btn) {
   if (chonkR) chonkR.style.display = _treeMode ? "flex" : "none";
   const thr = document.getElementById('tree-height-row-fs');
   if (thr) thr.style.display = _treeMode ? 'flex' : 'none';
+  const thrA = document.getElementById('tree-height-row-alt');
+  if (thrA) thrA.style.display = _treeMode ? 'flex' : 'none';
   // Mutual exclusion: turning on tree turns off helix and pipe
   if (_treeMode && _pipeMode) {
     _pipeMode = false;
@@ -3785,7 +3874,9 @@ function randomizeColours() {
 }
 
 // ── Point shape textures ──────────────────────────────────────
-let _pointShape = 'dot';
+let _pointShape     = 'dot';
+let _altShapeCount  = 1;    // 1=single shape, 2=dual alternating per frame
+const _shapeOrder = ['dot','ring','bubble','square','square_o','heart','star','triangle','cross','glyph','club','spade'];
 let _pointTexCache = {};
 function makePointTexture(shape) {
   if (shape === 'glyph') {
@@ -3903,7 +3994,15 @@ function makePointTexture(shape) {
 // Negative: INF shrinks (min 1/9× at bias=-8). ID (prox=0) always 1×.
 // Draw the selected point shape on a 2D canvas context at (x,y) with radius r
 function drawShape2D(ctx, x, y, r) {
-  const s = _pointShape || 'dot';
+  let s;
+  if (_altShapeCount === 2) {
+    // Dual: alternate between primary and next shape in order, per animation frame
+    const primaryIdx = _shapeOrder.indexOf(_pointShape);
+    const frameOffset = _frame % 2;
+    s = _shapeOrder[(primaryIdx + frameOffset) % _shapeOrder.length] || _pointShape;
+  } else {
+    s = _pointShape || 'dot';
+  }
   ctx.beginPath();
   switch (s) {
     case 'ring':
@@ -3949,25 +4048,29 @@ function drawShape2D(ctx, x, y, r) {
       ctx.rect(x-r, y-t, r*2, t*2); ctx.fill();
       ctx.beginPath(); ctx.rect(x-t, y-r, t*2, r*2); break;
     }
-    case 'duck': {
-      const fs = Math.max(r * 2.2, 8);
-      ctx.font = fs + 'px serif';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('🦆', x, y);
+    
+  
+    case 'club': {
+      // Club: 3 small circles in trefoil + stem
+      const cr2 = r*0.38;
+      // Top circle
+      ctx.arc(x, y-cr2*0.8, cr2, 0, Math.PI*2); ctx.fill(); ctx.beginPath();
+      // Bottom-left circle
+      ctx.arc(x-cr2*0.8, y+cr2*0.2, cr2, 0, Math.PI*2); ctx.fill(); ctx.beginPath();
+      // Bottom-right circle
+      ctx.arc(x+cr2*0.8, y+cr2*0.2, cr2, 0, Math.PI*2); ctx.fill(); ctx.beginPath();
+      // Stem
+      ctx.rect(x-r*0.15, y+cr2*0.4, r*0.3, r*0.55); ctx.fill();
       return;
     }
-    case 'duck': {
-      const fs = Math.max(r * 2.2, 8);
-      ctx.font = fs + 'px serif';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('🦆', x, y);
-      return;
-    }
-  case 'duck': {
-      const fs = Math.max(r * 2.2, 8);
-      ctx.font = fs + 'px serif';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText('🦆', x, y);
+    case 'spade': {
+      // Spade: inverted heart + stem
+      ctx.moveTo(x, y-r);
+      ctx.bezierCurveTo(x+r*1.0, y-r*0.2, x+r*0.5, y+r*0.5, x, y+r*0.1);
+      ctx.bezierCurveTo(x-r*0.5, y+r*0.5, x-r*1.0, y-r*0.2, x, y-r);
+      ctx.closePath(); ctx.fill(); ctx.beginPath();
+      // Stem
+      ctx.rect(x-r*0.15, y+r*0.1, r*0.3, r*0.55); ctx.fill();
       return;
     }
     default: // dot
@@ -3977,20 +4080,20 @@ function drawShape2D(ctx, x, y, r) {
 }
 
 function proxSizeScale(prox) {
-  if (_proxBias === 0) return 1;
-  if (_proxBias > 0) return 1 + prox * _proxBias;
-  return Math.max(0.2, 1 / (1 + prox * (-_proxBias)));
+  // _proxBias: 0.2 (min) → identity 5x larger than inflection
+  //            1.0 (neutral) → flat, all same size  
+  //            5.0 (max) → inflection 5x larger than identity
+  if (_proxBias <= 0) return 1;
+  return Math.pow(_proxBias, 2*prox - 1);
 }
 
 function setProxBias(val) {
-  const norm = parseFloat(val) / 100;
-  _proxBias = Math.pow(10, (norm - 0.5) * 2);
+  // Piecewise: 0→0.5x, 50→1.0x (default/neutral), 100→5x
+  const v = parseFloat(val);
+  // 0→0.2x, 50→1.0x (neutral/flat), 100→5x
+  _proxBias = v < 50 ? 0.2 + (v/50)*0.8 : 1.0 + ((v-50)/50)*4.0;
   const lbl = document.getElementById('prox-bias-label');
-  if (lbl) {
-    if (_proxBias === 0) lbl.textContent = 'flat';
-    else if (_proxBias > 0) lbl.textContent = `Inf ×${(1+_proxBias).toFixed(1)}`;
-    else lbl.textContent = `Inf ×${(1/(1-_proxBias)).toFixed(2)}`;
-  }
+  if (lbl) lbl.textContent = _proxBias.toFixed(2) + "×";
   _pointTexCache = {}; // force texture rebuild
   renderActiveView();
   if (_three) {
@@ -3999,13 +4102,32 @@ function setProxBias(val) {
   }
 
 }
+function _syncPointShapeBtns() {
+  document.querySelectorAll('[data-pshape]').forEach(b => {
+    b.classList.remove('active'); b.style.opacity = '';
+  });
+  const p = document.querySelector('[data-pshape="'+_pointShape+'"]');
+  if (p) p.classList.add('active');
+}
+
+function setAltShapeCount(n) {
+  _altShapeCount = n;
+  _pointTexCache = {};
+  if (_three) buildTorusPoints();
+  renderActiveView();
+}
+
 function setPointShape(shape, btn) {
-  _pointShape = shape;
-  document.querySelectorAll('[data-pshape]').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+  if (shape === _pointShape) {
+    // Clicking active primary: no-op (use dual button to set secondary)
+  } else {
+    // Set as new primary, clear secondary
+    _pointShape = shape;
+    _pointShape2 = null;
+  }
+  _syncPointShapeBtns();
   const sel = document.getElementById('main-shape-sel');
   if (sel && sel.value !== shape) sel.value = shape;
-  // Glyph mode: switch display to midpoints and show textbox
   const glyphWrap = document.getElementById('fs-glyph-wrap');
   if (shape === 'glyph') {
     if (glyphWrap) glyphWrap.style.display = '';
@@ -4018,20 +4140,16 @@ function setPointShape(shape, btn) {
   _pointTexCache = {};
   if (_three) {
     if (_torusFS) {
-      // Double rAF: first frame lets layout settle, second does the resize
-      requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
-      return; // _torusFS_resize calls buildTorusPoints + renderNow
-    } else {
-      buildTorusPoints();
-    }
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        _torusFS_resize();
+        setTimeout(_torusFS_resize, 500);
+      }));
+      if (window.visualViewport) window.visualViewport.addEventListener('resize', _torusFS_debounced, { once: false });
+      return;
+    } else { buildTorusPoints(); }
   }
   renderActiveView();
 }
-
-
-
-
-// Called from drawChordFrame — replaces all data drawing when active
 
 function getViewPortSize() {
   // Direct computation — no dependency on view-port having been laid out
@@ -4338,13 +4456,16 @@ function buildTorusPoints() {
           const p0 = pts[si], p1 = pts[Math.min(si+1,pts.length-1)];
           const cx = p0[0]+(p1[0]-p0[0])*frac, cy = p0[1]+(p1[1]-p0[1])*frac, cz = p0[2]+(p1[2]-p0[2])*frac;
           const tx=(p1[0]-p0[0])/(seg.l||1), ty=(p1[1]-p0[1])/(seg.l||1), tz=(p1[2]-p0[2])/(seg.l||1);
-          // Build disk frame: up=world-up unless tangent is vertical
-          let ux2=0,uy2=1,uz2=0; if (Math.abs(ty)>0.9){ux2=1;uy2=0;uz2=0;}
+          // Stable frame: pick seed axis least aligned with tangent (minimises twist)
+          let ux2,uy2,uz2;
+          if (Math.abs(tx)<=Math.abs(ty)&&Math.abs(tx)<=Math.abs(tz)){ux2=1;uy2=0;uz2=0;}
+          else if (Math.abs(ty)<=Math.abs(tz))                       {ux2=0;uy2=1;uz2=0;}
+          else                                                        {ux2=0;uy2=0;uz2=1;}
           const vx=ty*uz2-tz*uy2, vy=tz*ux2-tx*uz2, vz=tx*uy2-ty*ux2;
           const vl=Math.sqrt(vx*vx+vy*vy+vz*vz)||1;
           const vnx=vx/vl,vny=vy/vl,vnz=vz/vl;
           const wnx=ty*vnz-tz*vny, wny=tz*vnx-tx*vnz, wnz=tx*vny-ty*vnx;
-          const pr = _chonk * 6;
+          const pr = r; // normalized: matches torus/helix at default chonk
           return [cx+pr*(Math.cos(theta)*vnx+Math.sin(theta)*wnx), cy+pr*(Math.cos(theta)*vny+Math.sin(theta)*wny), cz+pr*(Math.cos(theta)*vnz+Math.sin(theta)*wnz)];
         };
       })()
@@ -4395,7 +4516,11 @@ function buildTorusPoints() {
         const tB = valToTheta(row[j]);
         let [x0,y0,z0] = pt(phi, tA);
         let [x1,y1,z1] = pt(phi, tB);
+        // Pre-compute color (needed by radiance chord sub before positions.push)
+        const prox_pre = inflectionProx(row[j], _n);
+        const [cr,cg,cb] = palForCol(j)(prox_pre, row[j], _n).map(cv => cv * colDim3 / 255);
         // Apply chord sub-mode
+        let _skipPush = false;
         if (_chordSub !== 'full') {
           const mx=(x0+x1)/2, my=(y0+y1)/2, mz=(z0+z1)/2;
           if (_chordSub === 'latter')       { x0=mx; y0=my; z0=mz; }
@@ -4404,31 +4529,46 @@ function buildTorusPoints() {
             const hx=(x1-x0)*0.25, hy=(y1-y0)*0.25, hz=(z1-z0)*0.25;
             x0=mx-hx; y0=my-hy; z0=mz-hz;
             x1=mx+hx; y1=my+hy; z1=mz+hz;
-          } else if (_chordSub === 'pane' && false) { // Pane disabled in Zoetrope
-            // Pane: rectangle along chord, perpendicular via Gram-Schmidt (works in all views)
-            const cdx=x1-x0, cdy=y1-y0, cdz=z1-z0;
-            const clen=Math.sqrt(cdx*cdx+cdy*cdy+cdz*cdz)||0.001;
-            const pW = clen * _fanWidth * 0.4;
-            // Robust perp: use world-up (0,1,0) unless chord is nearly vertical, then use (1,0,0)
-            let ux_p=0,uy_p=1,uz_p=0;
-            if (Math.abs(cdy/clen)>0.9){ux_p=1;uy_p=0;uz_p=0;}
-            // Gram-Schmidt: remove chord component from up vector
-            const dotP=(ux_p*cdx+uy_p*cdy+uz_p*cdz)/clen/clen;
-            ux_p-=dotP*cdx; uy_p-=dotP*cdy; uz_p-=dotP*cdz;
-            const upL=Math.sqrt(ux_p*ux_p+uy_p*uy_p+uz_p*uz_p)||1;
-            ux_p/=upL; uy_p/=upL; uz_p/=upL;
-            positions.push(x0+ux_p*pW,y0+uy_p*pW,z0+uz_p*pW, x1+ux_p*pW,y1+uy_p*pW,z1+uz_p*pW);
-            positions.push(x1+ux_p*pW,y1+uy_p*pW,z1+uz_p*pW, x1-ux_p*pW,y1-uy_p*pW,z1-uz_p*pW);
-            positions.push(x1-ux_p*pW,y1-uy_p*pW,z1-uz_p*pW, x0-ux_p*pW,y0-uy_p*pW,z0-uz_p*pW);
-            positions.push(x0-ux_p*pW,y0-uy_p*pW,z0-uz_p*pW, x0+ux_p*pW,y0+uy_p*pW,z0+uz_p*pW);
-            colors.push(cr,cg,cb, cr,cg,cb, cr,cg,cb, cr,cg,cb, cr,cg,cb, cr,cg,cb, cr,cg,cb, cr,cg,cb);
-            continue;
+          } else if (_chordSub === 'tangent') {
+            // Project 3D chord endpoints into ring 2D coord system, 
+            // compute perpendicular bisector (same as Phase view), map back to 3D.
+            // Ring at phi: centre C=(R*cos(phi),0,R*sin(phi)), axes u=(0,1,0), v=(cos(phi),0,sin(phi))
+            const cosp=Math.cos(phi), sinp=Math.sin(phi);
+            // Project to ring 2D: (v_coord = x*cosp+z*sinp-R,  u_coord = y)
+            const av=(x0*cosp+z0*sinp-R), au=y0;
+            const bv=(x1*cosp+z1*sinp-R), bu=y1;
+            const mxr=(av+bv)/2, myr=(au+bu)/2;
+            const cdxr=bv-av, cdyr=bu-au, clenr=Math.sqrt(cdxr*cdxr+cdyr*cdyr)||1;
+            const pnxr=-cdyr/clenr, pnyr=cdxr/clenr; // perp unit in ring 2D
+            // Intersect perp ray through ring-2D midpoint with circle radius r centred (0,0)
+            const B2r=2*(mxr*pnxr+myr*pnyr);
+            const C2r=mxr*mxr+myr*myr-r*r;
+            const disc2r=B2r*B2r-4*C2r;
+            if (disc2r>=0) {
+              const sd2r=Math.sqrt(disc2r);
+              const t1r=(-B2r-sd2r)/2, t2r=(-B2r+sd2r)/2;
+              const p1v=mxr+pnxr*t1r, p1u=myr+pnyr*t1r;
+              const p2v=mxr+pnxr*t2r, p2u=myr+pnyr*t2r;
+              // Back to 3D: P = C + p_v * v + p_u * u
+              x0=(R+p1v)*cosp; y0=p1u; z0=(R+p1v)*sinp;
+              x1=(R+p2v)*cosp; y1=p2u; z1=(R+p2v)*sinp;
+            }
+          } else if (_chordSub === 'radiance') {
+            // Extend 3D chord by its own length beyond each endpoint (same as Phase view).
+            // x0,y0,z0 = input point (on torus surface); x1,y1,z1 = output point.
+            const cdx3=x1-x0, cdy3=y1-y0, cdz3=z1-z0;
+            const clen3=Math.sqrt(cdx3*cdx3+cdy3*cdy3+cdz3*cdz3)||1;
+            const ux3=cdx3/clen3, uy3=cdy3/clen3, uz3=cdz3/clen3;
+            // Ray A: from x0 backwards by chord length
+            positions.push(x0,y0,z0, x0-ux3*clen3, y0-uy3*clen3, z0-uz3*clen3);
+            colors.push(cr,cg,cb, cr,cg,cb);
+            // Ray B: from x1 forwards by chord length
+            positions.push(x1,y1,z1, x1+ux3*clen3, y1+uy3*clen3, z1+uz3*clen3);
+            colors.push(cr,cg,cb, cr,cg,cb);
+            _skipPush = true;
           }
         }
-        positions.push(x0,y0,z0, x1,y1,z1);
-        const prox = inflectionProx(row[j], _n);
-        const [cr,cg,cb] = palForCol(j)(prox, row[j], _n).map(c => c * colDim3 / 255);
-        colors.push(cr,cg,cb, cr,cg,cb);
+        if (!_skipPush) { positions.push(x0,y0,z0, x1,y1,z1); colors.push(cr,cg,cb, cr,cg,cb); }
       }
     }
     const geo = new THREE.BufferGeometry();
@@ -4600,32 +4740,7 @@ function buildTorusPoints() {
           // Yo-yo: fiber line only (no arrowhead — tip point added separately below)
           positions.push(mx,my,mz, ex2,ey2,ez2);
           colors.push(cr,cg,cb, cr,cg,cb);
-        } else if (_vecSubMode === 'fan') {
-          // Fan 3D: V-mode arrow to ex2 + square panel extending beyond tip.
-          // Panel centered at ex2, extends in radial direction (rdx,rdy,rdz) and perp (u).
-          // Draw standard V arrow first
-          positions.push(mx,my,mz, ex2,ey2,ez2); colors.push(cr,cg,cb, cr,cg,cb);
-          const adx=ex2-mx, ady=ey2-my, adz=ez2-mz;
-          const aLen=Math.sqrt(adx*adx+ady*ady+adz*adz)||1;
-          const hLen=Math.min(fR*0.35, 0.2);
-          positions.push(ex2,ey2,ez2, ex2-(adx/aLen)*hLen+ux*hLen*0.4, ey2-(ady/aLen)*hLen+uy*hLen*0.4, ez2-(adz/aLen)*hLen+uz*hLen*0.4);
-          colors.push(cr,cg,cb, cr,cg,cb);
-          positions.push(ex2,ey2,ez2, ex2-(adx/aLen)*hLen-ux*hLen*0.4, ey2-(ady/aLen)*hLen-uy*hLen*0.4, ez2-(adz/aLen)*hLen-uz*hLen*0.4);
-          colors.push(cr,cg,cb, cr,cg,cb);
-          // Fan panel: base at ex2, extends forward (radial=adx/aLen) and perp (u), 4x scale
-          const fSize3 = fR * (Math.max(_fanWidth, _fanLength) / 100) * 120 + 0.05;
-          const rdx=adx/aLen, rdy=ady/aLen, rdz=adz/aLen;
-          const fp1x=ex2+rdx*fSize3+ux*fSize3, fp1y=ey2+rdy*fSize3+uy*fSize3, fp1z=ez2+rdz*fSize3+uz*fSize3;
-          const fp2x=ex2+rdx*fSize3-ux*fSize3, fp2y=ey2+rdy*fSize3-uy*fSize3, fp2z=ez2+rdz*fSize3-uz*fSize3;
-          const fp3x=ex2-ux*fSize3,             fp3y=ey2-uy*fSize3,             fp3z=ez2-uz*fSize3;
-          const fp4x=ex2+ux*fSize3,             fp4y=ey2+uy*fSize3,             fp4z=ez2+uz*fSize3;
-          fanPositions.push(fp1x,fp1y,fp1z, fp2x,fp2y,fp2z); fanColors.push(cr,cg,cb, cr,cg,cb);
-          fanPositions.push(fp2x,fp2y,fp2z, fp3x,fp3y,fp3z); fanColors.push(cr,cg,cb, cr,cg,cb);
-          fanPositions.push(fp3x,fp3y,fp3z, fp4x,fp4y,fp4z); fanColors.push(cr,cg,cb, cr,cg,cb);
-          fanPositions.push(fp4x,fp4y,fp4z, fp1x,fp1y,fp1z); fanColors.push(cr,cg,cb, cr,cg,cb);
-          fanPositions.push(fp1x,fp1y,fp1z, fp3x,fp3y,fp3z); fanColors.push(cr,cg,cb, cr,cg,cb);
-          fanPositions.push(fp2x,fp2y,fp2z, fp4x,fp4y,fp4z); fanColors.push(cr,cg,cb, cr,cg,cb);
-                } // end umbrella — P/Yo-yo tip collection follows // end umbrella — P/Yo-yo tip collection follows // end umbrella — P/Yo-yo tip collection follows // P and Yo-yo: collect tip as point
+        } // end umbrella — P/Yo-yo tip collection follows // end umbrella — P/Yo-yo tip collection follows // end umbrella — P/Yo-yo tip collection follows // P and Yo-yo: collect tip as point
         if (_vecSubMode === 'p' || _vecSubMode === 'yoyo') {
           tipPositions.push(ex2,ey2,ez2);
           tipColors.push(cr,cg,cb);
@@ -4787,7 +4902,16 @@ function toggleTorusFS() {
     botBar.style.display = 'none';
     if (fsBtn) fsBtn.textContent = '✕ Exit Zoetrope';
     // Use rAF to size after layout — no panel.requestFullscreen (unreliable in nested FS)
-    requestAnimationFrame(() => requestAnimationFrame(_torusFS_resize));
+    // Two rAFs for layout flush, then a 500ms delayed call so mobile
+    // browser chrome has time to collapse before we measure the viewport.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      _torusFS_resize();
+      setTimeout(_torusFS_resize, 500);
+    }));
+    // Also re-resize whenever visualViewport reports a size change
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', _torusFS_debounced, { once: false });
+    }
   } else {
     panel.style.cssText = '';
     panel.classList.remove("fs-active");
@@ -4795,6 +4919,7 @@ function toggleTorusFS() {
     canvas.style.width = ''; canvas.style.height = '';
     overlay.style.display = 'none';
     topBar.style.display = '';
+    if (window.visualViewport) window.visualViewport.removeEventListener('resize', _torusFS_debounced);
     botBar.style.display = '';
     if (fsBtn) fsBtn.textContent = '⛶ Zoetrope';
     if (_three) {
@@ -4825,6 +4950,13 @@ function toggleTorusFS() {
       }));
     }
   }
+}
+
+let _torusFS_debounceTmr = null;
+function _torusFS_debounced() {
+  if (!_torusFS) return;
+  clearTimeout(_torusFS_debounceTmr);
+  _torusFS_debounceTmr = setTimeout(_torusFS_resize, 80);
 }
 
 function _torusFS_resize() {
@@ -5783,6 +5915,367 @@ function drawAtlas() {
 
 
 
+
+// ── Quilt ───────────────────────────────────────────────────
+var _quiltN    = 7;
+var _quiltSize = 64;
+var _quiltRule = 'match'; // only rule
+var _quiltZoom = 1.0;
+var _quiltPanX = 0, _quiltPanY = 0;
+var _quiltDrag = null;
+var _quiltToolsOpen = false;
+var _quiltOmegaFilter = [true,true,true,true,true,true,true,true]; // 8 orders
+
+function toggleQuiltFS() {
+  var ov = document.getElementById('quilt-overlay');
+  if (!ov) return;
+  var open = ov.style.display !== 'none';
+  ov.style.display = open ? 'none' : 'block';
+  if (!open) {
+    quiltFitToScreen();
+    requestAnimationFrame(renderQuilt);
+    initQuiltInteraction();
+  }
+}
+
+function toggleQuiltTools() {
+  _quiltToolsOpen = !_quiltToolsOpen;
+  var p = document.getElementById('quilt-tools-panel');
+  var b = document.getElementById('quilt-tools-btn');
+  if (p) p.style.display = _quiltToolsOpen ? 'flex' : 'none';
+  if (b) b.textContent = (_quiltToolsOpen ? '▼' : '▶') + ' Tools';
+}
+
+function setQuiltNFromSel(sel) {
+  _quiltN = parseInt(sel.value);
+  quiltFitToScreen();
+  renderQuilt();
+}
+
+function setQuiltSize(val) {
+  _quiltSize = Math.min(1024, parseInt(val));
+  var lbl = document.getElementById('quilt-size-lbl');
+  if (lbl) lbl.textContent = _quiltSize;
+  quiltFitToScreen();
+  renderQuilt();
+}
+
+function setQuiltRule(rule, btn) {
+  _quiltRule = rule;
+  ['qr-match','qr-product','qr-diff'].forEach(function(id){
+    var b = document.getElementById(id); if (b) b.classList.remove('active');
+  });
+  if (btn) btn.classList.add('active');
+  renderQuilt();
+}
+
+function toggleQuiltOmega(n, btn) {
+  _quiltOmegaFilter[n-1] = !_quiltOmegaFilter[n-1];
+  if (btn) btn.classList.toggle('active', _quiltOmegaFilter[n-1]);
+  renderQuilt();
+}
+
+function toggleQuiltAllOrders(btn) {
+  var anyOff = _quiltOmegaFilter.some(function(v){ return !v; });
+  _quiltOmegaFilter = _quiltOmegaFilter.map(function(){ return anyOff; });
+  for (var i=1;i<=8;i++){
+    var b=document.getElementById('qom-'+i);
+    if(b) b.classList.toggle('active', anyOff);
+  }
+  renderQuilt();
+}
+
+function quiltFitToScreen() {
+  _quiltZoom = 1.0; _quiltPanX = 0; _quiltPanY = 0;
+  updateQuiltZoomLabel();
+}
+
+function updateQuiltZoomLabel() {
+  var lbl = document.getElementById('quilt-zoom-lbl');
+  if (lbl) lbl.textContent = _quiltZoom.toFixed(2) + 'x';
+}
+
+var _quiltInteractionInit = false;
+function initQuiltInteraction() {}  // no drag/zoom — always fit to screen
+
+function renderQuilt() {
+  var canvas = document.getElementById('quilt-canvas');
+  if (!canvas) return;
+  var fillEl = document.getElementById('quilt-fill');
+  var fillLbl = document.getElementById('quilt-fill-lbl');
+  var fill = fillEl ? parseFloat(fillEl.value) : 0.9;
+  if (fillLbl) fillLbl.textContent = fill.toFixed(2);
+
+  var W = canvas.offsetWidth || window.innerWidth;
+  var H = canvas.offsetHeight || window.innerHeight;
+  canvas.width = W; canvas.height = H;
+  var ctx = canvas.getContext('2d');
+  ctx.fillStyle = (typeof _quiltBgCol !== 'undefined') ? _quiltBgCol : '#050505';
+  ctx.fillRect(0, 0, W, H);
+
+  var lo  = Math.pow(2, _quiltN);
+  var seq = [];
+  for (var i = 0; i < _quiltSize; i++) seq.push(lo + i);
+  var M = seq.length;
+
+  var omCols = ['#e53030','#e88030','#d4a847','#4caf50','#00bcd4','#7c6fcd','#e040fb','#f48fb1'];
+
+  function omegaQ(v) {
+    var x = Math.round(v); if (x < 2) return 0;
+    var c = 0;
+    for (var d = 2; d*d <= x; d++) { while(x%d===0){c++;x=Math.floor(x/d);} }
+    if (x > 1) c++;
+    return c;
+  }
+
+  var omegas = seq.map(omegaQ);
+
+  var gridSide = Math.min(W, H);
+  var cell = gridSide / M;
+  var pxSz = cell * fill;
+
+  // Always fit to screen — no zoom/pan
+  ctx.save();
+
+  var gx0 = (W - gridSide) / 2;
+  var gy0 = (H - gridSide) / 2;
+
+  for (var row = 0; row < M; row++) {
+    var omR = omegas[row];
+    var filtR = omR >= 1 && omR <= 8 ? _quiltOmegaFilter[omR-1] : (omR > 8 ? _quiltOmegaFilter[7] : false);
+    if (!filtR) continue;
+    for (var col = 0; col < M; col++) {
+      var omC = omegas[col];
+      var filtC = omC >= 1 && omC <= 8 ? _quiltOmegaFilter[omC-1] : (omC > 8 ? _quiltOmegaFilter[7] : false);
+      if (!filtC) continue;
+
+      var lit = false, colour = '#888';
+      if (_quiltRule === 'match') {
+        lit = omR === omC && omR > 0;
+        colour = quiltOrderColour(omR);
+      
+      if (!lit) continue;
+
+      ctx.fillStyle = colour;
+      ctx.globalAlpha = 0.88;
+      ctx.fillRect(
+        gx0 + col*cell + (cell-pxSz)/2,
+        gy0 + row*cell + (cell-pxSz)/2,
+        pxSz, pxSz
+      );
+    }
+  }
+
+  ctx.globalAlpha = 1;
+  // Edge bars: omega-colour strip along top and left
+  var barW = Math.max(1, Math.min(4, cell * 0.18));
+  for (var k = 0; k < M; k++) {
+    var om = omegas[k];
+    if (om === 0) continue;
+    var filt = om >= 1 && om <= 8 ? _quiltOmegaFilter[om-1] : _quiltOmegaFilter[7];
+    if (!filt) continue;
+    var col2 = quiltOrderColour(om);
+    ctx.fillStyle = col2; ctx.globalAlpha = 0.4;
+    ctx.fillRect(gx0 + k*cell, gy0 - barW - 1, cell - 0.3, barW);
+    ctx.fillRect(gx0 - barW - 1, gy0 + k*cell, barW, cell - 0.3);
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+// Per-order quilt colours (hsl-based, mutable via sliders)
+}
+
+var _quiltColours = [
+  {h:0,   c:100}, // order 1 prime
+  {h:30,  c:100}, // order 2
+  {h:45,  c:80},  // order 3
+  {h:125, c:100}, // order 4
+  {h:188, c:100}, // order 5
+  {h:255, c:70},  // order 6
+  {h:290, c:100}, // order 7
+  {h:340, c:80},  // order 8+
+];
+
+function updateQuiltColour(order) {
+  var hEl = document.getElementById('qhue-'+order);
+  var cEl = document.getElementById('qchroma-'+order);
+  if (hEl && cEl) {
+    var idx = order - 1;
+    _quiltColours[idx] = {h: parseInt(hEl.value), c: parseInt(cEl.value)};
+    renderQuilt();
+  }
+}
+
+function quiltOrderColour(om) {
+  var idx = Math.min(om-1, _quiltColours.length-1);
+  var qc = _quiltColours[idx];
+  return 'hsl(' + qc.h + ',' + qc.c + '%,60%)';
+}
+
+var _quiltBgCol = 'hsl(240,20%,3%)';
+function updateQuiltBg() {
+  var h = document.getElementById('quilt-bg-hue'); 
+  var s = document.getElementById('quilt-bg-sat');
+  var l = document.getElementById('quilt-bg-lit');
+  if (h && s && l) {
+    _quiltBgCol = 'hsl('+h.value+','+s.value+'%,'+l.value+'%)';
+    renderQuilt();
+  }
+}
+
+
+
+
+
+
 </script>
+<!-- ══ QUILT FULLSCREEN ══ -->
+<div id="quilt-overlay" style="display:none;position:fixed;inset:0;z-index:600;background:#050505">
+  <canvas id="quilt-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block"></canvas>
+  <!-- Top-left: Tools toggle -->
+  <div style="position:absolute;top:12px;left:12px;z-index:10;pointer-events:auto">
+    <button onclick="toggleQuiltTools()" id="quilt-tools-btn"
+      style="font-family:var(--mono);font-size:11px;letter-spacing:1px;padding:6px 16px;background:rgba(0,0,0,0.8);color:var(--accent);border:1px solid var(--border);border-radius:2px;cursor:pointer">&#9654; Tools</button>
+    <div id="quilt-tools-panel" style="display:none;position:absolute;top:40px;left:0;z-index:11;background:rgba(10,10,12,0.95);border:1px solid var(--border);border-radius:3px;padding:14px;width:440px;flex-direction:column;gap:10px;pointer-events:auto;max-height:85vh;overflow-y:auto">
+
+      <div>
+        <div class="bar-label" style="margin-bottom:4px">Start Octave (N)</div>
+        <select id="quilt-n-sel" onchange="setQuiltNFromSel(this)"
+          style="width:100%;font-size:9px;padding:3px 5px;background:#0a0a0a;color:#d8d4cc;border:1px solid #333;border-radius:2px">
+          <option value="2">N=2  (start: 4)</option>
+          <option value="3">N=3  (start: 8)</option>
+          <option value="4">N=4  (start: 16)</option>
+          <option value="5">N=5  (start: 32)</option>
+          <option value="6">N=6  (start: 64)</option>
+          <option value="7" selected>N=7  (start: 128)</option>
+          <option value="8">N=8  (start: 256)</option>
+          <option value="9">N=9  (start: 512)</option>
+          <option value="10">N=10 (start: 1024)</option>
+          <option value="11">N=11 (start: 2048)</option>
+          <option value="12">N=12 (start: 4096)</option>
+        </select>
+      </div>
+
+      <div>
+        <div class="bar-label" style="margin-bottom:4px">Sample Size</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="range" id="quilt-size" min="8" max="1024" step="8" value="64"
+            oninput="setQuiltSize(this.value)" style="flex:1;accent-color:var(--accent)">
+          <span id="quilt-size-lbl" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:32px">64</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="bar-label" style="margin-bottom:4px">Order Filter</div>
+        <div style="display:flex;align-items:center;gap:2px;flex-wrap:wrap">
+          <button class="mbtn" id="quilt-all-btn" onclick="toggleQuiltAllOrders(this)" style="font-size:8px;padding:2px 5px;margin-right:3px">All</button>
+          <button class="mbtn active" id="qom-1" onclick="toggleQuiltOmega(1,this)" style="color:#e53030;min-width:20px;padding:2px 3px;font-size:9px">p</button>
+          <button class="mbtn active" id="qom-2" onclick="toggleQuiltOmega(2,this)" style="color:#e88030;min-width:20px;padding:2px 3px;font-size:9px">2</button>
+          <button class="mbtn active" id="qom-3" onclick="toggleQuiltOmega(3,this)" style="color:#d4a847;min-width:20px;padding:2px 3px;font-size:9px">3</button>
+          <button class="mbtn active" id="qom-4" onclick="toggleQuiltOmega(4,this)" style="color:#4caf50;min-width:20px;padding:2px 3px;font-size:9px">4</button>
+          <button class="mbtn active" id="qom-5" onclick="toggleQuiltOmega(5,this)" style="color:#00bcd4;min-width:20px;padding:2px 3px;font-size:9px">5</button>
+          <button class="mbtn active" id="qom-6" onclick="toggleQuiltOmega(6,this)" style="color:#7c6fcd;min-width:20px;padding:2px 3px;font-size:9px">6</button>
+          <button class="mbtn active" id="qom-7" onclick="toggleQuiltOmega(7,this)" style="color:#e040fb;min-width:20px;padding:2px 3px;font-size:9px">7</button>
+          <button class="mbtn active" id="qom-8" onclick="toggleQuiltOmega(8,this)" style="color:#f48fb1;min-width:20px;padding:2px 3px;font-size:9px">8+</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="bar-label" style="margin-bottom:4px">Pixel Fill</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="range" id="quilt-fill" min="0.05" max="4" step="0.05" value="0.9"
+            oninput="renderQuilt()" style="flex:1;accent-color:var(--accent)">
+          <span id="quilt-fill-lbl" style="font-family:var(--mono);font-size:8px;color:var(--accent);min-width:28px">0.90</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="bar-label" style="margin-bottom:6px">Order Colours &nbsp;<span style="font-family:var(--mono);font-size:7px;color:var(--muted)">Hue ──────────────── Chroma ─────────────</span></div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px">
+            <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:#e53030;min-width:18px;text-align:center">p</span>
+            <input type="range" id="qhue-1" min="0" max="360" step="1" value="0"
+              oninput="updateQuiltColour(1)" style="flex:1;accent-color:#e53030;height:4px">
+            <input type="range" id="qchroma-1" min="0" max="100" step="1" value="100"
+              oninput="updateQuiltColour(1)" style="flex:1;accent-color:#e53030;height:4px">
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px">
+            <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:#e88030;min-width:18px;text-align:center">2</span>
+            <input type="range" id="qhue-2" min="0" max="360" step="1" value="30"
+              oninput="updateQuiltColour(2)" style="flex:1;accent-color:#e88030;height:4px">
+            <input type="range" id="qchroma-2" min="0" max="100" step="1" value="100"
+              oninput="updateQuiltColour(2)" style="flex:1;accent-color:#e88030;height:4px">
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px">
+            <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:#d4a847;min-width:18px;text-align:center">3</span>
+            <input type="range" id="qhue-3" min="0" max="360" step="1" value="45"
+              oninput="updateQuiltColour(3)" style="flex:1;accent-color:#d4a847;height:4px">
+            <input type="range" id="qchroma-3" min="0" max="100" step="1" value="80"
+              oninput="updateQuiltColour(3)" style="flex:1;accent-color:#d4a847;height:4px">
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px">
+            <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:#4caf50;min-width:18px;text-align:center">4</span>
+            <input type="range" id="qhue-4" min="0" max="360" step="1" value="125"
+              oninput="updateQuiltColour(4)" style="flex:1;accent-color:#4caf50;height:4px">
+            <input type="range" id="qchroma-4" min="0" max="100" step="1" value="100"
+              oninput="updateQuiltColour(4)" style="flex:1;accent-color:#4caf50;height:4px">
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px">
+            <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:#00bcd4;min-width:18px;text-align:center">5</span>
+            <input type="range" id="qhue-5" min="0" max="360" step="1" value="188"
+              oninput="updateQuiltColour(5)" style="flex:1;accent-color:#00bcd4;height:4px">
+            <input type="range" id="qchroma-5" min="0" max="100" step="1" value="100"
+              oninput="updateQuiltColour(5)" style="flex:1;accent-color:#00bcd4;height:4px">
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px">
+            <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:#7c6fcd;min-width:18px;text-align:center">6</span>
+            <input type="range" id="qhue-6" min="0" max="360" step="1" value="255"
+              oninput="updateQuiltColour(6)" style="flex:1;accent-color:#7c6fcd;height:4px">
+            <input type="range" id="qchroma-6" min="0" max="100" step="1" value="70"
+              oninput="updateQuiltColour(6)" style="flex:1;accent-color:#7c6fcd;height:4px">
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px">
+            <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:#e040fb;min-width:18px;text-align:center">7</span>
+            <input type="range" id="qhue-7" min="0" max="360" step="1" value="290"
+              oninput="updateQuiltColour(7)" style="flex:1;accent-color:#e040fb;height:4px">
+            <input type="range" id="qchroma-7" min="0" max="100" step="1" value="100"
+              oninput="updateQuiltColour(7)" style="flex:1;accent-color:#e040fb;height:4px">
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:3px">
+            <span style="font-family:var(--mono);font-size:9px;font-weight:700;color:#f48fb1;min-width:18px;text-align:center">8+</span>
+            <input type="range" id="qhue-8" min="0" max="360" step="1" value="340"
+              oninput="updateQuiltColour(8)" style="flex:1;accent-color:#f48fb1;height:4px">
+            <input type="range" id="qchroma-8" min="0" max="100" step="1" value="80"
+              oninput="updateQuiltColour(8)" style="flex:1;accent-color:#f48fb1;height:4px">
+          </div>
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:8px">
+        <div class="bar-label" style="margin-bottom:6px">Background</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:28px">Hue</span>
+          <input type="range" id="quilt-bg-hue" min="0" max="360" step="1" value="240"
+            oninput="updateQuiltBg()" style="flex:1;accent-color:#334;height:4px">
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:28px">Sat</span>
+          <input type="range" id="quilt-bg-sat" min="0" max="100" step="1" value="20"
+            oninput="updateQuiltBg()" style="flex:1;accent-color:#334;height:4px">
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-family:var(--mono);font-size:7px;color:var(--muted);min-width:28px">Lit</span>
+          <input type="range" id="quilt-bg-lit" min="0" max="20" step="1" value="3"
+            oninput="updateQuiltBg()" style="flex:1;accent-color:#334;height:4px">
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- Top-right: subtitle + exit -->
+  <div style="position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:10px;z-index:10;pointer-events:auto">
+    <span style="font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1px">&#969;-order interference</span>
+    <button onclick="toggleQuiltFS()" style="font-family:var(--mono);font-size:10px;background:rgba(80,8,8,0.85);color:#e88;border:1px solid #833;border-radius:2px;padding:4px 12px;cursor:pointer">&#10005; exit</button>
+  </div>
+</div>
 </body>
 </html>
